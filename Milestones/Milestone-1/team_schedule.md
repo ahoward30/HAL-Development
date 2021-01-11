@@ -1,4 +1,5 @@
-#Meeting times:
+Meeting times:
+==================================================
 
 Monday: 11am-12pm
 
