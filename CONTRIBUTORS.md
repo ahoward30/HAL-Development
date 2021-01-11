@@ -5,11 +5,11 @@ Core Members
 
   * Repository Owner
 
-* **[Adnan Almarzooq]**
+* **[Adnan Almarzooq](https://github.com/adnan1995)**
 
   * Logo Designer
 
-* **[Jimmy Larios]**
+* **[Jimmy Larios](https://github.com/jlarios18)**
 
   * Team Motto and Résumé Designer 
 
