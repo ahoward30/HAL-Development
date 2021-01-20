@@ -16,4 +16,4 @@ In order to complete this project, we will need the use of an external API focus
 
 The algorithmic content in this project focuses on being able to utilize the GPS map feature and link volunteer listings to specific locations, as well as being able to compare distances between listings and the user to create a list of the closest listings. Additionally, algorithms must be created to manage the bookmarking system as well as user accounts. 
 
-I would give this topic a difficulty rating of 5. While Google’s API is likely very user friendly, putting all of the parts together and having it function correctly will take a good deal of work.
+We would give this topic a difficulty rating of 5. While Google’s API is likely very user friendly, putting all of the parts together and having it function correctly will take a good deal of work.
