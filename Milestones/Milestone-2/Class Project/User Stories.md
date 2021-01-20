@@ -1,4 +1,5 @@
 1. [E]
+
 	1. [U] As a visitor to the site I would like to see a fantastic and modern homepage that introduces me to the site and the features currently available.
 		1. [T] Create starter ASP dot NET Core MVC Web Application with Individual User Accounts and no unit test project
 		2. [T] Choose CSS library (Bootstrap 4, or ?) and use it for all pages
@@ -12,8 +13,10 @@
 		3. [T] Create a user table and customize user pages to display additional data
 		4. [T] Re-enable login/register links
 		5. [T] Manually test register and login; user should easily be able to see that they are logged in
+		
 
 2. [E]
+
 	3. [U] As a visitor, I want to see no. of times a particular peak has been climbed, names of peaks which are yet to be climbed, sorted by height.
 		1. [T] Add an extra option in the homepage navbar named “Research”
 		2. [T] Create a new view with forms for the following options:
