@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Expeditions.Models.Expedition>
+
+@{
+    ViewData["Title"] = "Recent";
+}
+
+<h1>Recent Expenditions</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Season)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TerminationReason)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OxygenUsed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Peak)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrekkingAgency)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Season)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TerminationReason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OxygenUsed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Peak.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrekkingAgency.Name)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
