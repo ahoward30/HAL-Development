@@ -23,7 +23,7 @@
             <td></td>
         </tr>
         <tr>
-            <td>3</td> <td>Started</td> <td>U</td> <td>-</td> <td>Adnan</td>
+            <td>3</td> <td>Complete</td> <td>U</td> <td>-</td> <td>Adnan</td>
             <td>As a visitor, I would like to see a list of the most recent expeditions that have been registered on the site.</td>
             <td>We want a quick way to take a look at the most recent expeditions that have taken place so that people can keep up to date with notable events in the climbing community.</td>
             <td></td>
