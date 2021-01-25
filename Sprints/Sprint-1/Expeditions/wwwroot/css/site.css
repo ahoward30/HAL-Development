@@ -27,7 +27,8 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-family: 'Franklin Gothic Medium';
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
@@ -61,6 +62,8 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  padding: 0px;
+  background-color: lightgrey;
 }
 .footer {
   position: absolute;
