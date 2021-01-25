@@ -1,5 +1,8 @@
+using Expeditions.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +15,7 @@ namespace Expeditions
 {
     public class Startup
     {
+        public string connectionString = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,7 +26,16 @@ namespace Expeditions
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ExpeditionsConnectionAzure"));
+            //builder.Password = Configuration["Expeditions:DBPassword"];
+
             services.AddControllersWithViews();
+            services.AddDbContext<ExpeditionsContext>(options =>
+            {
+                //options.UseSqlServer(builder.ConnectionString)
+                options.UseSqlServer(Configuration.GetConnectionString("ExpeditionsConnectionAzure"));
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
