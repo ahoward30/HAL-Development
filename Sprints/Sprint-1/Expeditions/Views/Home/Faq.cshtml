@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Expeditions.Models.FAQ>
+
+@{
+    ViewData["Title"] = "FAQ";
+}
+
+<br />
+
+<div class="text-center">
+    <h1 class="display-4"><strong>Frequently Asked Questions</strong></h1>
+</div>
+
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Answer)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

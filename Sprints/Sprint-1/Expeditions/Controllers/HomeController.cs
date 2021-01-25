@@ -39,6 +39,20 @@ namespace Expeditions.Controllers
 
             return View(recentTwenty);
         }
+
+        public IActionResult Faq()
+        {
+            context = new ExpeditionsContext();
+            List<FAQ> qAndAList = context.FAQs.ToList();
+            //List<FAQ> qAndAList = new List<FAQ>();
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    qAndAList.Add(expList[i]);
+            //}
+
+            return View(qAndAList);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
