@@ -10,19 +10,26 @@
     <h1 class="display-4"><strong>Frequently Asked Questions</strong></h1>
 </div>
 
+<br />
 
-<table class="table">
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Question)
-                </td>
-                <td>
+<div class="accordion" id="accordionQuestion">
+    @{ var i = 1;}
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-header" id="@($"question{i}")">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse{i}")" aria-expanded="false" aria-controls="@($"collapse{i}")">
+                        @Html.DisplayFor(modelItem => item.Question)
+                    </button>
+                </h2>
+            </div>
+            <div id="@($"collapse{i}")" class="collapse" aria-labelledby="@($"question{i}")" data-parent="#accordionQuestion">
+                <div class="card-body">
                     @Html.DisplayFor(modelItem => item.Answer)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+</div>
