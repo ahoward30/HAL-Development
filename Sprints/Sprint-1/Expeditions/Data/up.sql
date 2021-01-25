@@ -27,6 +27,13 @@ CREATE TABLE [TrekkingAgency] (
 )
 GO
 
+CREATE TABLE [FAQ] (
+  [ID]    INT PRIMARY KEY IDENTITY(1, 1),
+  [Question]  NVARCHAR(500),
+  [Answer]  NVARCHAR(500)
+)
+GO
+
 ALTER TABLE [Expedition] ADD CONSTRAINT [Expedition_FK_Peak] FOREIGN KEY ([PeakID]) REFERENCES [Peak] ([ID])
 ALTER TABLE [Expedition] ADD CONSTRAINT [Expedition_FK_TrekkingAgency] FOREIGN KEY ([TrekkingAgencyID]) REFERENCES [TrekkingAgency] ([ID])
 GO

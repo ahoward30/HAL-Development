@@ -11660,3 +11660,9 @@ INSERT INTO [Expedition](Season,Year,StartDate,TerminationReason,OxygenUsed,Peak
 INSERT INTO [Expedition](Season,Year,StartDate,TerminationReason,OxygenUsed,PeakID,TrekkingAgencyID) VALUES('Spring',2019,'2019-05-09','Bad conditions (deep snow, avalanching, falling ice, or rock)',0,157,210);
 INSERT INTO [Expedition](Season,Year,StartDate,TerminationReason,OxygenUsed,PeakID,TrekkingAgencyID) VALUES('Spring',2019,'2019-04-11','Lack (or loss) of supplies or equipment',0,191,264);
 INSERT INTO [Expedition](Season,Year,StartDate,TerminationReason,OxygenUsed,PeakID,TrekkingAgencyID) VALUES('Spring',2019,'2019-04-05','Success (main peak)',0,464,748);
+
+INSERT INTO [FAQ](Question,Answer) VALUES('How do I delete my account?', 'At the moment you cannot delete your account. Our staff is currently working on implementing this feature.');
+INSERT INTO [FAQ](Question,Answer) VALUES('How do I create a post?', 'You must be a registered user to create a post. To create a post, hover over to the top-right corner and click on the create post button.');
+INSERT INTO [FAQ](Question,Answer) VALUES('Where can I go to register for an account?', 'Click on the "Sign In" button at the top. Then click on the "create an account" link highlighted in blue.');
+INSERT INTO [FAQ](Question,Answer) VALUES('Why are my posts not appearing on screen?', 'Try refreshing your page after submitting a post.');
+INSERT INTO [FAQ](Question,Answer) VALUES('My question is not answered here', 'Try contacting us by phone at 1-503-555-5555 or by email at HAL@example-email.com');

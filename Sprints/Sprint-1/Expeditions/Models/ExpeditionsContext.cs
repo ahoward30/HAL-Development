@@ -18,6 +18,7 @@ namespace Expeditions.Models
         public virtual DbSet<Expedition> Expeditions { get; set; }
         public virtual DbSet<Peak> Peaks { get; set; }
         public virtual DbSet<TrekkingAgency> TrekkingAgencies { get; set; }
+        public virtual DbSet<FAQ> FAQs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -75,6 +76,17 @@ namespace Expeditions.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<FAQ>(entity =>
+            {
+                entity.ToTable("FAQ");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Question).HasMaxLength(500);
+
+                entity.Property(e => e.Answer).HasMaxLength(500);
             });
 
             OnModelCreatingPartial(modelBuilder);
