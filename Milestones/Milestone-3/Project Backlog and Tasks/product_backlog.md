@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         <tr>
-            <td>1</td> <td>Started</td> <td>U</td> <td>-</td> <td>Alex</td>
+            <td>1</td> <td>Complete</td> <td>U</td> <td>-</td> <td>Alex</td>
             <td> As a visitor to the site I would like to see a fantastic and modern homepage that introduces me to the site and the features currently available</td>
             <td>This story serves to kickstart getting the web application up and running on Azure, and in a way that looks presentable.</td>
             <td></td>
