@@ -17,7 +17,7 @@
             <td></td>
         </tr>
         <tr>
-            <td>2</td> <td>Started</td> <td>U</td> <td>-</td> <td>Jimmy</td>
+            <td>2</td> <td>Complete</td> <td>U</td> <td>-</td> <td>Jimmy</td>
             <td>As a visitor, I would like to be able to view an FAQ page so that I may have some of my questions answered without having to contact user support. </td>
             <td>By realizing this story, we create a resource to help explain how to use the web application for those new to the site.</td>
             <td></td>
