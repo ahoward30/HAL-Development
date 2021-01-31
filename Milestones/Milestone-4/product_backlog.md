@@ -29,7 +29,7 @@
             <td></td>
         </tr>
 		<tr>
-            <td>4</td> <td>Started</td> <td>U</td> <td>2</td> <td>Adnan</td>
+            <td>4</td> <td>Adnan</td> <td>U</td> <td>2</td> <td>Adnan</td>
             <td>As a visitor, I want to see extended information about specific expeditions when I click on its entry in a list, so that I can learn more about expeditions that interest me, without cluttering the screen with information for expeditions I'm not interested in.</td>
             <td>Currently, expedition lists are presented with nearly all of the information associated with them, which can be overwelming. By implementing this story, we remove much of the clutter except for absolutely necessary info until the user shows that they want to see it.</td>
             <td></td>
