@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Expeditions.Models.Peak>
+
+@{
+    ViewData["Title"] = "UnclimbedPeaks";
+}
+
+<h1>Unclimbed Peaks</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Height)
+            </th>
+            <th>
+                Climbing Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+   @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
+            <td>
+                Unclimbed
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
