@@ -64,6 +64,14 @@ namespace Expeditions.Controllers
             return View(qAndAList);
         }
 
+        public IActionResult Newsfeed()
+        {
+            context = new ExpeditionsContext();
+            List<Newsfeed> newsfeedList = context.Newsfeeds.ToList();
+
+            return View(newsfeedList);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
