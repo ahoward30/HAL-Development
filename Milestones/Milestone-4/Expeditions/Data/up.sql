@@ -34,6 +34,14 @@ CREATE TABLE [FAQ] (
 )
 GO
 
+CREATE TABLE [Newsfeed] (
+  [ID]    INT PRIMARY KEY IDENTITY(1, 1),
+  [Title]  NVARCHAR(250),
+  [Content]  NVARCHAR(MAX)
+)
+GO
+
+
 ALTER TABLE [Expedition] ADD CONSTRAINT [Expedition_FK_Peak] FOREIGN KEY ([PeakID]) REFERENCES [Peak] ([ID])
 ALTER TABLE [Expedition] ADD CONSTRAINT [Expedition_FK_TrekkingAgency] FOREIGN KEY ([TrekkingAgencyID]) REFERENCES [TrekkingAgency] ([ID])
 GO

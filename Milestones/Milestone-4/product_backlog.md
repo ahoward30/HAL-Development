@@ -29,13 +29,13 @@
             <td></td>
         </tr>
 		<tr>
-            <td>4</td> <td>Adnan</td> <td>U</td> <td>2</td> <td>Adnan</td>
+            <td>4</td> <td>Complete</td> <td>U</td> <td>2</td> <td>Adnan</td>
             <td>As a visitor, I want to see extended information about specific expeditions when I click on its entry in a list, so that I can learn more about expeditions that interest me, without cluttering the screen with information for expeditions I'm not interested in.</td>
             <td>Currently, expedition lists are presented with nearly all of the information associated with them, which can be overwelming. By implementing this story, we remove much of the clutter except for absolutely necessary info until the user shows that they want to see it.</td>
             <td></td>
         </tr>
 		<tr>
-            <td>5</td> <td>Started</td> <td>U</td> <td>2</td> <td>Jimmy</td>
+            <td>5</td> <td>Complete</td> <td>U</td> <td>2</td> <td>Jimmy</td>
             <td>As an expedition enthusiast, I would like to be able to follow news and read articles about expeditions, written by professionals and fellow enthusiasts, so that I can stay informed without having to visit another site.</td>
             <td>Implementing this story will create a page dedicated to listing titles articles written by professionals and allow the user to click on them to be taken to a page to read the content of the article.</td>
             <td></td>
