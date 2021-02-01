@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Expeditions.Models.Newsfeed>
+
+@{
+    ViewData["Title"] = "Newsfeed";
+}
+
+<br />
+
+<div class="text-center">
+    <h1 class="display-4"><strong>Newsfeed</strong></h1>
+</div>
+
+<br />
+
+<div class="accordion" id="accordionArticle">
+    @{ var i = 1;}
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-header" id="@($"article{i}")">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse{i}")" aria-expanded="false" aria-controls="@($"collapse{i}")">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </button>
+                </h2>
+            </div>
+            <div id="@($"collapse{i}")" class="collapse" aria-labelledby="@($"article{i}")" data-parent="#accordionArticle">
+                <div class="card-body">
+                    @Html.DisplayFor(modelItem => item.Content)
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+</div>
