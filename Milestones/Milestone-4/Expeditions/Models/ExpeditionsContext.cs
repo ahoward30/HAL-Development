@@ -19,6 +19,7 @@ namespace Expeditions.Models
         public virtual DbSet<Peak> Peaks { get; set; }
         public virtual DbSet<TrekkingAgency> TrekkingAgencies { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
+        public virtual DbSet<Newsfeed> Newsfeeds { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -87,6 +88,17 @@ namespace Expeditions.Models
                 entity.Property(e => e.Question).HasMaxLength(500);
 
                 entity.Property(e => e.Answer).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<Newsfeed>(entity =>
+            {
+                entity.ToTable("Newsfeed");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Title).HasMaxLength(250);
+
+                entity.Property(e => e.Content).HasMaxLength(int.MaxValue);
             });
 
             OnModelCreatingPartial(modelBuilder);
