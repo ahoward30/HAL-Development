@@ -71,6 +71,21 @@ namespace Expeditions.Controllers
 
             return View(newsfeedList);
         }
+        public IActionResult UnclimbedPeaks()
+        {
+            context = new ExpeditionsContext();
+            List<Peak> unclimbedList = context.Peaks.Where(p => p.ClimbingStatus == false).OrderBy(p => p.Height).ToList();
+            List<Peak> newUnclimbedList = new List<Peak>();
+            foreach(Peak p in unclimbedList)
+            {
+                if (p.Height > 0)
+                {
+                    newUnclimbedList.Add(p);
+                }
+            }
+
+            return View(newUnclimbedList);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

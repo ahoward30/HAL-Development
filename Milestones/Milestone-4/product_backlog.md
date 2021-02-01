@@ -41,8 +41,8 @@
             <td></td>
         </tr>
 		<tr>
-            <td>6</td> <td>Started</td> <td>U</td> <td>1</td> <td>Alex</td>
-            <td>As a visitor, I want to see names of peaks which are yet to be climbed, sorted by height, so that I may be the brave soul to finally scale them.</td>
+            <td>6</td> <td>Complete</td> <td>U</td> <td>1</td> <td>Alex</td>
+            <td>As a visitor, I want to see names of peaks which are yet to be climbed, sorted by height in ascending order, so that I may be the brave soul to finally scale them.</td>
             <td>Implementing this story will allow users a quick and easy way to view all of the peaks that have yet to be climbed in order of increasing height.</td>
             <td></td>
         </tr>
