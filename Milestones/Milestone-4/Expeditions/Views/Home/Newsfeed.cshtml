@@ -26,7 +26,12 @@
             </div>
             <div id="@($"collapse{i}")" class="collapse" aria-labelledby="@($"article{i}")" data-parent="#accordionArticle">
                 <div class="card-body">
-                    @Html.DisplayFor(modelItem => item.Content)
+                    <h1 style="text-align:center"><i><strong>@Html.DisplayFor(modelItem => item.Title)</strong></i></h1>
+                    <br />
+                    <div class="col-md-6 offset-md-3">
+                        <p><strong>By John Smith</strong></p>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </div>
                 </div>
             </div>
         </div>
