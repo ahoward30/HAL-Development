@@ -29,13 +29,12 @@ namespace Expeditions
             //var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ExpeditionsConnectionAzure"));
             //builder.Password = Configuration["Expeditions:DBPassword"];
 
-            services.AddControllersWithViews();
+            connectionString = Configuration.GetConnectionString("ExpeditionsConnectionAzure");
             services.AddDbContext<ExpeditionsContext>(options =>
-            {
-                //options.UseSqlServer(builder.ConnectionString)
-                options.UseSqlServer(Configuration.GetConnectionString("Expeditions"));
+                options.UseSqlServer(Configuration.GetConnectionString("ExpeditionsConnectionAzure"))
 
-            });
+            );
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
