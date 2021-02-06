@@ -13,9 +13,10 @@ namespace Expeditions.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         ExpeditionsContext context;
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ExpeditionsContext ctx)
         {
             _logger = logger;
+            context = ctx;
         }
 
         public IActionResult Index()
@@ -24,7 +25,7 @@ namespace Expeditions.Controllers
         }
         public IActionResult Recent()
         {
-            context = new ExpeditionsContext();
+            //context = new ExpeditionsContext();
             List<Expedition> expList = context.Expeditions.OrderByDescending(c => c.StartDate).ToList();
             List<Expedition> recentTwenty = new List<Expedition>();
             for (int i = 0; i < 20; i++)
@@ -42,7 +43,7 @@ namespace Expeditions.Controllers
 
         public IActionResult Details(int id)
         {
-            context = new ExpeditionsContext();
+            //context = new ExpeditionsContext();
             Expedition exp = context.Expeditions.Find(id);
             Peak peak = context.Peaks.Find(exp.PeakId);
             TrekkingAgency trek = context.TrekkingAgencies.Find(exp.TrekkingAgencyId);
@@ -53,7 +54,7 @@ namespace Expeditions.Controllers
 
         public IActionResult Faq()
         {
-            context = new ExpeditionsContext();
+            //context = new ExpeditionsContext();
             List<FAQ> qAndAList = context.FAQs.ToList();
             //List<FAQ> qAndAList = new List<FAQ>();
             //for (int i = 0; i < 5; i++)
@@ -66,14 +67,14 @@ namespace Expeditions.Controllers
 
         public IActionResult Newsfeed()
         {
-            context = new ExpeditionsContext();
+            //context = new ExpeditionsContext();
             List<Newsfeed> newsfeedList = context.Newsfeeds.ToList();
 
             return View(newsfeedList);
         }
         public IActionResult UnclimbedPeaks()
         {
-            context = new ExpeditionsContext();
+            //context = new ExpeditionsContext();
             List<Peak> unclimbedList = context.Peaks.Where(p => p.ClimbingStatus == false).OrderBy(p => p.Height).ToList();
             List<Peak> newUnclimbedList = new List<Peak>();
             foreach(Peak p in unclimbedList)
