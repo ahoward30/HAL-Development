@@ -13,7 +13,7 @@ Needs and the Features that Satisfy Them
 	* Separate log-in portals for clients and IT help
 	* Data tables to keep track of user accounts and related information
 	* Profile page for Experts to manage tags that they have expertise in
-	* Ability to edit and delete accounts that you own, or are admin of
+	* Ability to view, edit and delete accounts that you own, or are admin of
 	
 3. A service that allows clients to make IT help requests
 	* Page(s) for clients to submit a request with a title, a description, and tags
@@ -24,7 +24,7 @@ Needs and the Features that Satisfy Them
 	* View pages that list of potential matching expert's available hours if no sufficient online help available
 	* Integrated database that connect pertinent data tables together
 	* A hidden matching score calculated by comparing the tags and qualities of a clients's IT issue and an expert's information and profile
-	* Prompt for expert upon potential match with client's tags and description with ability to decline match and pass client issue onto next match if current expert cannot address the client's request
+	* Prompt for an expert upon matching with potential client's tags and description with the ability to decline the match and pass the client issue onto next match if current expert cannot address the client's request
 	* Queue system to put clients on hold if matching experts are online, but busy with other clients
 	
 5. The ability to meet and communicate between clients and experts
