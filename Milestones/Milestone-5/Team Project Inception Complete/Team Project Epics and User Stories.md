@@ -1,21 +1,24 @@
+Epics, User Stories and Tasks
+==================================================
+
 [E] As a visitor to the site I would like to see a fantastic and modern website with an intuitive visual design that guides me to site resources such as FAQ page, and account pages.
 
 	[U] As a visitor to the site I would like to see a fantastic and modern homepage that
 	introduces me to the site and the features currently available.
 
-        [T] Create starter ASP dot NET Core MVC Web Application with Individual User Accounts using Identity and no unit test project
+		[T] Create starter ASP dot NET Core MVC Web Application with Individual User Accounts using Identity and no unit test project
 		[T] Choose CSS library (Bootstrap 4, or ?) and use it for all pages
 		[T] Create nice bare homepage: write initial welcome content, customize navbar, hide links to login/register
-        [T] Create SQL Server database on Azure and configure a web app to use it. Hide credentials.
-        [T] Deploy it on Azure2.
+		[T] Create SQL Server database on Azure and configure a web app to use it. Hide credentials.
+		[T] Deploy it on Azure2.
 
 	[U] As a visitor, I would like to be able to view an About page so that I can learn more
 	about the site and understand its purpose.
 
 		[T] Create new view for About page, hyperlinked from home page
 		[T] Include information about company history, page development as well as pictures
-        [T] provide contact info (phone, email)
-        [T] Provide a link to return to the home page
+		[T] provide contact info (phone, email)
+		[T] Provide a link to return to the home page
 
 	[U] As a visitor, I would like to be able to view an FAQ page so that I may have some of my questions answered without having to contact user support.
         [T] Create new view for FAQ page, hyperlinked from home page
