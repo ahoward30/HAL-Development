@@ -21,15 +21,15 @@ Epics, User Stories and Tasks
 		[T] Provide a link to return to the home page
 
 	[U] As a visitor, I would like to be able to view an FAQ page so that I may have some of my questions answered without having to contact user support.
-        [T] Create new view for FAQ page, hyperlinked from home page
-        [T] Fill page with frequently asked questions and their answers
-        [T] provide contact info (phone, email) for user support for unanswered questions
-        [T] Provide a link to return to the home page
+		[T] Create new view for FAQ page, hyperlinked from home page
+		[T] Fill page with frequently asked questions and their answers
+		[T] provide contact info (phone, email) for user support for unanswered questions
+		[T] Provide a link to return to the home page
     
     [U] As a registered user, I would like to be able to view the details of my account on a dedicated page. 
-        [T] Implement navbar link to direct to sign-in or sign-up portal if visitor is not logged in
-        [T] Implement link to change to direct to user’s account page if user IS logged in
-        [T] Create view for user’s account page where user info will be dynamically displayed
+		[T] Implement navbar link to direct to sign-in or sign-up portal if visitor is not logged in
+		[T] Implement link to change to direct to user’s account page if user IS logged in
+		[T] Create view for user’s account page where user info will be dynamically displayed
 
 [E] As a visitor, I would like to be able to register for an account so that I may be able to receive and offer users help with IT issues. 
 
