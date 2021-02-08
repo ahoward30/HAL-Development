@@ -3,7 +3,7 @@
 ## ID: 6
 ## Effort Points: 4
 ## Owner: Adnan
-## Feature branch name: Expert Registration
+## Feature branch name: ExpertRegistration
 
 ## Assumptions/Preconditions
 
@@ -15,7 +15,7 @@
 ## Description
 
 After the application is created with Identity the registration functionality for expert need to be implemented. The Expert table needs to be created in the database.
-The view page attached to the register button on the navbar in the top right has to be modified. Two columns will be created and the left column can be used for the expert
+The view page attached to the register button on the navbar in the top right has to be modified. Two columns will be created and the right column can be used for the expert
 registration. The expert registration form will have the following content:
 1. Username
 2. First name
