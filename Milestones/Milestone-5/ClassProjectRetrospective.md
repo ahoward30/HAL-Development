@@ -10,8 +10,8 @@ While each team member had specifical technical skills to list while talking abo
 # What isn't going well
 This question yielded responses that felt very similar in theme to those from the previous question. Namely, the team determined that the two major issues are that the planning procedure is not detailed enough to yield correct exemplar stories to guide the team's work, and that the team is not starting work on projects early enough to avoid having to cram when approaching deadlines.
 
-#What the team can do better
+# What the team can do better
 Taking what was discussed in earlier questions, the team agreed that more time to create detailed exemplar user stories as early as possible is essential to moving forward. On top of that, detail and styling in general will be given more emphasis than it has been so far this term. Finally, the team agreed to be more vigilant and consistant about engaging in mindful standup meetings, and not allowing members to be too lax about them. Clear communication, and detail early on is absolutely essential.
 
-#What the team needs from others
+# What the team needs from others
 Going forward, the thing that the team expressed the most concern with was implementing authentication correctly, in a way that would fit our two user-type set up. We've watched the uploaded videos about identity, but are still unsure, which we will need to consult our instructor about. 
