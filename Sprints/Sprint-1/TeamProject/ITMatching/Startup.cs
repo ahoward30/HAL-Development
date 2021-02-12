@@ -29,7 +29,12 @@ namespace ITMatching
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("AuthenticationConnection")));
+
+            services.AddDbContext<ITMatchingDbContext>(options =>
+                options.UseSqlServer(
+                     Configuration.GetConnectionString("ITMatchingConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
