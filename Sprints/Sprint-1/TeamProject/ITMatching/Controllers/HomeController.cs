@@ -40,7 +40,16 @@ namespace ITMatching.Controllers
             return View();
         }
 
-        [Authorize]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult FAQ()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
