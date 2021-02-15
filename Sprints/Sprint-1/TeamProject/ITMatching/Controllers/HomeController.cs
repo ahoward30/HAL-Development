@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using ITMatching.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using ITMatching.Data;
 
 namespace ITMatching.Controllers
 {
@@ -15,11 +16,13 @@ namespace ITMatching.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
+        ITMatchingDbContext context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, ITMatchingDbContext ctx)
         {
             _logger = logger;
             _userManager = userManager;
+            context = ctx;
         }
 
         public async Task<IActionResult> Index()
@@ -47,7 +50,9 @@ namespace ITMatching.Controllers
 
         public IActionResult FAQ()
         {
-            return View();
+            List<FAQ> qAndAList = context.FAQs.ToList();
+
+            return View(qAndAList);
         }
 
         public IActionResult Privacy()
