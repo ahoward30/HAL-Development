@@ -25,6 +25,7 @@ namespace ITMatching.Data
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
+        public virtual DbSet<FAQ> FAQs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -131,6 +132,17 @@ namespace ITMatching.Data
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserTokens)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<FAQ>(entity =>
+            {
+                entity.ToTable("FAQ");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Question).HasMaxLength(500);
+
+                entity.Property(e => e.Answer).HasMaxLength(500);
             });
 
             OnModelCreatingPartial(modelBuilder);
