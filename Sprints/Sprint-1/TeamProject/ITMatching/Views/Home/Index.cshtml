@@ -4,7 +4,67 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    @ViewBag.Message
+    <h1 class="display-4">IT-Matching</h1>
+    @*@ @ViewBag.Message*@
+    <div class="container">
+        <div class="card border-dark text-black mb-3" style="background-color:#243b45">
+            <div class="card-body">
+                <div class="text-center">
+                    <h1 class="text-white">Have an IT Issue?</h1>
+                    <p class="text-white">
+                        If you have an IT-related issue, then submit a help request and get matched with an expert who can help you!
+                    </p>
+                    <a href='@Url.Action("RequestForm", "Matching")'><input type="button" class="btn-lg" style="background-color:#d8831b" class="btn btn-primary" value="Get Help Now"></a><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /><br />
+    <div class="container-fluid">
+        <div class="card border-dark text-black bg-info mb-3">
+            <img class="card-img" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpsmag.com%2F.image%2Ft_share%2FMTI3NTgyMjg3NTMyNTg0OTMw%2Fcomputer-types.jpg&f=1&nofb=1" alt="What is IT Matching">
+            <div class="card-img-overlay">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><h1>What is IT-Matching?</h1></div>
+                    <div class="card-body">
+                        <p class="text-left">
+                            IT-Matching is a web application giving the opportunity for those seeking IT help to be matched with those with the expertise
+                            needed in order to solve their IT-related problems. IT Matching will prompt users who need help to describe the nature of their IT or computing
+                            related issue and automatically connect them with professionals whose provided expertise matches the client’s issue. Once matched together in the
+                            system, IT Matching allows for the client and the expert to video chat one-on-one to come to a solution to the client’s IT-related issue.
+                        </p><br />
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="card text-white bg-dark mb-3">
+                                <div class="card-header"><h1>Key Features</h1></div>
+                                <div class="card-body">
+                                    <ul class="text-left">
+                                        <li>Request system for clients to describe and tag their IT issue</li>
+                                        <li>Automated system that connects users based on a "Matching Score"</li>
+                                        <li>Live one-on-one text or video chat between clients and experts</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-dark mb-2">
+                                <div class="card-header"><h1>Key Features</h1></div>
+                                <div class="card-body">
+                                    <ul class="text-left">
+                                        <li>Request system for clients to describe and tag their IT issue</li>
+                                        <li>Automated system that connects users based on a "Matching Score"</li>
+                                        <li>Live one-on-one text or video chat between clients and experts</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+ 
