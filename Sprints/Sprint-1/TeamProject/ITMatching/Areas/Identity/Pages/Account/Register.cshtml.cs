@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using ITMatching.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -45,10 +46,27 @@ namespace ITMatching.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+
+            [Required]
+            [StringLength(100, ErrorMessage = "Please enter your First name", MinimumLength = 2)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "Please enter your Last name", MinimumLength = 2)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "Please enter your primary phone number", MinimumLength = 6)]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -93,6 +111,22 @@ namespace ITMatching.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
+                        ITMatchingAppContext context = new ITMatchingAppContext();
+                        Itmuser Ituser = new Itmuser()
+                        {
+                            Username = Input.Email,
+                            FirstName = Input.FirstName,
+                            LastName = Input.LastName,
+                            PhoneNumber = Input.PhoneNumber,
+                            Email = Input.Email,
+                            AspnetUserId = user.Id
+                        };
+                        context.Itmusers.Add(Ituser);
+                        context.SaveChanges();
+                        Itmuser use = context.Itmusers.FirstOrDefault(item => item.Email == Ituser.Email);
+
+                        context.Clients.Add(new Client() { ItmuserId = use.Id });
+                        context.SaveChanges();
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
                     else
