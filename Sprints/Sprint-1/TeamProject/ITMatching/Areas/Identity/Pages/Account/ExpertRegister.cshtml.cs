@@ -18,15 +18,14 @@ using Microsoft.Extensions.Logging;
 namespace ITMatching.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class RegisterModel : PageModel
+    public class ExpertRegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public RegisterModel(
-            UserManager<IdentityUser> userManager,
+        public ExpertRegisterModel(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
@@ -46,7 +45,6 @@ namespace ITMatching.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-
             [Required]
             [StringLength(100, ErrorMessage = "Please enter your First name", MinimumLength = 2)]
             [Display(Name = "First Name")]
@@ -69,6 +67,22 @@ namespace ITMatching.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; }
 
             [Required]
+            [Display(Name = "Start Time")]
+            public string StartTime { get; set; }
+
+            [Required]
+            [Display(Name = "End Time")]
+            public string EndTime { get; set; }
+
+            [Required]
+            [Display(Name = "From (Day)")]
+            public string FromDay { get; set; }
+
+            [Required]
+            [Display(Name = "To (Day)")]
+            public string ToDay { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -79,6 +93,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
+
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -124,8 +139,12 @@ namespace ITMatching.Areas.Identity.Pages.Account
                         context.Itmusers.Add(Ituser);
                         context.SaveChanges();
                         Itmuser use = context.Itmusers.FirstOrDefault(item => item.Email == Ituser.Email);
-
-                        context.Clients.Add(new Client() { ItmuserId = use.Id });
+                        Expert exp = new Expert()
+                        {
+                            WorkSchedule = Input.StartTime + " - " + Input.EndTime + " " + Input.FromDay + " to " + Input.ToDay,
+                            ItmuserId = use.Id
+                        };
+                        context.Experts.Add(exp);
                         context.SaveChanges();
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
