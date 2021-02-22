@@ -48,11 +48,13 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "Please enter your First name", MinimumLength = 2)]
             [Display(Name = "First Name")]
+            [RegularExpression(@"^[a-zA-Z]*", ErrorMessage = "Name should not contain digits")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "Please enter your Last name", MinimumLength = 2)]
             [Display(Name = "Last Name")]
+            [RegularExpression(@"^[a-zA-Z]*", ErrorMessage = "Name should not contain digits")]
             public string LastName { get; set; }
 
             [Required]
@@ -64,22 +66,24 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "Please enter your primary phone number", MinimumLength = 6)]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone Number")]
+            [RegularExpression(@"^[0-9]{10-13}", ErrorMessage = "Phone number should not contain letters")]
+
             public string PhoneNumber { get; set; }
 
             [Required]
-            [Display(Name = "Start Time")]
+            [Display(Name = "Work Schedule Start Time")]
             public string StartTime { get; set; }
 
             [Required]
-            [Display(Name = "End Time")]
+            [Display(Name = "Work Schedule End Time")]
             public string EndTime { get; set; }
 
             [Required]
-            [Display(Name = "From (Day)")]
+            [Display(Name = "Work Schedule [From]")]
             public string FromDay { get; set; }
 
             [Required]
-            [Display(Name = "To (Day)")]
+            [Display(Name = "Work Schedule [To]")]
             public string ToDay { get; set; }
 
             [Required]
