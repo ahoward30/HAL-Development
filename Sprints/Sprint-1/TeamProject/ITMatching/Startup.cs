@@ -50,6 +50,12 @@ namespace ITMatching
 
             //Register the AuthMessageSenderOptions configuration instance
             services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            //Change email and activity timeout to 2 days
+            services.ConfigureApplicationCookie(o => {
+                o.ExpireTimeSpan = TimeSpan.FromDays(2);
+                o.SlidingExpiration = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
