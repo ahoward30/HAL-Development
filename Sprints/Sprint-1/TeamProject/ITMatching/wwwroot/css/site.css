@@ -1,10 +1,12 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
+h1.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+  font-family: GENUINE;
+  font-size: 48px;
 }
 
 /* Provide sufficient contrast against white background */
@@ -68,4 +70,85 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+/* Default Settings End Here
+-------------------------------------------------- */
+.navbar {
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+.container {
+    width: 100%;
+}
+
+.jumbotron {
+    min-height: 400px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#HomeJumbotron {
+    background-color: #243b45;
+    background-image: url('../Images/WomanComputer.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+#HomeJumbotron .container {
+    margin-top: 5%;
+
+}
+
+#OrangeButton {
+    background-color: #d8831b;   
+}
+
+#OrangeButton:hover {
+     background-color: #c57000;
+     color: #fff;
+}
+
+#HomeCard {
+    background-color: #5089b8;
+    background-image: url('../Images/code.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+#HalLogo {
+    height: 30px;
+    width: 90px;
+}
+
+#OrangeText {
+    color: #d8831b;
+}
+
+.nav-item:hover {
+    background-color: #d8831b;
+    color: rgba(0, 0, 0, .05)
+}
+
+h1 {
+    font-size: 48px;
+}
+
+header {
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+.nav-item {
+    font-size: 24px;
+    font-family: 'Segoe UI';
+}
+
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 32px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
