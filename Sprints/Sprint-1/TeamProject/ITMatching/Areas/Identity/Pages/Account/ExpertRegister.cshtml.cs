@@ -67,19 +67,19 @@ namespace ITMatching.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; }
 
             [Required]
-            [Display(Name = "Start Time")]
+            [Display(Name = "Work Schedule Start Time")]
             public string StartTime { get; set; }
 
             [Required]
-            [Display(Name = "End Time")]
+            [Display(Name = "Work Schedule End Time")]
             public string EndTime { get; set; }
 
             [Required]
-            [Display(Name = "From (Day)")]
+            [Display(Name = "Work Schedule [From]")]
             public string FromDay { get; set; }
 
             [Required]
-            [Display(Name = "To (Day)")]
+            [Display(Name = "Work Schedule [To]")]
             public string ToDay { get; set; }
 
             [Required]
