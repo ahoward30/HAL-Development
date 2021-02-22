@@ -66,7 +66,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "Please enter your primary phone number", MinimumLength = 6)]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone Number")]
-            [RegularExpression(@"^[0-9]{10-13}", ErrorMessage = "Phone number should not contain letters")]
+            //[RegularExpression(@"^[0-9]{10-13}", ErrorMessage = "Phone number should not contain letters")]
 
             public string PhoneNumber { get; set; }
 

@@ -1,9 +1,10 @@
 -- DOWN script for SQL Server
 
+DROP TABLE [ITMUser];
 DROP TABLE [Client];
 DROP TABLE [Expert];
 DROP TABLE [Service];
-DROP TABLE [ServiceTags];
+DROP TABLE [ServiceTag];
 DROP TABLE [Meeting];
 DROP TABLE [ExpertFeedback];
 DROP TABLE [FAQ];
