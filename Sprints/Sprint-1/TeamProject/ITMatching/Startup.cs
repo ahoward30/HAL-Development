@@ -12,6 +12,8 @@ using ITMatching.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ITMatching.Services;
 
 namespace ITMatching
 {
@@ -42,6 +44,12 @@ namespace ITMatching
             services.AddControllersWithViews();
             // Added to enable runtime compilation
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            //Adds EmailSender as a transient service
+            services.AddTransient<IEmailSender, EmailSender>();
+
+            //Register the AuthMessageSenderOptions configuration instance
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
