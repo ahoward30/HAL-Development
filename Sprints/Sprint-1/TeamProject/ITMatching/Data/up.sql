@@ -2,11 +2,12 @@
 
 CREATE TABLE [ITMUser] (
   [ID]					INT PRIMARY KEY IDENTITY(1, 1),
-  [ASPNetIdentityID]	NVARCHAR(450) NOT NULL,
+  [ASPNetUserID]		NVARCHAR(450) NOT NULL,
+  [UserName]			NVARCHAR(255) NOT NULL,
   [FirstName]			NVARCHAR(30) NOT NULL,
   [LastName]			NVARCHAR(30) NOT NULL,
   [Email]				NVARCHAR(50) NOT NULL,
-  [PhoneNumber]			INT
+  [PhoneNumber]			NVARCHAR(13) NOT NULL
 )
 
 CREATE TABLE [Client] (
