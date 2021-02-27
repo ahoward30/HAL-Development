@@ -16,9 +16,9 @@ namespace ITMatching.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
-        ITMatchingDbContext context;
+        ITMatchingAppContext context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, ITMatchingDbContext ctx)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, ITMatchingAppContext ctx)
         {
             _logger = logger;
             _userManager = userManager;

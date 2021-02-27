@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ITMatching.Services;
+using ITMatching.Models;
 
 namespace ITMatching
 {
@@ -33,7 +34,7 @@ namespace ITMatching
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AuthenticationConnection")));
 
-            services.AddDbContext<ITMatchingDbContext>(options =>
+            services.AddDbContext<ITMatchingAppContext>(options =>
                 options.UseSqlServer(
                      Configuration.GetConnectionString("ITMatchingConnection")));
 

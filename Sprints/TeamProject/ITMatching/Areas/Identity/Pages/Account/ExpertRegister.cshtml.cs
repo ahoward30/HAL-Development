@@ -18,23 +18,25 @@ using Microsoft.Extensions.Logging;
 namespace ITMatching.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class RegisterModel : PageModel
+    public class ExpertRegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ITMatchingAppContext _context;
 
-        public RegisterModel(
-            UserManager<IdentityUser> userManager,
+        public ExpertRegisterModel(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ITMatchingAppContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -46,17 +48,14 @@ namespace ITMatching.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-
             [Required]
             [StringLength(100, ErrorMessage = "Please enter your First name", MinimumLength = 2)]
             [Display(Name = "First Name")]
-            [RegularExpression(@"^[a-zA-Z]*", ErrorMessage = "Name should not contain digits")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "Please enter your Last name", MinimumLength = 2)]
             [Display(Name = "Last Name")]
-            [RegularExpression(@"^[a-zA-Z]*", ErrorMessage = "Name should not contain digits")]
             public string LastName { get; set; }
 
             [Required]
@@ -68,8 +67,23 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "Please enter your primary phone number", MinimumLength = 6)]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone Number")]
-           // [RegularExpression(@"^[0-9]{10-13}", ErrorMessage = "Phone number should not contain letters")]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            [Display(Name = "Start Time")]
+            public string StartTime { get; set; }
+
+            [Required]
+            [Display(Name = "End Time")]
+            public string EndTime { get; set; }
+
+            [Required]
+            [Display(Name = "From (Day)")]
+            public string FromDay { get; set; }
+
+            [Required]
+            [Display(Name = "To (Day)")]
+            public string ToDay { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -82,6 +96,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
+
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -114,7 +129,6 @@ namespace ITMatching.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        ITMatchingAppContext context = new ITMatchingAppContext();
                         Itmuser Ituser = new Itmuser()
                         {
                             Username = Input.Email,
@@ -124,12 +138,16 @@ namespace ITMatching.Areas.Identity.Pages.Account
                             Email = Input.Email,
                             AspnetUserId = user.Id
                         };
-                        context.Itmusers.Add(Ituser);
-                        context.SaveChanges();
-                        Itmuser use = context.Itmusers.FirstOrDefault(item => item.Email == Ituser.Email);
-
-                        context.Clients.Add(new Client() { ItmuserId = use.Id });
-                        context.SaveChanges();
+                        _context.Itmusers.Add(Ituser);
+                        _context.SaveChanges();
+                        Itmuser use = _context.Itmusers.FirstOrDefault(item => item.Email == Ituser.Email);
+                        Expert exp = new Expert()
+                        {
+                            WorkSchedule = Input.StartTime + " - " + Input.EndTime + " " + Input.FromDay + " to " + Input.ToDay,
+                            ItmuserId = use.Id
+                        };
+                        _context.Experts.Add(exp);
+                        _context.SaveChanges();
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
                     else
@@ -143,7 +161,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+            
             // If we got this far, something failed, redisplay form
             return Page();
         }

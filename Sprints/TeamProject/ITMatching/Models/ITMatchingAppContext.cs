@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -24,13 +25,16 @@ namespace ITMatching.Models
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ServiceTag> ServiceTags { get; set; }
+        public virtual DbSet<FAQ> FAQs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=IT-MatchingApp;Trusted_Connection=True");
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                //optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ITMatchingApp;Trusted_Connection=True");
+                //IConfiguration conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                optionsBuilder.UseSqlServer("Name=ITMatchingConnection");
             }
         }
 
@@ -91,7 +95,7 @@ namespace ITMatching.Models
 
             modelBuilder.Entity<Itmuser>(entity =>
             {
-                entity.ToTable("ITMUsers");
+                entity.ToTable("ITMUser");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -167,6 +171,17 @@ namespace ITMatching.Models
                     .WithMany(p => p.ServiceTags)
                     .HasForeignKey(d => d.ServiceId)
                     .HasConstraintName("FK__ServiceTa__Exper__403A8C7D");
+            });
+
+            modelBuilder.Entity<FAQ>(entity =>
+            {
+                entity.ToTable("FAQ");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Question).HasMaxLength(500);
+
+                entity.Property(e => e.Answer).HasMaxLength(500);
             });
 
             OnModelCreatingPartial(modelBuilder);
