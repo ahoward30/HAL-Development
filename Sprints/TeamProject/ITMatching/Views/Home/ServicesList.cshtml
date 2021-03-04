@@ -1,0 +1,128 @@
+@model IEnumerable<ITMatching.Models.Service>
+
+@{
+    ViewData["Title"] = "Services List";
+}
+<div class="container">
+    <h1 class="text-center large-Margin">Topics Our Service Covers</h1>
+    <div class="row large-Margin">
+        <div class="col-lg-6">
+            <p>IT-Matching supports a multitude of different topics that our experts can troubleshoot. The topics are broadly split into the categories of "Hardware", "Software", and "Network". When you submit a help request as a client, you are able to write a description of your IT issue, and tag your request with any and all topics that relate to your issue.</p>
+        </div>
+        <div class="col-lg-6">
+            <p>After submitting your help request, you will be matched with an expert who has experience in the topics that you tagged in your help request. From this point, you and your matched expert can have a one-on-one meeting with the ability for text-chat, video calling, and screensharing. </p>
+        </div>
+    </div>
+</div>
+
+<div class="jumbotron jumbotron-fluid" id="ListJumbotron">
+    <div class="container">
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card service-Card">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="nav-item">
+                        <a href="#hardwareTab" class="nav-link active" data-toggle="tab">Hardware</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#softwareTab" class="nav-link" data-toggle="tab">Software</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#networkTab" class="nav-link" data-toggle="tab">Network</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#osTab" class="nav-link" data-toggle="tab">Operating System</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#methodTab" class="nav-link" data-toggle="tab">Meeting Method</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade pb-0 mb-0 show active" id="hardwareTab">
+                        <ul class="mb-0">
+                            @foreach (var item in Model)
+                            {
+                                if (item.ServiceCategory == "Hardware" && item.ServiceName != "Hardware")
+                                {
+                                    <li>@item.ServiceName</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="softwareTab">
+                        <ul class="mb-0">
+                            @foreach (var item in Model)
+                            {
+                                if (item.ServiceCategory == "Software" && item.ServiceName != "Software")
+                                {
+                                    <li>@item.ServiceName</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="networkTab">
+                        <ul class="mb-0">
+                            @foreach (var item in Model)
+                            {
+                                if (item.ServiceCategory == "Network" && item.ServiceName != "Network")
+                                {
+                                    <li>@item.ServiceName</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="osTab">
+                        <ul class="mb-0">
+                            @foreach (var item in Model)
+                            {
+                                if (item.ServiceCategory == "OS")
+                                {
+                                    <li>@item.ServiceName</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="methodTab">
+                        <ul class="mb-0">
+                            @foreach (var item in Model)
+                            {
+                                if (item.ServiceCategory == "CommunicationMethod" && item.ServiceName != "CommunicationMethod")
+                                {
+                                    <li>@item.ServiceName</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center container-fluid"><br /><br />
+    <div class="container-fluid">
+        <div class="card border-dark text-black bg-info mb-3" id="HomeCard">
+            <div class="card-body" id="HomeCard">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><h1 id="OrangeText">Register for an account today, and allow us to solve your IT issues!</h1></div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a href='@Url.Action("TempRegister", "Identity")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Register Now"></a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Return to Home Page"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

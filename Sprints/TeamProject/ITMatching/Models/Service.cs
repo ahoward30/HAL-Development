@@ -14,7 +14,7 @@ namespace ITMatching.Models
         }
 
         public int Id { get; set; }
-        public int ServiceCategory { get; set; }
+        public string ServiceCategory { get; set; }
         public string ServiceName { get; set; }
 
         public virtual ICollection<Meeting> Meetings { get; set; }

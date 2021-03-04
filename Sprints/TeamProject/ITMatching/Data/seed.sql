@@ -62,7 +62,7 @@ INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'Router');
 INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'Modem');
 INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'Gateway');
 INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'DNS');
-INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'Port');
+INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'Ports');
 INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'TCP');
 INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'UDP');
 INSERT INTO [Service](ServiceCategory,ServiceName) VALUES('Network', 'ICMP');

@@ -101,6 +101,13 @@ body {
 
 }
 
+#ListJumbotron {
+    background-color: #243b45;
+    background-image: url('../Images/hardware_orange.png');
+    background-size: cover;
+    background-position: center bottom;
+}
+
 #OrangeButton {
     background-color: #d8831b;   
 }
@@ -115,6 +122,10 @@ body {
     background-image: url('../Images/code.png');
     background-size: cover;
     background-position: center center;
+}
+
+#service-Card{
+    margin-top: 20px;
 }
 
 #HalLogo {
@@ -141,14 +152,53 @@ header {
 }
 
 .nav-item {
-    font-size: 24px;
+    font-size: 18px;
     font-family: 'Segoe UI';
 }
 
 .btn-xlarge {
     padding: 18px 28px;
-    font-size: 32px;
+    font-size: 26px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+}
+
+.large-Margin{
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+p {
+    font-family: 'Segoe UI';
+    font-size: 16px;
+}
+
+#logout {
+    font-size: 18px;
+}
+
+#hardwareTab {
+    background-image: url('../Images/hardwarebackground.png');
+    background-size: cover;
+}
+
+#softwareTab {
+    background-image: url('../Images/softwarebackground.png');
+    background-size: cover;
+}
+
+#networkTab {
+    background-image: url('../Images/networkbackground.png');
+    background-size: cover;
+}
+
+#osTab {
+    background-image: url('../Images/osbackground.png');
+    background-size: cover;
+}
+
+#methodTab {
+    background-image: url('../Images/meetingbackground.png');
+    background-size: cover;
 }
