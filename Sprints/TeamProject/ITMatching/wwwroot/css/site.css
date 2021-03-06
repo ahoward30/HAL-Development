@@ -89,6 +89,13 @@ body {
     margin-bottom: 0px;
 }
 
+#AccountJumbotron {
+    background-color: #243b45;
+    background-image: url('../Images/Servers.jpg');
+    background-size: cover;
+    background-position: center center;
+}
+
 #HomeJumbotron {
     background-color: #243b45;
     background-image: url('../Images/WomanComputer.png');
