@@ -16,13 +16,13 @@ a {
 
 .btn-primary {
   color: #fff;
-  background-color: #1b6ec2;
+  background-color: #5089b8;
   border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #1b6ec2;
+  background-color: #5089b8;
   border-color: #1861ac;
 }
 
@@ -87,6 +87,13 @@ body {
     min-height: 400px;
     margin-top: 0px;
     margin-bottom: 0px;
+}
+
+#AccountJumbotron {
+    background-color: #243b45;
+    background-image: url('../Images/Servers.jpg');
+    background-size: cover;
+    background-position: center center;
 }
 
 #HomeJumbotron {

@@ -41,6 +41,7 @@ namespace ITMatching
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()                          //Enable Roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             // Added to enable runtime compilation

@@ -1,0 +1,92 @@
+﻿@page
+@model IndexModel
+@using ITMatching.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ITMatchingAppContext AppContext
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+@if (SignInManager.IsSignedIn(User))
+{
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+
+    @if (eUser != null)
+    {
+        <div class="row">
+            <div class="col-md-9">
+                <form id="profile-form" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.FirstName"></label>
+                        <input asp-for="@itUser.FirstName" class="form-control" disabled />
+                        @*<input type="text" readonly class="form-control-plaintext" id="staticText" value="@itUser.FirstName">*@
+                        <span asp-validation-for="@itUser.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.LastName"></label>
+                        <input asp-for="@itUser.LastName" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.Email"></label>
+                        <input asp-for="@itUser.Email" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.PhoneNumber"></label>
+                        <input asp-for="@itUser.PhoneNumber" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@eUser.WorkSchedule"></label>
+                        <input asp-for="@eUser.WorkSchedule" class="form-control" disabled />
+                        <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-9">
+                <form id="profile-form" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.FirstName"></label>
+                        <input asp-for="@itUser.FirstName" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.LastName"></label>
+                        <input asp-for="@itUser.LastName" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.Email"></label>
+                        <input asp-for="@itUser.Email" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@itUser.PhoneNumber"></label>
+                        <input asp-for="@itUser.PhoneNumber" class="form-control" disabled />
+                        <span asp-validation-for="@itUser.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
