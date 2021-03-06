@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -15,6 +16,8 @@ namespace ITMatching.Models
         }
 
         public int Id { get; set; }
+
+        [Display(Name = "Work Schedule")]
         public string WorkSchedule { get; set; }
         public int? ItmuserId { get; set; }
 
