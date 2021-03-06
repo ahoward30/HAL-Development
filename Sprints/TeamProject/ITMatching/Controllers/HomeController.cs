@@ -55,6 +55,12 @@ namespace ITMatching.Controllers
             return View(qAndAList);
         }
 
+        public IActionResult ServicesList()
+        {
+            List<Service> services = context.Services.ToList();
+            return View(services);
+        }
+
         public IActionResult Privacy()
         {
             return View();

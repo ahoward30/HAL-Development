@@ -37,12 +37,12 @@ html {
   }
 }
 
-.border-top {
+/*.border-top {
   border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
-}
+}*/
 
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
@@ -108,13 +108,22 @@ body {
 
 }
 
+#ListJumbotron {
+    background-color: #243b45;
+    background-image: url('../Images/hardware_orange.png');
+    background-size: cover;
+    background-position: center center;
+}
+
 #OrangeButton {
     background-color: #d8831b;   
+    border: 0px;
 }
 
 #OrangeButton:hover {
      background-color: #c57000;
      color: #fff;
+     border: 0px;
 }
 
 #HomeCard {
@@ -122,6 +131,10 @@ body {
     background-image: url('../Images/code.png');
     background-size: cover;
     background-position: center center;
+}
+
+#service-Card{
+    margin-top: 20px;
 }
 
 #HalLogo {
@@ -147,15 +160,66 @@ header {
     padding: 0px;
 }
 
+.text-shadow {
+    color: #FFF;
+    text-shadow: 2px 2px #000;
+}
+
 .nav-item {
-    font-size: 24px;
+    font-size: 18px;
     font-family: 'Segoe UI';
 }
 
 .btn-xlarge {
     padding: 18px 28px;
-    font-size: 32px;
+    font-size: 26px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+}
+
+.large-Margin{
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+p {
+    font-family: 'Segoe UI';
+    font-size: 16px;
+}
+
+.nav-tabs{
+    border: 0px;
+}
+
+#logout {
+    font-size: 18px;
+}
+
+#hardwareTab {
+    background-image: url('../Images/hardwarebackground.png');
+    background-size: cover;
+}
+
+#softwareTab {
+    background-image: url('../Images/softwarebackground.png');
+    background-size: cover;
+}
+
+#networkTab {
+    background-image: url('../Images/networkbackground.png');
+    background-size: cover;
+    background-position: center bottom;
+}
+
+#osTab {
+    background-image: url('../Images/osbackground.png');
+    background-size: cover;
+    background-position: center center;
+}
+
+#methodTab {
+    background-image: url('../Images/meetingbackground.png');
+    background-size: cover;
+    background-position: center center;
 }

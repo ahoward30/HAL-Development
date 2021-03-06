@@ -153,6 +153,10 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.ServiceCategory)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.ServiceName)
                     .IsRequired()
                     .HasMaxLength(100);

@@ -25,6 +25,7 @@ GO
 
 CREATE TABLE [Service] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
+  [ServiceCategory]	NVARCHAR(100) NOT NULL,
   [ServiceName]		NVARCHAR(100) NOT NULL
 )
 GO 
