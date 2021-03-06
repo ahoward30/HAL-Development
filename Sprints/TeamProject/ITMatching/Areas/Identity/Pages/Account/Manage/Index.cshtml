@@ -18,11 +18,10 @@
 {
     string id = UserManager.GetUserId(User);
     Itmuser itUser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
 
-    @if(itUser.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault() != null)
+    @if (eUser != null)
     {
-        Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
-
         <div class="row">
             <div class="col-md-6">
                 <form id="profile-form" method="post">
