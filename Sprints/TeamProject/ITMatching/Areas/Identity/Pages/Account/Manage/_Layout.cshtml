@@ -9,21 +9,30 @@
     }
 }
 
-<h2>Manage your account</h2>
 
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
+<div class="container">
+    <div class="text-center">
+        <h1>Account Overview</h1>
+        <h3>Review your account settings</h3>
+        <br />
+    </div>
+</div>
+
+<div class="jumbotron" id="AccountJumbotron">
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row-">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10 offset-2">
+            <br />
+
             @RenderBody()
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @RenderSection("Scripts", required: false)
-}
+    @section Scripts {
+        @RenderSection("Scripts", required: false)
+    }
