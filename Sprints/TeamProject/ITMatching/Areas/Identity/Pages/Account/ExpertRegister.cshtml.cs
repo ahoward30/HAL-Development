@@ -70,22 +70,6 @@ namespace ITMatching.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; }
 
             [Required]
-            [Display(Name = "Start Time")]
-            public string StartTime { get; set; }
-
-            [Required]
-            [Display(Name = "End Time")]
-            public string EndTime { get; set; }
-
-            [Required]
-            [Display(Name = "From (Day)")]
-            public string FromDay { get; set; }
-
-            [Required]
-            [Display(Name = "To (Day)")]
-            public string ToDay { get; set; }
-
-            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -143,7 +127,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
                         Itmuser use = _context.Itmusers.FirstOrDefault(item => item.Email == Ituser.Email);
                         Expert exp = new Expert()
                         {
-                            WorkSchedule = Input.StartTime + " - " + Input.EndTime + " " + Input.FromDay + " to " + Input.ToDay,
+                            //WorkSchedule = Input.StartTime + " - " + Input.EndTime + " " + Input.FromDay + " to " + Input.ToDay,
                             ItmuserId = use.Id
                         };
                         _context.Experts.Add(exp);
