@@ -2,8 +2,13 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 body {
-    background-color: #FFF;
+    background-color: #EEEEEE;
 }
+
+.navbar-color {
+    background-color: #1a344c;
+    color: whitesmoke;
+} 
 
 #toggleButton{
     background-color: darkblue;
