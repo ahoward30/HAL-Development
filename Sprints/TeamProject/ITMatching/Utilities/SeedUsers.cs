@@ -37,8 +37,8 @@ namespace ITMatching.Utilities
                         // Ensure this user exists or is newly created (Email is used for username since that is the default in Register and Login -- change those and then use username here if you want it different than email
                         var identityID = await EnsureUser(userManager, testUserPw, u.Email, u.Email, u.EmailConfirmed);
                         // Create a new ITMatchingUser if this one doesn't already exist
-                        Itmuser iu = new Itmuser { AspnetUserId = identityID, FirstName = u.FirstName, LastName = u.LastName };
-                        if(!context.Itmusers.Any(x => x.AspnetUserId == iu.AspnetUserId && x.FirstName == iu.FirstName && x.LastName == iu.LastName))
+                        Itmuser iu = new Itmuser { AspNetUserId = identityID, FirstName = u.FirstName, LastName = u.LastName };
+                        if(!context.Itmusers.Any(x => x.AspNetUserId == iu.AspNetUserId && x.FirstName == iu.FirstName && x.LastName == iu.LastName))
                         {
                             // Doesn't already exist, so add a new user
                             context.Add(iu);

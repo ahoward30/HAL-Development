@@ -5,10 +5,11 @@ using System.Collections.Generic;
 
 namespace ITMatching.Models
 {
-    public partial class ServiceTag
+    public partial class WorkSchedule
     {
         public int Id { get; set; }
-        public int ServiceId { get; set; }
         public int? ExpertId { get; set; }
+        public string Day { get; set; }
+        public int? Hour { get; set; }
     }
 }

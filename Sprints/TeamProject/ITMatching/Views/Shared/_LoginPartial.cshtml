@@ -9,7 +9,7 @@
     @if (SignInManager.IsSignedIn(User))
     {
         string id = UserManager.GetUserId(User);
-        Itmuser itUser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
+        Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
 
         <li class="nav-item">
             <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@itUser.FirstName's Profile</a>

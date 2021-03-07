@@ -299,3 +299,9 @@ label.label-floatlabel {
         background-color: #c57000;
         color: white;
     }
+.SchedularTable {
+    text-align:center;
+    margin-bottom:50px;
+    margin-top:50px;
+    color:white;
+}

@@ -16,7 +16,7 @@
 @if (SignInManager.IsSignedIn(User))
 {
     string id = UserManager.GetUserId(User);
-    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
     Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
 
     @if (eUser != null)
