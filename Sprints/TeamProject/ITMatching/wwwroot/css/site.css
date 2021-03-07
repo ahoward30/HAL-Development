@@ -223,3 +223,79 @@ p {
     background-size: cover;
     background-position: center center;
 }
+/*Styling Registration form*/
+
+.centered-form {
+    margin-top: 60px;
+    position: center;
+}
+
+    .centered-form .panel {
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+    }
+
+label.label-floatlabel {
+    font-weight: bold;
+    color: #46b8da;
+    font-size: 11px;
+}
+
+/*Styling Temp Register*/
+
+.Tempbtn {
+    position: relative;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #343a40;
+    color: white;
+    font-size: 16px;
+    font-family: Verdana;
+    padding: 15px 30px 15px 30px;
+    border: solid;
+    cursor: pointer;
+    border-radius: 20px;
+    text-align: center;
+    width: 200px;
+    height: 75px;
+    margin-left: 15px;
+    margin-right: 15px;
+    box-shadow: 0 8px 16px 0 #343a40, 0 6px 20px 0 #c57000;
+}
+
+    .Tempbtn:hover {
+        background-color: #c57000;
+        color: white;
+        transition: all .5s ease-in-out;
+        font-size: x-large;
+    }
+
+.bg-overlay {
+    height: 550px;
+    background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)),url('https://unsplash.imgix.net/photo-1416339442236-8ceb164046f8?q=75&fm=jpg&s=8eb83df8a744544977722717b1ea4d09') center no-repeat scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.congrats-overlay {
+    height: 550px;
+    color: white;
+    background: url('https://images.unsplash.com/photo-1513151233558-d860c5398176?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80') center no-repeat scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.SubmitBtn {
+    background-color: #1b6ec2;
+    color: white;
+}
+
+    .SubmitBtn:hover {
+        background-color: #c57000;
+        color: white;
+    }
