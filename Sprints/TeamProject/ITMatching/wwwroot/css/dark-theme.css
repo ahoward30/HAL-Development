@@ -1,0 +1,12 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+body {
+    background-color: #000;
+}
+
+#toggleButton {
+    background-color: #d8831b;
+    color: whitesmoke;
+    margin-right: 20px;
+}
