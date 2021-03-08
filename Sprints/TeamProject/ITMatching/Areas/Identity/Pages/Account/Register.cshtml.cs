@@ -51,11 +51,13 @@ namespace ITMatching.Areas.Identity.Pages.Account
         {
 
             [Required]
+            [RegularExpression(@"^[a-zA-Z]*", ErrorMessage = "Invalid name, names cannot contain symbols or numbers.")]
             [StringLength(100, ErrorMessage = "Please enter your First name", MinimumLength = 2)]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
+            [RegularExpression(@"^[a-zA-Z]*", ErrorMessage = "Invalid name, names cannot contain symbols or numbers.")]
             [StringLength(100, ErrorMessage = "Please enter your Last name", MinimumLength = 2)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
@@ -66,6 +68,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Not a valid phone number")]
             [StringLength(100, ErrorMessage = "Please enter your primary phone number", MinimumLength = 6)]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone Number")]
@@ -116,12 +119,12 @@ namespace ITMatching.Areas.Identity.Pages.Account
                     {
                         Itmuser Ituser = new Itmuser()
                         {
-                            Username = Input.Email,
+                            UserName = Input.Email,
                             FirstName = Input.FirstName,
                             LastName = Input.LastName,
                             PhoneNumber = Input.PhoneNumber,
                             Email = Input.Email,
-                            AspnetUserId = user.Id
+                            AspNetUserId = user.Id
                         };
                         _context.Itmusers.Add(Ituser);
                         _context.SaveChanges();

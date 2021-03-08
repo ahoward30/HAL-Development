@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ConfirmEmailModel
 @{
     ViewData["Title"] = "Confirm email";
@@ -17,25 +17,25 @@
         </div>
         <div class="row justify-content-center">
             <div class="text-center" style="margin-top: 100px;">
-                <a class="Tempbtn" asp-area="Identity" asp-page="/">Go My Profile Page</a>
+                <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Login">Go To Login Page</a>
             </div>
-            <div class="text-center" style="margin-top: 100px;">
-                <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
-            </div>
-            @* @if (SignInManager.IsSignedIn(User))
-        {
-            string id = UserManager.GetUserId(User);
-
-            Itmuser ituser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
-            Expert expert = AppContext.Experts.Where(u => u.ItmuserId == ituser.Id).FirstOrDefault();
-            if (expert != null)
-            {
-                <div style="margin-top: 100px;">
-                    <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
-                </div>
-            }
-        }*@
-
         </div>
     </div>
+
 </div>
+
+
+@* @if (SignInManager.IsSignedIn(User))
+    {
+        string id = UserManager.GetUserId(User);
+
+        Itmuser ituser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+        Expert expert = AppContext.Experts.Where(u => u.ItmuserId == ituser.Id).FirstOrDefault();
+        if (expert != null)
+        {
+            <div style="margin-top: 100px;">
+                <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
+            </div>
+        }
+    }*@
+

@@ -8,12 +8,9 @@ namespace ITMatching.Models
     public partial class ExpertFeedback
     {
         public int Id { get; set; }
-        public int? ExpertId { get; set; }
-        public int? ClientId { get; set; }
+        public int ExpertId { get; set; }
+        public int ClientId { get; set; }
         public string FeedbackText { get; set; }
-        public int? Rating { get; set; }
-
-        public virtual Client Client { get; set; }
-        public virtual Expert Expert { get; set; }
+        public int Rating { get; set; }
     }
 }
