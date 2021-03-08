@@ -1,0 +1,24 @@
+﻿@page
+@model ITMatching.Areas.Identity.Pages.Account.TempRegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+<div class="bg-overlay">
+    <center>
+        <h1 style="color:#c57000">Get Started Today With Our IT-Assistance Program</h1>
+        <br />
+
+        <h4 style="color:#c57000;">What Would You Like to Register As?</h4>
+        <br />
+    </center>
+    <div class="row justify-content-center">
+        <div class="">
+            <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Register">Client</a>
+        </div>
+        <div class="">
+            <a class="Tempbtn" asp-area="Identity" asp-page="/Account/ExpertRegister">Expert</a>
+        </div>
+    </div>
+
+</div>
+

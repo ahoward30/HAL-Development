@@ -1,0 +1,72 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "ClientRegister";
+}
+
+<br />
+<div class="container">
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-12">
+            <div class="panel panel-default" style="margin-bottom:20px;">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <center>
+                        <h3 style="font-family: Verdana;" class="dark-label">Client</h3>
+                        <hr />
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <table>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.FirstName" class="dark-label"></label>:</th>
+                                <td>
+                                    <input asp-for="Input.FirstName" class="form-control" />
+                                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label asp-for="Input.LastName" class="dark-label"></label>:</th>
+                                <td>
+                                    <input asp-for="Input.LastName" class="form-control" />
+                                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.PhoneNumber" class="dark-label"></label>:</th>
+                                <td>
+                                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.Email" class="dark-label"></label>:</th>
+                                <td>
+                                    <input asp-for="Input.Email" class="form-control" />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.Password" class="dark-label"></label>:</th>
+                                <td>
+                                    <input asp-for="Input.Password" class="form-control" />
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.ConfirmPassword" class="dark-label"></label>:</th>
+                                <td>
+                                    <input asp-for="Input.ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2"><center><button type="submit" class="btn SubmitBtn">Register</button></center></th>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

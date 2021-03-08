@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*@ViewBag.Message*@
+<div class="jumbotron jumbotron-fluid" id="HomeJumbotron">
+    <div class="container">
+        <div class="row">
+            <br /><br />
+            <div class="col-lg-6">
+                <h1 class="text-white text-center text-shadow">Have an IT Issue?</h1>
+            </div>
+            <div class="col-lg-6">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get Help Now"></a><br />
+                }
+                else
+                {
+                    <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See What We Can Help You With"></a><br />
+                }
+
+            </div>
+        </div>
+        <br /><br />
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4 class="text-white text-center">
+                    If you have an IT-related issue, then submit a help request and get matched with an expert who can help you!
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center container-fluid">
+    <br /><br />
+    <div class="container">
+        <div class="card border-dark text-black bg-info mb-3" id="HomeCard">
+            <div class="card-body" id="HomeCard">
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-header"><h2 id="OrangeText">What is IT-Matching?</h2></div>
+                    <div class="card-body">
+                        <p class="text-left text-white">
+                            IT-Matching is a web application giving the opportunity for those seeking IT help to be matched with those with the expertise
+                            needed in order to solve their IT-related problems. IT Matching will prompt users who need help to describe the nature of their IT or computing
+                            related issue and automatically connect them with professionals whose provided expertise matches the client’s issue. Once matched together in the
+                            system, IT Matching allows for the client and the expert to video chat one-on-one to come to a solution to the client’s IT-related issue.
+                        </p><br />
+                        <h3 id="OrangeText"> Make an account and get started today! </h3><br /><br />
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card text-white bg-dark mb-3">
+                                <div class="card-header"><h2 id="OrangeText">Key Features</h2></div>
+                                <div class="card-body">
+                                    <ul class="text-left">
+                                        <li><p class=" text-white">Request form for clients to describe and tag their IT issue</p><br /></li>
+                                        <li><p class=" text-white">Automated system that connects users based on a "Matching Score"</p><br /></li>
+                                        <li><p class=" text-white">Live one-on-one text or video chat between clients and experts</p><br /></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card text-white bg-dark mb-2">
+                                <div class="card-header"><h2 id="OrangeText">Get Help with...</h2></div>
+                                <div class="card-body">
+                                    <ul class="text-left">
+                                        <li><p class=" text-white">Hardware,</p></li>
+                                        <li><p class=" text-white">Software,</p></li>
+                                        <li><p class=" text-white">and Networking,</p></li>
+                                    </ul>
+                                    <h3 id="OrangeText">All in a format convenient to you!</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
