@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ConfirmEmailModel
 @{
     ViewData["Title"] = "Confirm email";
@@ -9,17 +9,17 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @inject ITMatchingAppContext AppContext
-<div class="congrats-overlay">
-    <center>
-        <h1 >Congratulations, You Have Completed Your Registeration!</h1>
-        <br />
-        <br />
-    </center>
-    <div class="row justify-content-center">
-        <div class="">
-            <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Login">Go To Login Page</a>
+
+<div class="congrats-overlay row text-center">
+    <div class="container">
+        <div class="row">
+            <h1 style="font-family:Garamond, serif;">Congratulations, You have Finished Your Registration process! </h1>
         </div>
-       
+        <div class="row justify-content-center">
+            <div class="text-center" style="margin-top: 100px;">
+                <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Login">Go To Login Page</a>
+            </div>
+        </div>
     </div>
 
 </div>

@@ -1,0 +1,49 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+body {
+    background-color: #EEEEEE;
+}
+
+h1, h2, h3, h4, h5, p {
+    color: #222222;
+}
+
+a {
+    color: #222222;
+}
+
+label {
+    color: #222222;
+}
+
+.navbar-color {
+    background-color: #1a344c;
+    color: whitesmoke;
+}
+
+.faq-header {
+    background-color: #1a344c;
+}
+
+.faq-body {
+    background-color: #DDDDDD;
+    color: #222222;
+}
+
+.Logo {
+    color: #385c7c;
+}
+
+#service-Card {
+    margin-top: 20px;
+    background-color: #DDDDDD;
+}
+
+#toggleButton {
+    background-color: #353590;
+    color: aliceblue;
+    margin-right: 20px;
+    border: 2px solid;
+    border-color: whitesmoke;
+}
