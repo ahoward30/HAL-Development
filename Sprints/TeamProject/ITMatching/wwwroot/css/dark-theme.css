@@ -21,6 +21,10 @@ label {
     color: #EEEEEE;
 }
 
+.dark-label {
+    color: #222222;
+}
+
 .navbar-color {
     background-color: #1a344c;
     color: whitesmoke;
@@ -51,6 +55,10 @@ label {
 .border-custom {
     border-color: #000;
     color: #000;
+}
+
+.Tempbtn {
+    text-color: #222222;
 }
 
 footer {

@@ -10,27 +10,32 @@
 @inject UserManager<IdentityUser> UserManager
 @inject ITMatchingAppContext AppContext
 
-<div class="congrats-overlay row">
-    <center>
-        <h1 style="font-family:Garamond, serif;">Congratulation, You have Finished Your Registeration process! </h1>
-        <div style="margin-top: 100px;">
-            <a class="Tempbtn" asp-area="Identity" asp-page="/">Go My Profile Page</a>
+<div class="congrats-overlay row text-center">
+    <div class="container">
+        <div class="row">
+            <h1 style="font-family:Garamond, serif;">Congratulations, You have Finished Your Registration process! </h1>
         </div>
-        <div style="margin-top: 100px;">
-            <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
-        </div>
-        @* @if (SignInManager.IsSignedIn(User))
-            {
-                string id = UserManager.GetUserId(User);
+        <div class="row justify-content-center">
+            <div class="text-center" style="margin-top: 100px;">
+                <a class="Tempbtn" asp-area="Identity" asp-page="/">Go My Profile Page</a>
+            </div>
+            <div class="text-center" style="margin-top: 100px;">
+                <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
+            </div>
+            @* @if (SignInManager.IsSignedIn(User))
+        {
+            string id = UserManager.GetUserId(User);
 
-                Itmuser ituser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
-                Expert expert = AppContext.Experts.Where(u => u.ItmuserId == ituser.Id).FirstOrDefault();
-                if (expert != null)
-                {
-                    <div style="margin-top: 100px;">
-                        <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
-                    </div>
-                }
-            }*@
-    </center>
+            Itmuser ituser = AppContext.Itmusers.Where(u => u.AspnetUserId == id).FirstOrDefault();
+            Expert expert = AppContext.Experts.Where(u => u.ItmuserId == ituser.Id).FirstOrDefault();
+            if (expert != null)
+            {
+                <div style="margin-top: 100px;">
+                    <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Your Work Schedule</a>
+                </div>
+            }
+        }*@
+
+        </div>
+    </div>
 </div>
