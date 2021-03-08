@@ -9,9 +9,8 @@ h1.navbar-brand {
   font-size: 48px;
 }
 
-/* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #EEEEEE;
 }
 
 .btn-primary {
@@ -21,7 +20,7 @@ a {
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
+  color: #1861ac;
   background-color: #5089b8;
   border-color: #1861ac;
 }
@@ -133,10 +132,6 @@ body {
     background-position: center center;
 }
 
-#service-Card{
-    margin-top: 20px;
-}
-
 #HalLogo {
     height: 30px;
     width: 90px;
@@ -148,7 +143,7 @@ body {
 
 .nav-item:hover {
     background-color: #d8831b;
-    color: rgba(0, 0, 0, .05)
+    color: darkgray;
 }
 
 h1 {
