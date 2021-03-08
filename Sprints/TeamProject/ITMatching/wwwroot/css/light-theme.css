@@ -5,13 +5,43 @@ body {
     background-color: #EEEEEE;
 }
 
+h1, h2, h3, h4, h5, p {
+    color: #222222;
+}
+
+a {
+    color: #222222;
+}
+
+label {
+    color: #222222;
+}
+
 .navbar-color {
     background-color: #1a344c;
     color: whitesmoke;
-} 
+}
 
-#toggleButton{
-    background-color: darkblue;
+.faq-header {
+    background-color: #1a344c;
+}
+
+.faq-body {
+    background-color: #DDDDDD;
+    color: #222222;
+}
+
+.Logo {
+    color: #385c7c;
+}
+
+#service-Card {
+    margin-top: 20px;
+    background-color: #DDDDDD;
+}
+
+#toggleButton {
+    background-color: #202060;
     color: aliceblue;
     margin-right: 20px;
 }

@@ -5,14 +5,40 @@ body {
     background-color: #202427;
 }
 
-h1, h2, h3, h4, h5, p {
+h1, h2, h3, h4, h5, p{
+    color: #EEEEEE;
+}
+
+a {
+    color: #EEEEEE;
+}
+
+.Logo {
+    color: #EEEEEE;
+}
+
+label { 
     color: #EEEEEE;
 }
 
 .navbar-color {
     background-color: #1a344c;
     color: whitesmoke;
-} 
+}
+
+.faq-header {
+    background-color: #1a344c;
+}
+
+.faq-body {
+    background-color: #385c7c;
+    color: #EEEEEE;
+}
+
+#service-Card {
+    margin-top: 20px;
+    background-color: #1a344c;
+}
 
 #toggleButton {
     background-color: #d8831b;
@@ -20,7 +46,11 @@ h1, h2, h3, h4, h5, p {
     margin-right: 20px;
 }
 
-#service-Card {
-    margin-top: 20px;
-    background-color: #b6ff00;
+.border-custom {
+    border-color: #000;
+    color: #000;
+}
+
+footer {
+    background-color: #444444;
 }
