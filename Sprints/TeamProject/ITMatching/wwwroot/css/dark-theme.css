@@ -44,6 +44,8 @@ label {
     background-color: #d8831b;
     color: whitesmoke;
     margin-right: 20px;
+    border: 2px solid;
+    border-color: whitesmoke;
 }
 
 .border-custom {

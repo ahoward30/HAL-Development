@@ -41,7 +41,9 @@ label {
 }
 
 #toggleButton {
-    background-color: #202060;
+    background-color: #353590;
     color: aliceblue;
     margin-right: 20px;
+    border: 2px solid;
+    border-color: whitesmoke;
 }
