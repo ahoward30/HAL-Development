@@ -73,8 +73,8 @@ CREATE TABLE [HelpRequest] (
 )
 GO
 create table [WorkSchedule] (
-ID int primary key IDENTITY(1,1),
-ExpertId int,
+  [ID]					INT PRIMARY KEY IDENTITY(1,1),
+  [ExpertId]            INT	NOT NULL,
 "Day" NVARCHAR(20),
 "Hour" int
 )
