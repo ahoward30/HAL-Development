@@ -12,5 +12,6 @@ namespace ITMatching.Models
         public string RequestTitle { get; set; }
         public string RequestDescription { get; set; }
         public int ServiceTagId { get; set; }
+        public bool IsOpen { get; set; }
     }
 }

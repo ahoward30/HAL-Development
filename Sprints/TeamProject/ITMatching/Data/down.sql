@@ -3,7 +3,8 @@
 DROP TABLE [Client];
 DROP TABLE [Expert];
 DROP TABLE [Service];
-DROP TABLE [ServiceTag];
+DROP TABLE [ExpertService];
+DROP TABLE [RequestService];
 DROP TABLE [Meeting];
 DROP TABLE [ExpertFeedback];
 DROP TABLE [FAQ];

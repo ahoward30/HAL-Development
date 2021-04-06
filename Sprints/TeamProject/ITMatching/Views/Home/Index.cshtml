@@ -17,7 +17,7 @@
             <div class="col-lg-6">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get Help Now"></a><br />
+                    <a href='@Url.Action("RequestFormMajorTopics", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get Help Now"></a><br />
                 }
                 else
                 {

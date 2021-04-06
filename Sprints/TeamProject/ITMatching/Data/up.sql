@@ -30,11 +30,17 @@ CREATE TABLE [Service] (
 )
 GO 
 
---Likely have to rework so that this isn't tied to expert, so that we can use with HelpRequest as well
-CREATE TABLE [ServiceTag] (
+CREATE TABLE [ExpertService] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ServiceId]		INT NOT NULL,
   [ExpertId]		INT
+)
+GO 
+
+CREATE TABLE [RequestService] (
+  [ID]				INT PRIMARY KEY IDENTITY(1, 1),
+  [ServiceId]		INT NOT NULL,
+  [RequestId]		INT
 )
 GO 
 
@@ -67,9 +73,9 @@ GO
 CREATE TABLE [HelpRequest] (
   [ID]					INT PRIMARY KEY IDENTITY(1, 1),
   [ClientID]			INT NOT NULL,
-  [RequestTitle]		NVARCHAR(40),
-  [RequestDescription]	NVARCHAR(2000),
-  [ServiceTagID]		INT NOT NULL,
+  [RequestTitle]		NVARCHAR(40) NOT NULL,
+  [RequestDescription]	NVARCHAR(2000) NOT NULL,
+  [IsOpen]				BIT NOT NULL
 )
 GO
 create table [WorkSchedule] (
