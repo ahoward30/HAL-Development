@@ -102,8 +102,6 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.RequestTitle).HasMaxLength(40);
 
-                entity.Property(e => e.ServiceTagId).HasColumnName("ServiceTagID");
-
                 entity.Property(e => e.IsOpen).HasColumnName("IsOpen");
 
             });

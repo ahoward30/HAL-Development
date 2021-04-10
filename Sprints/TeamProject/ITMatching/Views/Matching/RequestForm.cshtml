@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Request Form";
 }
+<script src="~/js/request-form.js" asp-append-version="true"></script>
 <h1>@ViewData["Title"]</h1>
 
 <div class="container">
@@ -23,54 +24,112 @@
                         <div class="form-group">
                             <label for="tags">Select any tags that apply:</label>
                             <div class="card card-body">
-                                @foreach (Service s in Model.Services)
-                            {
-                                 if (s.ServiceCategory == "OS" && s.ServiceName != "OS")
-                                 {
-                                <input type="checkbox" name="TagIds" value="@s.Id">@s.ServiceName
-                                 }
-                            }
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="formTags">
+                                                @foreach (Service s in Model.Services)
+                                                {
+                                                    if (s.ServiceCategory == "OS" && s.ServiceName != "OS")
+                                                    {
+                                                        <li>
+                                                            <label>
+                                                                <input type="checkbox" />
+                                                                <span>@s.ServiceName </span>
+                                                            </label>
+                                                        </li>
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card card-body">
-                                @foreach (Service s in Model.Services)
-                            {
-                                 if (s.ServiceCategory == "Hardware" && s.ServiceName != "Hardware")
-                                 {
-                                <input type="checkbox" name="TagIds" value="@s.Id">@s.ServiceName
-                                 }
-                            }
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="formTags">
+                                                @foreach (Service s in Model.Services)
+                                                {
+                                                    if (s.ServiceCategory == "Hardware" && s.ServiceName != "Hardware")
+                                                    {
+                                                        <li>
+                                                            <label>
+                                                                <input type="checkbox" />
+                                                                <span>@s.ServiceName </span>
+                                                            </label>
+                                                        </li>
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card card-body">
-                                @foreach (Service s in Model.Services)
-                            {
-                                 if (s.ServiceCategory == "Software" && s.ServiceName != "Software")
-                                 {
-                                <input type="checkbox" name="TagIds" value="@s.Id">@s.ServiceName
-                                 }
-                            }
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="formTags">
+                                                @foreach (Service s in Model.Services)
+                                                {
+                                                    if (s.ServiceCategory == "Software" && s.ServiceName != "Software")
+                                                    {
+                                                        <li>
+                                                            <label>
+                                                                <input type="checkbox" />
+                                                                <span>@s.ServiceName </span>
+                                                            </label>
+                                                        </li>
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card card-body">
-                                @foreach (Service s in Model.Services)
-                            {
-                                 if (s.ServiceCategory == "Network" && s.ServiceName != "Network")
-                                 {
-                                <input type="checkbox" name="TagIds" value="@s.Id">@s.ServiceName
-                                 }
-                            }
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="formTags">
+                                                @foreach (Service s in Model.Services)
+                                                {
+                                                    if (s.ServiceCategory == "Network" && s.ServiceName != "Network")
+                                                    {
+                                                        <li>
+                                                            <label>
+                                                                <input type="checkbox" />
+                                                                <span>@s.ServiceName </span>
+                                                            </label>
+                                                        </li>
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card card-body">
-                                @foreach (Service s in Model.Services)
-                            {
-                                 if (s.ServiceCategory == "CommunicationMethod" && s.ServiceName != "CommunicationMethod")
-                                 {
-                                <input type="checkbox" name="TagIds" value="@s.Id">@s.ServiceName
-                                 }
-                            }
+                                <div class="list-unstyled card-columns">
+                                    @foreach (Service s in Model.Services)
+                                    {
+                                        if (s.ServiceCategory == "CommunicationMethod" && s.ServiceName != "CommunicationMethod")
+                                        {
+                                            <input type="checkbox" class="cbox" name="TagIds" value="@s.Id">@s.ServiceName
+                                        }
+                                    }
+                                </div>
                             </div>
                         </div>
-                        <div class="input-center">
-                            <button type="submit" class="btn btn-secondary">Submit</button>
-                        </div>
+                            <div class="input-center">
+                                <input type="submit" class="btn btn-secondary" id="formSubmitButton" value="Submit">
+                             </div>
                     </form>
                 </div>
             </div>
