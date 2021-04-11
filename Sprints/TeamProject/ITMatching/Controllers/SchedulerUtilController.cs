@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ITMatching.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace ITMatching.Controllers
 {
     public class SchedulerUtilController : Controller
     {
+        static Dictionary<string, List<int>> scheduleHours;
         public IActionResult Index()
         {
             return View();

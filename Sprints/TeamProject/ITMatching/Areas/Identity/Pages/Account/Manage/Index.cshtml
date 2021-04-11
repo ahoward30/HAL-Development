@@ -22,7 +22,10 @@
 
     @if (eUser != null)
     {
-        WorkSchedule workHr = AppContext.WorkSchedules.Where(work => work.ExpertId == eUser.Id).FirstOrDefault();
+        List<WorkSchedule> workHr = AppContext.WorkSchedules.Where(work => work.ExpertId == eUser.Id).ToList();
+        Dictionary<string, List<int>> hours = ITMatching.Controllers.SchedulerUtilController.GetSchedule(workHr);
+        ViewData["SchedulerData"] = hours;
+
         <div class="row">
             <div class="col-md-9">
                 <form id="profile-form" method="post">
@@ -48,18 +51,18 @@
                         <input asp-for="@itUser.PhoneNumber" class="form-control" disabled />
                         <span asp-validation-for="@itUser.PhoneNumber" class="text-danger"></span>
                     </div>
-                    @if (workHr == null)
+                    @if (workHr.Count == 0)
                     {
                      <div class="form-group">
                         
-                         <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Set Up my Schedule</a>
+                         <a class="Tempbtn" asp-controller="SchedulerUtil" asp-action="Schedular">Set Up my Schedule</a>
                          <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
                      </div>
                     }else
                     {
                 <div class="form-group">
                     
-                    <a class="Tempbtn" asp-area="Identity" asp-page="/Account/Schedular">Edit my Schedule</a>
+                    <a class="Tempbtn" asp-controller="SchedulerUtil" asp-action="Schedular">Edit my Schedule</a>
                     <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
                 </div>
                     }
