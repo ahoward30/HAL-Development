@@ -10,6 +10,11 @@ namespace ITMatching.Controllers
     public class SchedulerUtilController : Controller
     {
         static Dictionary<string, List<int>> scheduleHours;
+        private readonly ITMatchingAppContext appContext;
+        public SchedulerUtilController(ITMatchingAppContext context)
+        {
+            appContext = context;
+        }
         public IActionResult Index()
         {
             return View();
@@ -72,6 +77,18 @@ namespace ITMatching.Controllers
         {
             ViewBag.SchedularData = scheduleHours;
             return View();
+        }
+
+        [Route("/ViewSchedule/{ExpertId}")]
+        public IActionResult ViewSchedule(int ExpertId)
+        {
+            Expert exp = appContext.Experts.Find(ExpertId);
+            Itmuser itm = appContext.Itmusers.Find(exp.ItmuserId);
+            List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == ExpertId).ToList();
+            Dictionary<string, List<int>> hours = GetSchedule(workHr);
+            ViewBag.ViewScheduleName = itm.FirstName;
+            ViewBag.ViewSchedularData = hours;
+            return View(hours);
         }
     }
 }
