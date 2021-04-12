@@ -147,6 +147,13 @@ namespace ITMatching.Controllers
             _context.WorkSchedules.AddRange(schedules);
             _context.SaveChanges();
             return Ok();
+
+        }
+
+        [NonAction]
+        public WorkSchedule ParseWorkSchedule(int userId, string day, int h, Schedule sch)
+        {
+            return null;
         }
 
 

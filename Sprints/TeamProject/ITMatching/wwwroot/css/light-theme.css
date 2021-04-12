@@ -35,6 +35,11 @@ label {
     color: #385c7c;
 }
 
+.thead-custom {
+    background-color: #1a344c;
+    color: #EEEEEE
+}
+
 #service-Card {
     margin-top: 20px;
     background-color: #DDDDDD;

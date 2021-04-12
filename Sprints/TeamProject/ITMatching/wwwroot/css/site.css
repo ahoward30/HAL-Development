@@ -218,8 +218,24 @@ p {
     background-size: cover;
     background-position: center center;
 }
-/*Styling Registration form*/
 
+.formTags {
+    column-count: 3;
+    column-gap: 2rem;
+    list-style: none;
+}
+
+.formTagsCommunication {
+    column-count: 4;
+    column-gap: 2rem;
+    list-style: none;
+}
+
+.requestFormCardHeader {
+    background-color: #5089b8;
+}
+
+/*Styling Registration form*/
 .centered-form {
     margin-top: 60px;
     position: center;
