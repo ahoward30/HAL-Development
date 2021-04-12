@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ITMatching.Controllers
 {
@@ -16,16 +20,12 @@ namespace ITMatching.Controllers
         {
             _context = context;
         }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
-        public ActionResult Get()
-        {
-            return Ok("its working fine");
-        }
 
         [HttpPost]
         public IActionResult Post(Schedule sch)
@@ -38,10 +38,15 @@ namespace ITMatching.Controllers
             string[] Sat = sch.Saturday;
             string[] Sun = sch.Sunday;
 
-            /*using(ITMatchingAppContext _context = new ITMatchingAppContext())
+            List<WorkSchedule> workHr = _context.WorkSchedules.Where(work => work.ExpertId == sch.UserId).ToList();
+            if (workHr != null)
             {
-
-            }*/
+                foreach (var item in workHr)
+                {
+                    _context.WorkSchedules.Remove(item);
+                }
+                _context.SaveChanges();
+            }
             List<WorkSchedule> schedules = new List<WorkSchedule>();
             foreach (var item in Mon)
             {
@@ -143,5 +148,7 @@ namespace ITMatching.Controllers
             _context.SaveChanges();
             return Ok();
         }
+
+
     }
 }
