@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ITMatching\ITMatching.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

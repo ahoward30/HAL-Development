@@ -24,12 +24,6 @@ namespace ITMatching.Controllers
         }
 
         [Authorize]
-        public IActionResult RequestFormMajorTopics()
-        {
-            return View();
-        }
-
-        [Authorize]
         public IActionResult RequestForm()
         {
             RequestFormViewModel viewModel = new RequestFormViewModel();
@@ -73,6 +67,7 @@ namespace ITMatching.Controllers
                 context.SaveChanges();
                 return RedirectToAction("HelpRequestAdded");
             }
+
             return RedirectToAction("RequestForm", "Matching");
         }
 

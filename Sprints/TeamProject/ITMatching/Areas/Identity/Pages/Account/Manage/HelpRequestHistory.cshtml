@@ -19,47 +19,50 @@
 
     HelpRequest[] helpRequests = AppContext.HelpRequests.Where(hr => hr.ClientId == itUser.Id).ToArray();
 
-if (helpRequests?.Any() == true)
-{
-        <table class="table">
-            <tr>
-                <thead class="thead-light">
-                    <th scope="col" class="text-center">Help Request Title</th>
-                    <th scope="col" class="text-center">Help Request Description</th>
-                    <th scope="col" class="text-center">IT Subject Tags</th>
-                </thead>
-            </tr>
-            <tbody>
-                @foreach (HelpRequest hr in helpRequests)
+    <div class="container-fluid  justify-content-center" >
+        <div class="row justify-content-center">
+                @if (helpRequests?.Any() == true)
                 {
-                    int[] serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId).ToArray();
-                    List<String> tags = new List<String>();
-                    String tag;
-                    @foreach (int si in serviceIds)
-                    {
-                        tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
-                        tags.Add(tag);
-                    }
-                    String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ",").TrimEnd(',');
-                    <tr>
-                        <td class="text-nowrap text-center">@hr.RequestTitle</td>
-                        <td class="text text-left">@hr.RequestDescription</td>
-                        <td class="text text-left">@tagsString</td>
-                    </tr>
+
+                    <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
+                        <tr class="thead-custom">
+                                <th scope="col" class="text-center">Help Request Title</th>
+                                <th scope="col" class="text-center">Help Request Description</th>
+                                <th scope="col" class="text-center">IT Subject Tags</th>
+                        </tr>
+                        <tbody>
+                            @foreach (HelpRequest hr in helpRequests)
+                            {
+                                int[] serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId).ToArray();
+                                List<String> tags = new List<String>();
+                                String tag;
+                                @foreach (int si in serviceIds)
+                                {
+                                    tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
+                                    tags.Add(tag);
+                                }
+                                String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
+                                <tr class="requestFormCardHeader">
+                                    <td class="text-nowrap text-center">@hr.RequestTitle</td>
+                                    <td class="text text-left">@hr.RequestDescription</td>
+                                    <td class="text text-left">@tagsString</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
-            </tbody>
-        </table>
-    }
-    if (helpRequests?.Any() != true)
-    {
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10">
-                    <h3>Your account has created no IT help requests.</h3>
-                </div>
-            </div>
+                @if (helpRequests?.Any() != true)
+                {
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <h3>Your account has created no IT help requests.</h3>
+                            </div>
+                        </div>
+                    </div>
+                }
         </div>
-    }
+    </div>
 }
 
 @section Scripts {

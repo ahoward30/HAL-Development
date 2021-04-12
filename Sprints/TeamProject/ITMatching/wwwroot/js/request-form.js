@@ -1,11 +1,8 @@
-﻿
-$('#formSubmitButton').prop("disabled", true);
-$('input:checkbox').click(function () {
-    if ($(this).is(':checked')) {
-        $('#formSubmitButton').prop("disabled", false);
-    } else {
-        if ($('.cbox').filter(':checked').length < 1) {
-            $('#formSubmitButton').attr('disabled', true);
+﻿    $('#requestForm input[type=checkbox]').on('change', function () {
+        var len = $('#requestForm input[type=checkbox]:checked').length;
+        if (len > 0) {
+            $("#submit").removeAttr('disabled');;
+        } else if (len === 0) {
+            $("#submit").attr('disabled', true);;
         }
-    }
-});
+    }).trigger('change');

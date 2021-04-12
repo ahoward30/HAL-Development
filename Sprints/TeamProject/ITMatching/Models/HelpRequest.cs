@@ -13,8 +13,10 @@ namespace ITMatching.Models
         [Required]
         public int ClientId { get; set; }
         [Required(ErrorMessage = "A help request title is required")]
+        [MaxLength(40)]
         public string RequestTitle { get; set; }
         [Required(ErrorMessage = "A help request description is required")]
+        [MaxLength(2000)]
         public string RequestDescription { get; set; }
         [Required]
         public bool IsOpen { get; set; }
