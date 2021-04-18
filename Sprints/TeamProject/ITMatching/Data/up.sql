@@ -47,9 +47,11 @@ GO
 --Now lists HelpRequest object ID instead of ServiceID (which can be obtained through HelpRequestID)
 CREATE TABLE [Meeting] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
+  [Date]			DATETIME NOT NULL,
   [ClientID]		INT NOT NULL,
   [ExpertID]		INT NOT NULL,
-  [HelpRequestID]	INT NOT NULL
+  [HelpRequestID]	INT NOT NULL,
+  [Status]			NVARCHAR(20) NOT NULL
 )
 GO
 
