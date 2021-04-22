@@ -132,6 +132,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
                         {
                             //WorkSchedule = Input.StartTime + " - " + Input.EndTime + " " + Input.FromDay + " to " + Input.ToDay,
                             ItmuserId = use.Id
+                            
                         };
                         _context.Experts.Add(exp);
                         _context.SaveChanges();

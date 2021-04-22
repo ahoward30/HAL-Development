@@ -60,6 +60,8 @@ namespace ITMatching.Models
                 entity.Property(e => e.ItmuserId).HasColumnName("ITMUserID");
 
                 entity.Property(e => e.WorkSchedule).HasMaxLength(60);
+
+                entity.Property(e => e.IsAvailable).HasColumnName("IsAvailable");
             });
 
             modelBuilder.Entity<ExpertFeedback>(entity =>
@@ -141,11 +143,22 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.HelpRequestId).HasColumnName("Date");
+
                 entity.Property(e => e.ClientId).HasColumnName("ClientID");
 
                 entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
 
                 entity.Property(e => e.HelpRequestId).HasColumnName("HelpRequestID");
+
+                entity.Property(e => e.HelpRequestId).HasColumnName("Status");
+
+                entity.Property(e => e.HelpRequestId).HasColumnName("ClientTimestamp");
+
+                entity.Property(e => e.HelpRequestId).HasColumnName("ExpertTimestamp");
+
+                entity.Property(e => e.HelpRequestId).HasColumnName("MatchExpireTimestamp");
+
             });
 
             modelBuilder.Entity<Service>(entity =>
