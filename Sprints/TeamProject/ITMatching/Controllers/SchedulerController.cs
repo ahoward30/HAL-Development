@@ -15,10 +15,12 @@ namespace ITMatching.Controllers
     [ApiController]
     public class SchedularController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ITMatchingAppContext _context;
-        public SchedularController(ITMatchingAppContext context)
+        public SchedularController(ITMatchingAppContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
