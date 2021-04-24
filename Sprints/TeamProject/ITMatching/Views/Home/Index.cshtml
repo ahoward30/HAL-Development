@@ -5,6 +5,15 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    bool isUserLoggedIn = SignInManager.IsSignedIn(User);
+    bool isExpert = false;
+    if (isUserLoggedIn)
+    {
+        string id = UserManager.GetUserId(User);
+        Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+        Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+        isExpert = eUser != null;
+    }
 }
 
 @*@ViewBag.Message*@
@@ -13,32 +22,21 @@
         <div class="row">
             <br /><br />
             <div class="col-lg-6">
-                <h1 class="text-white text-center text-shadow">Have an IT Issue?</h1>
+                <h1 class="text-white text-center text-shadow">@(isExpert ? "Want to help?" : "Have an IT Issue?")</h1>
             </div>
             <div class="col-lg-6">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    string id = UserManager.GetUserId(User);
-                    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
-                    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
-
-                    //User logged in and is Expert
-                    @if (eUser != null)
-                    {
-                        <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See What We Can Help You With"></a><br />
-                    }
-                    //User logged in and is Client
-                    else
-                    {
-                        <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get Help Now"></a><br />
-                    }
-                }
-                //User is not logged in
-                else
+                @if (!isUserLoggedIn) //User is not logged in
                 {
                     <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See What We Can Help You With"></a><br />
                 }
-
+                else if (isExpert) //User logged in and is Expert
+                {
+                    <a href='@Url.Action("ExpertWaitingRoom", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See The Request List"></a><br />
+                }
+                else //User logged in and is Client
+                {
+                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get Help Now"></a><br />
+                }
             </div>
         </div>
         <br /><br />

@@ -143,7 +143,7 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.HelpRequestId).HasColumnName("Date");
+                entity.Property(e => e.Date).HasColumnName("Date");
 
                 entity.Property(e => e.ClientId).HasColumnName("ClientID");
 
@@ -151,13 +151,13 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.HelpRequestId).HasColumnName("HelpRequestID");
 
-                entity.Property(e => e.HelpRequestId).HasColumnName("Status");
+                entity.Property(e => e.Status).HasColumnName("Status");
 
-                entity.Property(e => e.HelpRequestId).HasColumnName("ClientTimestamp");
+                entity.Property(e => e.ClientTimestamp).HasColumnName("ClientTimestamp");
 
-                entity.Property(e => e.HelpRequestId).HasColumnName("ExpertTimestamp");
+                entity.Property(e => e.ExpertTimestamp).HasColumnName("ExpertTimestamp");
 
-                entity.Property(e => e.HelpRequestId).HasColumnName("MatchExpireTimestamp");
+                entity.Property(e => e.MatchExpireTimestamp).HasColumnName("MatchExpireTimestamp");
 
             });
 
