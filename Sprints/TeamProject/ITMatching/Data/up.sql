@@ -87,3 +87,11 @@ create table [WorkSchedule] (
 "Hour" int
 )
 GO
+CREATE TABLE [RequestSchedule](
+    [ID]                INT primary key IDENTITY,
+    [ClientId]            int NOT NULL,
+    [RequestId]            int    NOT NULL,
+    [Day]                nvarchar(20),
+    [Hour]                int
+)
+GO

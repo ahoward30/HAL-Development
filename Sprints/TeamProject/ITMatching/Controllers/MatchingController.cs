@@ -70,6 +70,42 @@ namespace ITMatching.Controllers
 
             return RedirectToAction("RequestForm", "Matching");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult HelpRequestWithSchedule(HelpRequest helpRequest, int?[] TagIds)
+        {
+            if (ModelState.IsValid)
+            {
+                string id = _userManager.GetUserId(User);
+                Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+                helpRequest.ClientId = itUser.Id;
+                helpRequest.IsOpen = true;
+                context.HelpRequests.Add(helpRequest);
+
+
+                Debug.WriteLine("Length of TagIds Array is " + TagIds.Length);
+                int ID = context.HelpRequests.Count();
+                Debug.WriteLine("Total rows in HelpRequests table is " + ID);
+                foreach (int i in TagIds)
+                {
+                    Debug.WriteLine("Tag ID is " + i);
+                    RequestService entry = new RequestService();
+                    entry.RequestId = ID + 1;
+                    entry.ServiceId = i;
+                    context.RequestServices.Add(entry);
+                }
+                context.SaveChanges();
+                return RedirectToAction("RequestScheduler");
+            }
+
+            return RedirectToAction("RequestForm", "Matching");
+        }
+
+        public IActionResult RequestScheduler()
+        {
+
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
