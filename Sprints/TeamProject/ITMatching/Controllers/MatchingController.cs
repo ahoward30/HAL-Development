@@ -72,20 +72,19 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        //Attempt to meet with an online expert, and either navigate to a meeting room to talk to them, or to a list of expert information if no matching experts are available.
         public IActionResult ClientExpertMatching(Meeting meeting)
         {
             //Compile a list of IDs from all experts who are currently available for matching
             List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
 
             //Compile a list of the IDs of the services tagged by the client for their help request
-            List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.Id == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+            List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
 
             //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
-            //List<(int, double)> thresholdMeetingExperts = new List<(int, double)>();
-
-            //Algorithm First Pass (Trying to find online experts to meet with right now)
             List<(int, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs);
 
+            //Attempt to meet with online experts who meet the matching score threshold for this help request
             if (thresholdMeetingExperts.Any())
             {
                 //Create new list for Experts who meet the threshold sorted by descending order
@@ -134,57 +133,37 @@ namespace ITMatching.Controllers
 
             //Check database to see if there are preferred hours for this help request then do one of two second passes depending on if any preferred hours are found
             bool helpRequestHasSchedule = false;
-            //helpRequestHasSchedule = context.RequestSchedule.Where(rs => rs.RequestId == meeting.HelpRequestId).Any();  REQUESTSCHEDULE TABLE IS PART OF ADNAN'S STORY AND DOES NOT YET EXIST. UNCOMMENT ONCE IT EXISTS!
+            helpRequestHasSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).Any();
 
             //Algorithm Second Pass (Trying to find offline experts to meet with later)
-            List<(int, double)> offlineExpertIdsAndScores = FindOfflineMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs);
+            List<(int, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs);
 
             return View(offlineExpertIdsAndScores);
         }
 
-        public List<(int, double)> FindThresholdMeetingExperts(List<int> experts, List<int> helpRequestServiceIDs)
+        public List<(int, double)> FindThresholdMeetingExperts(List<int> expertIDs, List<int> helpRequestServiceIDs)
         {
             //Initialize values for generating matching score
             double threshold = 0.75;
-            int clientMaxPoints = GetMaxPointValue(helpRequestServiceIDs);
+            int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
             (int, double) IdMatchingScorePair = (0, 0);
 
             //Create list to fill with threshold meeting experts to then pass back
             List<(int, double)> thresholdMeetingExperts = new List<(int, double)>();
 
-            foreach (int id in experts)
+            foreach (int id in expertIDs)
             {
                 //Set initial expert values to 0
                 double expertMatchingScore = 0;
-                int expertMatchingPoints = 0;
 
                 //Compile list of the IDs of the services tagged by the expert
                 List<int> ExpertServiceIDs = context.ExpertServices.Where(es => es.Id == id).Select(es => es.ServiceId).ToList();
 
+                //
+                List<int> matchingServiceIDs = ExpertServiceIDs.Where(id => helpRequestServiceIDs.Contains(id)).ToList();
+
                 //Determine the value of tags that the current expert shares with the client's help request
-                foreach (int i in helpRequestServiceIDs)
-                {
-                    if (ExpertServiceIDs.Contains(i))
-                    {
-
-                        Service tag = context.Services.Where(s => s.Id == i).FirstOrDefault();
-
-                        switch (tag.ServiceCategory)
-                        {
-                            case "OS":
-                                expertMatchingPoints += 12;
-                                break;
-
-                            case "CommunicationMethod":
-                                expertMatchingPoints += 15;
-                                break;
-
-                            default:
-                                expertMatchingPoints += 10;
-                                break;
-                        }
-                    }
-                }
+                int expertMatchingPoints = GetServicePoints(matchingServiceIDs);
 
                 //Calculate matching score for current expert
                 expertMatchingScore = expertMatchingPoints / clientMaxPoints;
@@ -197,7 +176,8 @@ namespace ITMatching.Controllers
             return thresholdMeetingExperts;
         }
 
-        public List<(int, double)> FindOfflineMatchingExperts(Meeting meeting, bool helpRequestHasSchedule, List<int> helpRequestServiceIDs)
+        //Returns a list of threshold-meeting experts who are unavailable to meet with right now
+        public List<(int, double)> FindUnavailableMatchingExperts(Meeting meeting, bool helpRequestHasSchedule, List<int> helpRequestServiceIDs)
         {
             List<int> offlineExpertIds = context.Experts.Select(e => e.Id).ToList();
 
@@ -209,14 +189,14 @@ namespace ITMatching.Controllers
                 if (helpRequestHasSchedule)
                 {
                     //Get schedule values that have a matching helpRequestId to our meeting's helpRequestId
-                    //List<RequestSchedule> requestSchedule = context.RequestSchedule.Where(rs => rs.RequestId == meeting.HelpRequestId); REQUESTSCHEDULE TABLE IS PART OF ADNAN'S STORY AND DOES NOT YET EXIST. UNCOMMENT ONCE IT EXISTS!
-                    //int clientAvailableHoursCount = requestSchedule.Count(); REQUESTSCHEDULE TABLE IS PART OF ADNAN'S STORY AND DOES NOT YET EXIST. UNCOMMENT ONCE IT EXISTS!
+                    List<RequestSchedule> requestSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).ToList();
+                    int clientAvailableHoursCount = requestSchedule.Count();
 
                     for (int i = 0; i < thresholdMeetingExperts.Count; i++)
                     {
                         //Get schedule values that have a matching exp
                         List<WorkSchedule> expertSchedule = context.WorkSchedules.Where(ws => ws.ExpertId == thresholdMeetingExperts[i].Item1).ToList();
-                        List<WorkSchedule> expertScheduleMatchingClientHours = new List<WorkSchedule>;
+                        List<WorkSchedule> expertScheduleMatchingClientHours = new List<WorkSchedule>();
                         
                         //iterate through expert's work schedule and create a list of only the times that they share with the helpRequest
                         foreach(WorkSchedule ws in expertSchedule)
@@ -274,33 +254,35 @@ namespace ITMatching.Controllers
                 return emptyList;
         }
 
-        public int GetMaxPointValue(List<int> serviceIDs)
+        //Calculates the total point value of corresponding services from a list of serviceIDs
+        public int GetServicePoints(List<int> serviceIDs)
         {
-            int maxValue = 0;
+            int totalPoints = 0;
 
-            foreach (int hr in serviceIDs)
+            foreach (int id in serviceIDs)
             {
-                Service tag = context.Services.Where(s => s.Id == hr).FirstOrDefault();
+                Service tag = context.Services.Where(s => s.Id == id).FirstOrDefault();
 
                 switch (tag.ServiceCategory)
                 {
                     case "OS":
-                        maxValue += 12;
+                        totalPoints += 12;
                         break;
 
                     case "CommunicationMethod":
-                        maxValue += 15;
+                        totalPoints += 15;
                         break;
 
                     default:
-                        maxValue += 10;
+                        totalPoints += 10;
                         break;
                 }
             }
 
-            return maxValue;
+            return totalPoints;
         }
 
+        //Returns True if client has not updated their timestamp on a pending meeting object for over 30 seconds, likely indicating they are no longer in their waiting room
         public Boolean ClientIsNotThere(DateTime dbTime)
         {
             DateTime current = DateTime.UtcNow;
@@ -314,6 +296,8 @@ namespace ITMatching.Controllers
                 return false;
             }
         }
+
+        //Returns True if expert has not updated their timestamp on a pending meeting object for over 30 seconds, likely indicating they are no longer in their waiting room
 
         public Boolean ExpertIsNotThere(DateTime dbTime)
         {

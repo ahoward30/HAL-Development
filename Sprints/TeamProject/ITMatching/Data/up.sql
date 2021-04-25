@@ -84,10 +84,18 @@ CREATE TABLE [HelpRequest] (
   [IsOpen]				BIT NOT NULL
 )
 GO
-create table [WorkSchedule] (
-  [ID]					INT PRIMARY KEY IDENTITY(1,1),
-  [ExpertId]            INT	NOT NULL,
-"Day" NVARCHAR(20),
-"Hour" int
+CREATE TABLE [WorkSchedule] (
+    [ID]                INT PRIMARY KEY IDENTITY(1,1),
+    [ExpertId]          INT	NOT NULL,
+    "Day"               NVARCHAR(20),
+    "Hour"              INT
+)
+GO
+CREATE TABLE [RequestSchedule](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [ClientId]          INT NOT NULL,
+    [RequestId]         INT NOT NULL,
+    [Day]               NVARCHAR(20),
+    [Hour]              INT
 )
 GO
