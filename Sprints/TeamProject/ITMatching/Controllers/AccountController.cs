@@ -42,7 +42,6 @@ namespace ITMatching.Controllers
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
                 Expert thisExpert = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
 
-
                 Debug.WriteLine("Length of TagIds Array is " + TagIds.Length);
                 foreach (int i in TagIds)
                 {
@@ -56,18 +55,17 @@ namespace ITMatching.Controllers
                         context.ExpertServices.Add(entry);
                     }
 
-                    //ExpertService existingService = context.ExpertServices.Find(id);
-                    //if (entry.Id == entry.ExpertId)
-                    //{
+                    //List<int> exServiceIds = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
+                    //if (exServiceIds != checked)
+                    //    {
 
-                    //}    
+                    //}
 
                 }
                 context.SaveChanges();
                 return RedirectToPage("/Account/Manage/ExpertTags", new { area = "Identity" });
             }
-
-            return RedirectToAction("EditTagsForm", "Account"); //Changed but does not redirect back to form
+            return RedirectToAction("EditTagsForm", "Account"); //Changed but does not redirect back to form and instead account profile
         }
 
         [Authorize]
@@ -86,6 +84,7 @@ namespace ITMatching.Controllers
 
                 //return View(Services);
 
+                //Grabs all of the expert services where thisExpert is the expertID
                 viewModel.ExpertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
                 viewModel.Services = context.Services.ToList();
                 return View(viewModel);
