@@ -101,13 +101,15 @@ namespace ITMatching.Controllers
             return RedirectToAction("RequestForm", "Matching");
         }
 
-        public IActionResult ResubmitHelpRequest(int HelpRequestID)
+        public IActionResult ResubmitHelpRequest(int helpRequestID)
         {
-            //Need to find a way to pass in the helpRequest's ID based upon which button is pressed 
+            //Use HelpRequestID passed in from history page to get list of the helpRequest's already selected checkboxes
+            List<int> checkedServiceBoxes = context.RequestServices.Where(rs => rs.RequestId == helpRequestID).Select(id => id.ServiceId).ToList();
 
-            RequestFormViewModel viewModel = new RequestFormViewModel();
+            ResubmitFormViewModel viewModel = new ResubmitFormViewModel();
             viewModel.Services = context.Services.ToList();
-            viewModel.HelpRequest = new HelpRequest();
+            viewModel.HelpRequest = context.HelpRequests.Where(hr => hr.Id == helpRequestID).FirstOrDefault();
+            viewModel.checkedBoxes = checkedServiceBoxes;
 
             return View(viewModel);
         }
