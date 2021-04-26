@@ -235,6 +235,10 @@ p {
     background-color: #5089b8;
 }
 
+.editFormCardHeader {
+    background-color: #5089b8;
+}
+
 /*Styling Registration form*/
 .centered-form {
     margin-top: 60px;
