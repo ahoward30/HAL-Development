@@ -47,7 +47,8 @@ namespace ITMatching.Controllers
                 {
                     Debug.WriteLine("Tag ID is " + i);
                     ExpertService entry = new ExpertService();
-                    entry.ExpertId = itUser.Id;     //Might have to check later
+                    //entry.ExpertId = itUser.Id;     //Might have to check later
+                    entry.ExpertId = thisExpert.Id;
                     entry.ServiceId = i;
 
                     if (context.ExpertServices.Find(i) == null)
@@ -55,17 +56,17 @@ namespace ITMatching.Controllers
                         context.ExpertServices.Add(entry);
                     }
 
-                    //List<int> exServiceIds = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
-                    //if (exServiceIds != checked)
-                    //    {
-
+                    //List<int> expertServiceIds = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
+                    //if (!expertServiceIds.contains(entry.ServiceId))
+                    //{
+                    //  context.Update(entry);
                     //}
 
                 }
                 context.SaveChanges();
                 return RedirectToPage("/Account/Manage/ExpertTags", new { area = "Identity" });
             }
-            return RedirectToAction("EditTagsForm", "Account"); //Changed but does not redirect back to form and instead account profile
+            return RedirectToAction("EditTagsForm", "Account"); //Changed but does not redirect back to form and instead to account profile
         }
 
         [Authorize]
@@ -79,14 +80,9 @@ namespace ITMatching.Controllers
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
                 Expert thisExpert = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
 
-                //List<int> expertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
-                //List<Service> Services = context.Services.ToList();
-
-                //return View(Services);
-
-                //Grabs all of the expert services where thisExpert is the expertID
                 viewModel.ExpertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
                 viewModel.Services = context.Services.ToList();
+
                 return View(viewModel);
             }
             return View();

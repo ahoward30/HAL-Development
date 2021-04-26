@@ -17,7 +17,7 @@
     Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
     Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
 
-    ExpertService expertService = AppContext.ExpertServices.Where(hr => hr.ExpertId == itUser.Id).FirstOrDefault();
+    ExpertService expertService = AppContext.ExpertServices.Where(es => es.ExpertId == itUser.Id).FirstOrDefault();
 
     <div class="container-fluid  justify-content-center">
         <div class="row justify-content-center">
