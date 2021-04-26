@@ -17,47 +17,38 @@
     Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
     Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
 
-    ExpertService[] expertService = AppContext.ExpertServices.Where(hr => hr.ExpertId == itUser.Id).ToArray();
+    ExpertService expertService = AppContext.ExpertServices.Where(hr => hr.ExpertId == itUser.Id).FirstOrDefault();
 
     <div class="container-fluid  justify-content-center">
         <div class="row justify-content-center">
-            @if (expertService?.Any() == true)
+            @if (expertService != null)
             {
                 <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
                     <tr class="thead-custom">
-                        @*<th scope="col" class="text-center">Help Request Title</th>
-                        <th scope="col" class="text-center">Help Request Description</th>*@
                         <th scope="col" class="text-center">My Subject Tags</th>
                     </tr>
                     <tbody>
-                        @foreach (ExpertService es in expertService)
+                        @if (expertService != null)
                         {
-                            int[] serviceIds = AppContext.ExpertServices.Where(eI => eI.ExpertId == es.Id).Select(sI => sI.ServiceId).ToArray();
-                            //List<Service> tags = new List<Service>();
+                            int[] serviceIds = AppContext.ExpertServices.Where(eI => eI.ExpertId == expertService.ExpertId).Select(sI => sI.ServiceId).ToArray();
                             List<String> tags = new List<String>();
                             String tag;
-                            //Service tag;
 
                             @foreach (int si in serviceIds)
                             {
-                                //tag = AppContext.Services.Where(s => s.Id == si).FirstOrDefault();
                                 tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
                                 tags.Add(tag);
-                                //tags.Add(tag);
                             }
-                            //String tagsChange = tags.ToString();
                             String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
 
                             <tr class="editFormCardHeader">
-                                <td class="text-center">@es.ServiceId</td>
-                                <td class="text-center">@es.ExpertId</td>
                                 <td class="text-center">@tagsString</td>
                             </tr>
                         }
                     </tbody>
                 </table>
             }
-            @if (expertService?.Any() != true)
+            @if (expertService == null)
             {
                 <div class="container">
                     <div class="row">
