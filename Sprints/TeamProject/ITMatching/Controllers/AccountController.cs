@@ -44,8 +44,6 @@ namespace ITMatching.Controllers
 
 
                 Debug.WriteLine("Length of TagIds Array is " + TagIds.Length);
-                //int ID = context.ExpertServices.Count();
-                //Debug.WriteLine("Total rows in HelpRequests table is " + ID);
                 foreach (int i in TagIds)
                 {
                     Debug.WriteLine("Tag ID is " + i);
@@ -58,11 +56,11 @@ namespace ITMatching.Controllers
                         context.ExpertServices.Add(entry);
                     }
 
-                    ExpertService existingService = context.ExpertServices.Find(id);
-                    if (entry.Id == entry.ExpertId)
-                    {
+                    //ExpertService existingService = context.ExpertServices.Find(id);
+                    //if (entry.Id == entry.ExpertId)
+                    //{
 
-                    }    
+                    //}    
 
                 }
                 context.SaveChanges();
@@ -77,14 +75,20 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
+                EditTagsFormViewModel viewModel = new EditTagsFormViewModel();
+
                 string id = _userManager.GetUserId(User);
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
                 Expert thisExpert = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
 
-                List<int> expertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
-                List<Service> Services = context.Services.ToList();
+                //List<int> expertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
+                //List<Service> Services = context.Services.ToList();
 
-                return View(Services);
+                //return View(Services);
+
+                viewModel.ExpertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
+                viewModel.Services = context.Services.ToList();
+                return View(viewModel);
             }
             return View();
         }

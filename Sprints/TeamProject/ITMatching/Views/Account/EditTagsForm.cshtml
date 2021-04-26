@@ -1,4 +1,5 @@
-﻿@model List<Service>
+﻿@*@model List<Service>*@
+@model ITMatching.ViewModels.EditTagsFormViewModel
 
 @{
     ViewData["Title"] = "Edit/Add Subject Tags";
@@ -16,15 +17,15 @@
                     <form asp-controller="Account" asp-action="ExpertTags" method="post" id="editForm">
                         <div asp-validation-summary="ModelOnly"></div>
                         @*<div class="form-group">
-                            <label asp-for="HelpRequest.RequestTitle" class="control-label">Give the request a title:<br></label>
-                            <input class="form-control" asp-for="HelpRequest.RequestTitle" rows="1">
-                            <span asp-validation-for="HelpRequest.RequestTitle" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="HelpRequest.RequestDescription" class="control-label">Please describe your IT Issue in detail:<br></label>
-                            <textarea class="form-control" asp-for="HelpRequest.RequestDescription" rows="4" maxlength="2000"></textarea>
-                            <span asp-validation-for="HelpRequest.RequestDescription" class="text-danger"></span>
-                        </div>*@
+                                <label asp-for="HelpRequest.RequestTitle" class="control-label">Give the request a title:<br></label>
+                                <input class="form-control" asp-for="HelpRequest.RequestTitle" rows="1">
+                                <span asp-validation-for="HelpRequest.RequestTitle" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="HelpRequest.RequestDescription" class="control-label">Please describe your IT Issue in detail:<br></label>
+                                <textarea class="form-control" asp-for="HelpRequest.RequestDescription" rows="4" maxlength="2000"></textarea>
+                                <span asp-validation-for="HelpRequest.RequestDescription" class="text-danger"></span>
+                            </div>*@
                         <div class="form-group">
                             <label for="tags">Select any tags that apply:</label><br />
                             <div class="card-header requestFormCardHeader">
@@ -39,17 +40,29 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <ul class="formTags">
-                                                    @foreach (Service s in Model)
+                                                    @foreach (Service s in Model.Services)
                                                     {
                                                         if (s.ServiceCategory == "OS" && s.ServiceName != "OS")
                                                         {
+                                                            @*<li>
+                                                                    <label>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
+                                                                        <span class="text-dark">@s.ServiceName </span>
+                                                                    </label>
+                                                                </li>*@
                                                             <li>
                                                                 <label>
-                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
-                                                                    <span class="text-dark">@s.ServiceName </span>
+                                                                    @if (Model.ExpertServicesIDs.Contains(s.Id))
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" unchecked>
+                                                                    }
+                                                                    <span class=etc.>@s.ServiceName </span>
                                                                 </label>
                                                             </li>
-
                                                         }
                                                     }
                                                 </ul>
@@ -71,7 +84,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <ul class="formTags">
-                                                    @foreach (Service s in Model)
+                                                    @foreach (Service s in Model.Services)
                                                     {
                                                         if (s.ServiceCategory == "Hardware" && s.ServiceName != "Hardware")
                                                         {
@@ -103,7 +116,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <ul class="formTags">
-                                                    @foreach (Service s in Model)
+                                                    @foreach (Service s in Model.Services)
                                                     {
                                                         if (s.ServiceCategory == "Software" && s.ServiceName != "Software")
                                                         {
@@ -135,7 +148,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <ul class="formTags">
-                                                    @foreach (Service s in Model)
+                                                    @foreach (Service s in Model.Services)
                                                     {
                                                         if (s.ServiceCategory == "Network" && s.ServiceName != "Network")
                                                         {
@@ -165,7 +178,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <ul class="formTagsCommunication">
-                                                @foreach (Service s in Model)
+                                                @foreach (Service s in Model.Services)
                                                 {
                                                     if (s.ServiceCategory == "CommunicationMethod" && s.ServiceName != "CommunicationMethod")
                                                     {
