@@ -50,30 +50,30 @@ namespace ITMatching.Tests
 
             // Mock the Meeting repository
             Mock<IMeetingRepository> mockMeetingRepo = new Mock<IMeetingRepository>();
-            mockMeetingRepo.Setup(m => m.GetOpenMeetingsByExpertIdAsync(1)).ReturnsAsync(new List<Meeting>() {
+            mockMeetingRepo.Setup(m => m.GetMatchingMeetingsByExpertIdAsync(1)).ReturnsAsync(new List<Meeting>() {
                  new Meeting
                  {
                      Id = 1,
-                     Date = DateTime.Now,
+                     Date = DateTime.UtcNow,
                      ClientId = 3,
                      ExpertId = 1,
                      HelpRequestId = 4,
                      Status = "open",
-                     ClientTimestamp = DateTime.Now,
-                     ExpertTimestamp = DateTime.Now,
-                     MatchExpireTimestamp = DateTime.Now
+                     ClientTimestamp = DateTime.UtcNow,
+                     ExpertTimestamp = DateTime.UtcNow,
+                     MatchExpireTimestamp = DateTime.UtcNow
                  },
                  new Meeting
                  {
                      Id = 2,
-                     Date = DateTime.Now,
+                     Date = DateTime.UtcNow,
                      ClientId = 5,
                      ExpertId = 1,
                      HelpRequestId = 6,
                      Status = "open",
-                     ClientTimestamp = DateTime.Now,
-                     ExpertTimestamp = DateTime.Now,
-                     MatchExpireTimestamp = DateTime.Now
+                     ClientTimestamp = DateTime.UtcNow,
+                     ExpertTimestamp = DateTime.UtcNow,
+                     MatchExpireTimestamp = DateTime.UtcNow
                  }
             });
             mockMeetingRepo.Setup(m => m.UpdateStatusAsync(1, "accept"));
