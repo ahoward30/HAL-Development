@@ -28,6 +28,7 @@ namespace ITMatching.Models
         public virtual DbSet<ExpertService> ExpertServices { get; set; }
         public virtual DbSet<RequestService> RequestServices { get; set; }
         public virtual DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public virtual DbSet<RequestSchedule> RequestSchedules { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -197,6 +198,19 @@ namespace ITMatching.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Day).HasMaxLength(20);
+            });
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.ToTable("RequestSchedule");
+
+                entity.Property(e => e.ID).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.ToTable("RequestSchedule");
+
+                entity.Property(e => e.ID).HasColumnName("ID");
             });
 
             OnModelCreatingPartial(modelBuilder);

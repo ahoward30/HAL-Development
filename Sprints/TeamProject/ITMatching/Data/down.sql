@@ -11,3 +11,4 @@ DROP TABLE [FAQ];
 DROP TABLE [HelpRequest];
 DROP TABLE [ITMUser];
 DROP TABLE [WorkSchedule];
+DROP TABLE [RequestSchedule];
