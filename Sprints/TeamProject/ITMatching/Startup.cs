@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ITMatching.Services;
 using ITMatching.Models;
+using ITMatching.Models.Abstract;
+using ITMatching.Models.Concrete;
 
 namespace ITMatching
 {
@@ -39,6 +41,11 @@ namespace ITMatching
                      Configuration.GetConnectionString("ITMatchingConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
+             
+            services.AddScoped<IItmuserRepository, ItmuserRepository>();
+            services.AddScoped<IExpertRepository, ExpertRepository>();
+            services.AddScoped<IMeetingRepository, MeetingRepository>();
+            services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()                          //Enable Roles

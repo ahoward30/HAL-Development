@@ -2,25 +2,37 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ITMatching.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ITMatching.ViewModels;
+using ITMatching.Models.Abstract;
+using System.Threading.Tasks;
 
 namespace ITMatching.Controllers
 {
     public class MatchingController : Controller
     {
+        private readonly ILogger<MatchingController> logger;
         private readonly UserManager<IdentityUser> _userManager;
         ITMatchingAppContext context;
+        private readonly IItmuserRepository _itmuserRepo;
+        private readonly IExpertRepository _expertRepo;
+        private readonly IMeetingRepository _meetingRepo;
+        private readonly IHelpRequestRepository _helpRequestRepo;
 
-        public MatchingController(ILogger<MatchingController> logger, UserManager<IdentityUser> userManager, ITMatchingAppContext ctx)
+        public MatchingController(ILogger<MatchingController> logger, UserManager<IdentityUser> userManager, ITMatchingAppContext ctx,
+            IItmuserRepository itmuserRepo, IExpertRepository expertRepo, IMeetingRepository meetingRepo, IHelpRequestRepository helpRequestRepo)
         {
+            this.logger = logger;
             _userManager = userManager;
             context = ctx;
+            _itmuserRepo = itmuserRepo;
+            _expertRepo = expertRepo;
+            _meetingRepo = meetingRepo;
+            _helpRequestRepo = helpRequestRepo;
         }
 
         [Authorize]
@@ -344,7 +356,7 @@ namespace ITMatching.Controllers
             {
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }
@@ -364,6 +376,49 @@ namespace ITMatching.Controllers
             {
                 return false;
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ExpertWaitingRoom()
+        {
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+            Expert eUser = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
+            if (eUser != null)
+            {
+                var meetingRequests = (await _meetingRepo.GetMatchingMeetingsByExpertIdAsync(eUser.Id))
+                    .ToDictionary(m => m.Id, m => m.HelpRequestId);
+                var meetings = (await _helpRequestRepo.GetListByIdsAsync(meetingRequests.Values.ToList()))
+                    .Select(hr => new { MeetingId = meetingRequests.First(mr => mr.Value == hr.Id).Key, HelpRequest = hr })
+                    .ToDictionary(o => o.MeetingId, o => o.HelpRequest);
+                var ewrVM = new ExpertWaitingRoomViewModel
+                {
+                    Expert = eUser,
+                    Meetings = meetings
+                };
+                return View(ewrVM);
+            }
+            else
+            { return BadRequest(); }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeExpertStatus(int expertId)
+        {
+            await _expertRepo.ToggleStatusAsync(expertId);
+            return RedirectToAction("ExpertWaitingRoom");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
+        {
+            await _meetingRepo.UpdateStatusAsync(meetingId, status);
+            if (status != "accept")
+            { return RedirectToAction("ExpertWaitingRoom"); }
+            else
+            { return RedirectToAction("Meeting", new { meetingId }); }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
