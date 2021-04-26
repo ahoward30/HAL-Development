@@ -1,0 +1,81 @@
+﻿@page
+@model ExpertTagsModel
+@using ITMatching.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ITMatchingAppContext AppContext
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.ExpertTags;
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+
+    ExpertService[] expertService = AppContext.ExpertServices.Where(hr => hr.ExpertId == itUser.Id).ToArray();
+
+    <div class="container-fluid  justify-content-center">
+        <div class="row justify-content-center">
+            @if (expertService?.Any() == true)
+            {
+                <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
+                    <tr class="thead-custom">
+                        @*<th scope="col" class="text-center">Help Request Title</th>
+                        <th scope="col" class="text-center">Help Request Description</th>*@
+                        <th scope="col" class="text-center">My Subject Tags</th>
+                    </tr>
+                    <tbody>
+                        @foreach (ExpertService es in expertService)
+                        {
+                            int[] serviceIds = AppContext.ExpertServices.Where(eI => eI.ExpertId == es.Id).Select(sI => sI.ServiceId).ToArray();
+                            //List<Service> tags = new List<Service>();
+                            List<String> tags = new List<String>();
+                            String tag;
+                            //Service tag;
+
+                            @foreach (int si in serviceIds)
+                            {
+                                //tag = AppContext.Services.Where(s => s.Id == si).FirstOrDefault();
+                                tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
+                                tags.Add(tag);
+                                //tags.Add(tag);
+                            }
+                            //String tagsChange = tags.ToString();
+                            String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
+
+                            <tr class="editFormCardHeader">
+                                <td class="text-center">@es.ServiceId</td>
+                                <td class="text-center">@es.ExpertId</td>
+                                <td class="text-center">@tagsString</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @if (expertService?.Any() != true)
+            {
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <h3>You currently do not have any expert subject tags selected.</h3>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-9">
+                <center>
+                    @Html.ActionLink("Add/Edit Subject Tags", "EditTagsForm", "Account", null, new { @class = "btn btn-primary" })
+                </center>
+            </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
