@@ -107,6 +107,12 @@ namespace ITMatching.Controllers
                     }
                 }
 
+                List<RequestSchedule> currentHours = context.RequestSchedules.Where(rs => rs.RequestId == ID).ToList();
+                foreach (RequestSchedule rs in currentHours)
+                {
+                    context.RequestSchedules.Remove(rs);
+                }
+
                 context.SaveChanges();
                 return RedirectToAction("HelpRequestAdded");
             }
@@ -166,6 +172,12 @@ namespace ITMatching.Controllers
                         RequestService serviceToRemove = context.RequestServices.Where(rs => rs.ServiceId == i).FirstOrDefault();
                         context.RequestServices.Remove(serviceToRemove);
                     }
+                }
+
+                List<RequestSchedule> currentHours = context.RequestSchedules.Where(rs => rs.RequestId == ID).ToList();
+                foreach (RequestSchedule rs in currentHours)
+                {
+                    context.RequestSchedules.Remove(rs);
                 }
 
                 context.SaveChanges();
