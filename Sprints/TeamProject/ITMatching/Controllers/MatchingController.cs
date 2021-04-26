@@ -101,7 +101,7 @@ namespace ITMatching.Controllers
             return RedirectToAction("RequestForm", "Matching");
         }
 
-        public IActionResult ResubmitHelpRequest()
+        public IActionResult ResubmitHelpRequest(int HelpRequestID)
         {
             //Need to find a way to pass in the helpRequest's ID based upon which button is pressed 
 
