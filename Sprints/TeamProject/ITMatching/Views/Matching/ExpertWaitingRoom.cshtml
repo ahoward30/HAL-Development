@@ -26,19 +26,22 @@
 
         @if (meetings?.Any() == true)
         {
-            @foreach (var meeting in meetings)
-            {
-                var meetingId = meeting.Key;
-                var hr = meeting.Value;
+            <div class="accordion" id="accordionReq">
                 <div class="row no-gutters">
-                    <div class="col-12 p-3 req-head-bg@(cnt > 0 ? " mb-3" : "")">
-                        <h3 class="mb-0 req-head-text font-weight-bold">@hr.RequestTitle</h3>
-                    </div>
-                    @if (cnt == 0)
+
+                    @foreach (var meeting in meetings)
                     {
+                        var meetingId = meeting.Key;
+                        var hr = meeting.Value;
                         var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
                         var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
-                        <div class="col-12 mb-3 p-3 req-body-bg">
+
+                        <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
+                            <div class="col-12 p-3 req-head-bg">
+                                <h3 class="mb-0 req-head-text font-weight-bold text-left">@hr.RequestTitle</h3>
+                            </div>
+                        </button>
+                        <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
                             <p class="font-weight-bold text-white">
                                 @hr.RequestDescription
                             </p>
@@ -56,11 +59,12 @@
                                 </form>
                             </div>
                         </div>
+
                         cnt++;
                     }
-                </div>
-            }
 
+                </div>
+            </div>
         }
         @if (meetings?.Any() != true)
         {

@@ -265,7 +265,7 @@ namespace ITMatching.Controllers
             Expert eUser = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
             if (eUser != null)
             {
-                var meetingRequests = (await _meetingRepo.GetOpenMeetingsByExpertIdAsync(eUser.Id))
+                var meetingRequests = (await _meetingRepo.GetMatchingMeetingsByExpertIdAsync(eUser.Id))
                     .ToDictionary(m => m.Id, m => m.HelpRequestId);
                 var meetings = (await _helpRequestRepo.GetListByIdsAsync(meetingRequests.Values.ToList()))
                     .Select(hr => new { MeetingId = meetingRequests.First(mr => mr.Value == hr.Id).Key, HelpRequest = hr })
@@ -294,7 +294,10 @@ namespace ITMatching.Controllers
         public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
         {
             await _meetingRepo.UpdateStatusAsync(meetingId, status);
-            return RedirectToAction("ExpertWaitingRoom");
+            if (status != "accept")
+            { return RedirectToAction("ExpertWaitingRoom"); }
+            else
+            { return RedirectToAction("Meeting", new { meetingId }); }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

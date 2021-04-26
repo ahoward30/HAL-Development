@@ -7,7 +7,7 @@ namespace ITMatching.Models.Abstract
 {
     public interface IMeetingRepository : IRepository<Meeting>
     {
-        Task<List<Meeting>> GetOpenMeetingsByExpertIdAsync(int expertId);
+        Task<List<Meeting>> GetMatchingMeetingsByExpertIdAsync(int expertId);
         Task UpdateStatusAsync(int meetingId, string status);
     }
 }

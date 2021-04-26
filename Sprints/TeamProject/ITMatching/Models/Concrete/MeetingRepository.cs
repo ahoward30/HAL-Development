@@ -14,13 +14,25 @@ namespace ITMatching.Models.Concrete
 
         }
 
-        public virtual async Task<List<Meeting>> GetOpenMeetingsByExpertIdAsync(int expertId) =>
-           await _dbSet.AsNoTracking().Where(m => m.ExpertId == expertId && m.Status == "open").ToListAsync();
+        public virtual async Task<List<Meeting>> GetMatchingMeetingsByExpertIdAsync(int expertId)
+        {
+            var meetings = await _dbSet.AsNoTracking().Where(m => m.ExpertId == expertId && m.Status == "Matching").ToListAsync();
+            foreach (var meetingId in meetings.Select(m => m.Id))
+            {
+                var meeting = await this.FindByIdAsync(meetingId);
+                meeting.ExpertTimestamp = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+            return meetings;
+        }
 
         public virtual async Task UpdateStatusAsync(int meetingId, string status)
         {
             var meeting = await this.FindByIdAsync(meetingId);
-            meeting.Status = status;
+            if (status != "accept")
+            { meeting.ExpertId = 0; }
+            else
+            { meeting.Status = "Matched"; }
             _context.Update(meeting);
             await _context.SaveChangesAsync();
             return;

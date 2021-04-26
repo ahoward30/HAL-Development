@@ -348,25 +348,36 @@ label.label-floatlabel {
         top: 15px;
         width: 15px;
         height: 15px;
-        background: #646464;
+        background: #FF4F4F;
         background-image: radial-gradient(top, #616161 0%, #616161 20%, #535353 60%);
         border-radius: 50%;
-        box-shadow: 0 0 4px #1C1C17;
+        box-shadow: 0 0 4px #1C1C17, 0 0 5px #FF4242;
         transition: all .3s ease;
     }
 
-    .button-toggler:hover:before, .button-toggler.active:hover:before {
+    .button-toggler:hover:before {
+        background: #4FFF4F;
+        box-shadow: 0 0 4px #1C1C17, 0 0 5px #42FF42;
+    }
+
+    .button-toggler:active:before {
+        background: #4FFF4F;
+        box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #00CC00;
+    }
+
+    .button-toggler.active:hover:before {
         background: #FF4F4F;
         box-shadow: 0 0 4px #1C1C17, 0 0 5px #FF4242;
     }
 
-    .button-toggler:active:before {
+    .button-toggler.active:active:before {
+        background: #FF4F4F;
         box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #CC0000;
     }
 
     .button-toggler.active:before {
-        background: #FF4F4F;
-        box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #CC0000;
+        background: #4FFF4F;
+        box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #00CC00;
     }
 
 .req-head-bg {
