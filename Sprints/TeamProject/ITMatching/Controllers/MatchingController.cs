@@ -61,21 +61,52 @@ namespace ITMatching.Controllers
                 string id = _userManager.GetUserId(User);
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
                 helpRequest.ClientId = itUser.Id;
-                helpRequest.IsOpen = true;
-                context.HelpRequests.Add(helpRequest);
+                int ID;
 
+                int matchingRequestsCount = context.HelpRequests.Where(hr => hr.RequestTitle == helpRequest.RequestTitle && hr.RequestDescription == helpRequest.RequestDescription && hr.ClientId == helpRequest.ClientId).Count();
 
-                Debug.WriteLine("Length of TagIds Array is " + TagIds.Length);
-                int ID = context.HelpRequests.Count();
-                Debug.WriteLine("Total rows in HelpRequests table is " + ID);
+                if (matchingRequestsCount > 0)
+                {
+                    HelpRequest existingRequest = context.HelpRequests.Where(hr => hr.RequestTitle == helpRequest.RequestTitle && hr.RequestDescription == helpRequest.RequestDescription && hr.ClientId == helpRequest.ClientId).FirstOrDefault();
+                    existingRequest.IsOpen = true;
+
+                    context.HelpRequests.Update(existingRequest);
+                    ID = existingRequest.Id;
+                }
+                else
+                {
+                    helpRequest.IsOpen = true;
+                    context.HelpRequests.Add(helpRequest);
+
+                    ID = context.HelpRequests.Count() + 1;
+                }
+
                 foreach (int i in TagIds)
                 {
                     Debug.WriteLine("Tag ID is " + i);
                     RequestService entry = new RequestService();
-                    entry.RequestId = ID + 1;
+                    entry.RequestId = ID;
                     entry.ServiceId = i;
-                    context.RequestServices.Add(entry);
+                    int matchingRequestServiceCount = context.RequestServices.Where(rs => rs.RequestId == ID && rs.ServiceId == i).Count();
+
+                    if (matchingRequestServiceCount == 0)
+                    {
+                        context.RequestServices.Add(entry);
+                    }
+
                 }
+
+                List<int> requestServiceIDsInDataTable = context.RequestServices.Select(rs => rs.ServiceId).ToList();
+
+                foreach (int i in requestServiceIDsInDataTable)
+                {
+                    if (!TagIds.Contains(i))
+                    {
+                        RequestService serviceToRemove = context.RequestServices.Where(rs => rs.ServiceId == i).FirstOrDefault();
+                        context.RequestServices.Remove(serviceToRemove);
+                    }
+                }
+
                 context.SaveChanges();
                 return RedirectToAction("HelpRequestAdded");
             }
@@ -91,27 +122,72 @@ namespace ITMatching.Controllers
                 string id = _userManager.GetUserId(User);
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
                 helpRequest.ClientId = itUser.Id;
-                helpRequest.IsOpen = true;
-                context.HelpRequests.Add(helpRequest);
+                int ID;
 
+                int matchingRequestsCount = context.HelpRequests.Where(hr => hr.RequestTitle == helpRequest.RequestTitle && hr.RequestDescription == helpRequest.RequestDescription && hr.ClientId == helpRequest.ClientId).Count();
 
-                Debug.WriteLine("Length of TagIds Array is " + TagIds.Length);
-                int ID = context.HelpRequests.Count();
-                Debug.WriteLine("Total rows in HelpRequests table is " + ID);
+                if (matchingRequestsCount > 0)
+                {
+                    HelpRequest existingRequest = context.HelpRequests.Where(hr => hr.RequestTitle == helpRequest.RequestTitle && hr.RequestDescription == helpRequest.RequestDescription && hr.ClientId == helpRequest.ClientId).FirstOrDefault();
+                    existingRequest.IsOpen = true;
+
+                    context.HelpRequests.Update(existingRequest);
+                    ID = existingRequest.Id;
+                }
+                else
+                {
+                    helpRequest.IsOpen = true;
+                    context.HelpRequests.Add(helpRequest);
+
+                    ID = context.HelpRequests.Count() + 1;
+                }
+
                 foreach (int i in TagIds)
                 {
                     Debug.WriteLine("Tag ID is " + i);
                     RequestService entry = new RequestService();
-                    entry.RequestId = ID + 1;
+                    entry.RequestId = ID;
                     entry.ServiceId = i;
-                    context.RequestServices.Add(entry);
+                    int matchingRequestServiceCount = context.RequestServices.Where(rs => rs.RequestId == ID && rs.ServiceId == i).Count();
+
+                    if (matchingRequestServiceCount == 0)
+                    {
+                        context.RequestServices.Add(entry);
+                    }
+
                 }
+
+                List<int> requestServiceIDsInDataTable = context.RequestServices.Select(rs => rs.ServiceId).ToList();
+
+                foreach (int i in requestServiceIDsInDataTable)
+                {
+                    if (!TagIds.Contains(i))
+                    {
+                        RequestService serviceToRemove = context.RequestServices.Where(rs => rs.ServiceId == i).FirstOrDefault();
+                        context.RequestServices.Remove(serviceToRemove);
+                    }
+                }
+
                 context.SaveChanges();
                 return RedirectToAction("RequestScheduler");
             }
 
             return RedirectToAction("RequestForm", "Matching");
         }
+
+        public IActionResult ResubmitHelpRequest(int helpRequestID)
+        {
+            //Use HelpRequestID passed in from history page to get list of the helpRequest's already selected checkboxes
+            List<int> checkedServiceBoxes = context.RequestServices.Where(rs => rs.RequestId == helpRequestID).Select(id => id.ServiceId).ToList();
+
+            ResubmitFormViewModel viewModel = new ResubmitFormViewModel();
+            viewModel.Services = context.Services.ToList();
+            viewModel.HelpRequest = context.HelpRequests.Where(hr => hr.Id == helpRequestID).FirstOrDefault();
+            viewModel.checkedBoxes = checkedServiceBoxes;
+
+            return View(viewModel);
+        }
+
 
         public IActionResult RequestScheduler()
         {
