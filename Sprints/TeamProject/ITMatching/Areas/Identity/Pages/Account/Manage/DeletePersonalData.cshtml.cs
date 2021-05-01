@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
+using ITMatching.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,15 +15,18 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ITMatchingAppContext _context;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ITMatchingAppContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -82,6 +87,14 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{user.Id}'.");
             }
+
+            Itmuser itmUser = _context.Itmusers.FirstOrDefault(item => item.AspNetUserId == user.Id);
+            itmUser.UserName = user.UserName;
+            itmUser.Email = user.UserName;
+            itmUser.FirstName = "Deleted";
+            itmUser.LastName = "User";
+            _context.Update(itmUser);
+            await _context.SaveChangesAsync();
 
             await _signInManager.SignOutAsync();
 
