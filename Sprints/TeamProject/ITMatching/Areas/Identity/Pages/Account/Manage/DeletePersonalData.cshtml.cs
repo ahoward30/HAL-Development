@@ -30,6 +30,10 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Required]
+            [Display(Name = "Security Phrase")]
+            public string SecurityPhrase { get; set; }
+
+            [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
         }
@@ -55,8 +59,14 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             RequirePassword = await _userManager.HasPasswordAsync(user);
+
+            if (user.Email != Input.SecurityPhrase)
+            {
+                ModelState.AddModelError(string.Empty, "Incorrect security phrase.");
+                return Page();
+            }
+
             if (RequirePassword)
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
@@ -65,17 +75,17 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-
-            var result = await _userManager.DeleteAsync(user);
-            var userId = await _userManager.GetUserIdAsync(user);
+            user.UserName = $"deleted@user-{user.Id}.com";
+            user.Email = user.UserName;
+            var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
+                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{user.Id}'.");
             }
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", user.Id);
 
             return Redirect("~/");
         }
