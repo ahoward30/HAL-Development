@@ -9,6 +9,8 @@ namespace ITMatching.BDDTests.Steps
         // For additional details on SpecFlow step definitions see https://go.specflow.org/doc-stepdef
 
         private readonly ScenarioContext _scenarioContext;
+        private readonly CalculatorStepDefinitions _calculator = new Calculator();
+
 
         public CalculatorStepDefinitions(ScenarioContext scenarioContext)
         {
