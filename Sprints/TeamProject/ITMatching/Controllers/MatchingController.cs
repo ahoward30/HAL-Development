@@ -38,6 +38,14 @@ namespace ITMatching.Controllers
         [Authorize]
         public IActionResult RequestForm()
         {
+            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true).ToList();
+            foreach (HelpRequest hr in openHelpRequests)
+            {
+                hr.IsOpen = false;
+                context.HelpRequests.Update(hr);
+            }
+            context.SaveChanges();
+
             RequestFormViewModel viewModel = new RequestFormViewModel();
             viewModel.Services = context.Services.ToList();
             viewModel.HelpRequest = new HelpRequest();
@@ -190,6 +198,15 @@ namespace ITMatching.Controllers
 
         public IActionResult ResubmitHelpRequest(int helpRequestID)
         {
+            //Grabs list of open help requests and sets them to false
+            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true).ToList();
+            foreach (HelpRequest hr in openHelpRequests)
+            {
+                hr.IsOpen = false;
+                context.HelpRequests.Update(hr);
+            }
+            context.SaveChanges();
+
             //Use HelpRequestID passed in from history page to get list of the helpRequest's already selected checkboxes
             List<int> checkedServiceBoxes = context.RequestServices.Where(rs => rs.RequestId == helpRequestID).Select(id => id.ServiceId).ToList();
 
