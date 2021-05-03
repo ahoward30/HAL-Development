@@ -48,7 +48,8 @@ namespace ITMatching.Controllers
         [Authorize]
         public IActionResult HelpRequestAdded()
         {
-            return View();
+            //return View();
+            return RedirectToAction("ClientWaitingRoom");
         }
 
 
