@@ -490,6 +490,39 @@ namespace ITMatching.Controllers
             { return BadRequest(); }
         }
 
+        [Authorize]
+        public async Task<IActionResult> ClientWaitingRoom()
+        {
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+
+            if (itUser != null)
+            {
+                Meeting meeting = new Meeting();
+                meeting.Date = DateTime.UtcNow;
+                meeting.ClientId = itUser.Id;
+                meeting.ExpertId = 0;
+                meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
+                meeting.Status = "Matching";
+
+                context.Meetings.Add(meeting);
+
+                HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
+
+                var clientWaitingRoomVM = new ClientWaitingRoomViewModel
+                {
+                    HelpRequest = helpRequest,
+                    Meeting = meeting
+                };
+
+                return View(clientWaitingRoomVM);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeExpertStatus(int expertId)
