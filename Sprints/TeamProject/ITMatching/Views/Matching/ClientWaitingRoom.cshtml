@@ -1,0 +1,49 @@
+﻿@using System.Text.Json
+@inject ITMatchingAppContext AppContext
+@model ITMatching.ViewModels.ClientWaitingRoomViewModel
+@{
+    ViewData["Title"] = "Client Waiting Room";
+}
+
+<div class="container">
+    <h1 class="mt-4 mb-5 text-center"><strong>Waiting for a matching expert...</strong></h1>
+
+    @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
+    {
+        var meetingId = Model.Meeting.Id;
+        var hr = Model.HelpRequest;
+        var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+        var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+
+        <div class="card-header clientWaitingCardHeader">
+            <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+        </div>
+
+        <div class="card card-body" id="clientWaiting">
+            <div class="col-12 p-3 req-body-bg">
+                <div class="row no-gutters">
+                    <p class="font-weight-bold text-black">
+                        @Model.HelpRequest.RequestDescription
+                    </p>
+                    <div class="d-flex m-n3 flex-wrap">
+                        @foreach (var tag in tags)
+                        {
+                            <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @*@if(Model.Meeting.Id == null)
+        {
+            <div class="d-flex justify-content-center">
+                <h3>No request(s) found.</h3>
+            </div>
+        }*@
+
+</div>
+
+@section Scripts {
+    <script src="~/js/expert-waiting-room.js" asp-append-version="true"></script>
+}
