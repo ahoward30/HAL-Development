@@ -47,8 +47,8 @@ namespace ITMatching.Controllers
                 {
                     Debug.WriteLine("Tag ID is " + i);
                     ExpertService entry = new ExpertService();
-                    //entry.ExpertId = itUser.Id;     //Might have to check later
-                    entry.ExpertId = thisExpert.Id;
+                    entry.ExpertId = itUser.Id;     //Might have to check later
+                    //entry.ExpertId = thisExpert.Id;
                     entry.ServiceId = i;
 
                     if (context.ExpertServices.Find(i) == null)
