@@ -10,19 +10,25 @@
 
     @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
     {
-        var meetingId = Model.Meeting.Id;
-        var hr = Model.HelpRequest;
-        var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
-        var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+        <div class="accordion" id="accordionReq">
+            <div class="row no-gutters">
+                
+                @{ 
+                    var cnt = 0;
 
-        <div class="card-header clientWaitingCardHeader">
-            <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
-        </div>
+                    var meetingId = Model.Meeting.Id;
+                    var hr = Model.HelpRequest;
+                    var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+                    var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+                }
 
-        <div class="card card-body" id="clientWaiting">
-            <div class="col-12 p-3 req-body-bg">
-                <div class="row no-gutters">
-                    <p class="font-weight-bold text-black">
+                <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
+                    <div class="col-12 p-3 req-head-bg">
+                        <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+                    </div>
+                </button>
+                <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
+                    <p class="font-weight-bold text-white">
                         @Model.HelpRequest.RequestDescription
                     </p>
                     <div class="d-flex m-n3 flex-wrap">
@@ -34,6 +40,31 @@
                 </div>
             </div>
         </div>
+
+        @*var meetingId = Model.Meeting.Id;
+            var hr = Model.HelpRequest;
+            var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+            var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+
+            <div class="card-header clientWaitingCardHeader">
+                <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+            </div>
+
+            <div class="card card-body" id="clientWaiting">
+                <div class="col-12 p-3 req-body-bg">
+                    <div class="row no-gutters">
+                        <p class="font-weight-bold text-black">
+                            @Model.HelpRequest.RequestDescription
+                        </p>
+                        <div class="d-flex m-n3 flex-wrap">
+                            @foreach (var tag in tags)
+                            {
+                                <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>*@
     }
     @*@if(Model.Meeting.Id == null)
         {
