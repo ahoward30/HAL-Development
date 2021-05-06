@@ -13,7 +13,7 @@
         Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
 
         <li>
-            <button type="button" class="btn btn-dark" onclick="toggleTheme()" id="toggleButton">Toggle Dark Mode</button>
+            <button type="button" class="btn btn-dark" id="toggleButton">Toggle Dark Mode</button>
         </li>
         <li class="nav-item">
             <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@itUser.FirstName's Profile</a>
@@ -28,7 +28,7 @@
     else
     {
         <li>
-            <button type="button" class="btn btn-secondary" onclick="toggleTheme()" id="toggleButton">Toggle Dark Mode</button>
+            <button type="button" class="btn btn-secondary" id="toggleButton">Toggle Dark Mode</button>
         </li>
         <li class="nav-item">
             <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/TempRegister">Register</a>

@@ -99,3 +99,11 @@ CREATE TABLE [RequestSchedule](
     [Hour]              INT
 )
 GO
+CREATE TABLE [Message](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [MeetingID]         INT NOT NULL,
+    [SentBy]            INT NOT NULL,
+    [SentTime]          DATETIME,
+    [Text]              NVARCHAR(2000)
+)
+GO
