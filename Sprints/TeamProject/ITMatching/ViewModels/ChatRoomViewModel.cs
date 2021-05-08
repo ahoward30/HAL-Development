@@ -20,5 +20,6 @@ namespace ITMatching.ViewModels
             }
         }
         public int CurrentUserId { get => IsExpert ? Expert.Id : Client.Id; }
+        public string ErrorMessage { get; set; }
     }
 }

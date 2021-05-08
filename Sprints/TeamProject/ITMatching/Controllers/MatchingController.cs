@@ -504,37 +504,46 @@ namespace ITMatching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
         {
-            await _meetingRepo.UpdateStatusAsync(meetingId, status);
-            if (status != "accept")
+            bool isAccepted = status.ToLower() == "accept";
+            await _meetingRepo.UpdateStatusAsync(meetingId, isAccepted ? "Matched" : "Rejected");
+            if (!isAccepted)
             { return RedirectToAction("ExpertWaitingRoom"); }
             else
-            { return RedirectToAction("Meeting", new { meetingId }); }
+            { return RedirectToAction("ChatRoom", new { id = meetingId }); }
         }
 
         [Authorize]
         public async Task<IActionResult> ChatRoom(int id)
         {
+            string message = string.Empty;
             var meeting = await _meetingRepo.FindByIdAsync(id);
-            if (meeting != null)
+            if (meeting != null )
             {
-                string userId = _userManager.GetUserId(User);
-                var itUser = await _itmuserRepo.GetByAspNetUserIdAsync(userId);
-                var expert = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
-                if (meeting.ClientId == itUser.Id || (expert != null && meeting.ExpertId == expert.Id)) {
-                    var meetingExpert = await _expertRepo.FindByIdAsync(meeting.ExpertId);
-                    var crVM = new ChatRoomViewModel
+                if (meeting.Status.ToLower() != "Closed".ToLower())
+                {
+                    string userId = _userManager.GetUserId(User);
+                    var itUser = await _itmuserRepo.GetByAspNetUserIdAsync(userId);
+                    var expert = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
+                    if (meeting.Status.ToLower() == "Matched".ToLower() && ( meeting.ClientId == itUser.Id || (expert != null && meeting.ExpertId == expert.Id)))
                     {
-                        IsExpert = (expert != null && meeting.ExpertId == expert.Id),
-                        Client = await _itmuserRepo.FindByIdAsync(meeting.ClientId),
-                        Expert = await _itmuserRepo.FindByIdAsync(meetingExpert.ItmuserId),
-                        HelpRequest = await _helpRequestRepo.FindByIdAsync(meeting.HelpRequestId),
-                        Meeting = meeting,
-                        Messages = await _messageRepo.GetMessagesByMeetingIdAsync(meeting.Id)
-                    };
-                    return View(crVM);
+                        var meetingExpert = await _expertRepo.FindByIdAsync(meeting.ExpertId);
+                        var crVM = new ChatRoomViewModel
+                        {
+                            IsExpert = (expert != null && meeting.ExpertId == expert.Id),
+                            Client = await _itmuserRepo.FindByIdAsync(meeting.ClientId),
+                            Expert = await _itmuserRepo.FindByIdAsync(meetingExpert.ItmuserId),
+                            HelpRequest = await _helpRequestRepo.FindByIdAsync(meeting.HelpRequestId),
+                            Meeting = meeting,
+                            Messages = await _messageRepo.GetMessagesByMeetingIdAsync(meeting.Id)
+                        };
+                        return View(crVM);
+                    }
+                    else { message = "You don't have access to this meeting."; }
                 }
+                else { message = "This meeting is closed."; }
             }
-            return BadRequest();
+            else { message = "Invalid meeting Id."; }
+            return View(new ChatRoomViewModel {ErrorMessage = message });
         }
 
         [HttpPost]
@@ -546,6 +555,13 @@ namespace ITMatching.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
+        {
+            await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");
+            return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching"): RedirectToAction("ClientWaitingRoom", "Matching");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
