@@ -87,7 +87,10 @@ namespace ITMatching.Controllers
                     helpRequest.IsOpen = true;
                     context.HelpRequests.Add(helpRequest);
 
-                    ID = context.HelpRequests.Count() + 1;
+                    context.SaveChanges();
+
+                    ID = context.HelpRequests.Where(hr => hr.IsOpen == true).Select(hr => hr.Id).FirstOrDefault();
+
                 }
 
                 foreach (int i in TagIds)
@@ -154,7 +157,9 @@ namespace ITMatching.Controllers
                     helpRequest.IsOpen = true;
                     context.HelpRequests.Add(helpRequest);
 
-                    ID = context.HelpRequests.Count() + 1;
+                    context.SaveChanges();
+
+                    ID = context.HelpRequests.Where(hr => hr.IsOpen == true).Select(hr => hr.Id).FirstOrDefault();
                 }
 
                 foreach (int i in TagIds)
@@ -227,8 +232,10 @@ namespace ITMatching.Controllers
 
         [HttpPost]
         //Attempt to meet with an online expert, and either navigate to a meeting room to talk to them, or to a page listing expert information if no matching experts are available.
-        public IActionResult ClientExpertMatching(Meeting meeting)
+        public IActionResult ClientExpertMatching(int meetingId)
         {
+            Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+
             //Compile a list of IDs from all experts who are currently available for matching
             List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
 
@@ -303,6 +310,12 @@ namespace ITMatching.Controllers
 
             //Algorithm Second Pass (Trying to find offline experts to meet with later)
             List<(int, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs, clientMaxPoints);
+
+            var expertClientMatchingViewModel = new ExpertClientMatchingViewModel
+            {
+                OfflineExpertIdsAndScores = offlineExpertIdsAndScores,
+
+            };
 
             return View(offlineExpertIdsAndScores);
         }
@@ -508,6 +521,7 @@ namespace ITMatching.Controllers
             { return BadRequest(); }
         }
 
+        
         [Authorize]
         public async Task<IActionResult> ClientWaitingRoom()
         {
@@ -516,14 +530,19 @@ namespace ITMatching.Controllers
 
             if (itUser != null)
             {
+
                 Meeting meeting = new Meeting();
                 meeting.Date = DateTime.UtcNow;
+                meeting.ClientTimestamp = DateTime.UtcNow;
+                meeting.ExpertTimestamp = DateTime.UtcNow;
+                meeting.MatchExpireTimestamp = DateTime.UtcNow;
                 meeting.ClientId = itUser.Id;
                 meeting.ExpertId = 0;
                 meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
                 meeting.Status = "Matching";
 
                 context.Meetings.Add(meeting);
+                context.SaveChanges();
 
                 HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
 
@@ -540,6 +559,27 @@ namespace ITMatching.Controllers
                 return BadRequest();
             }
         }
+
+        //[Authorize]
+        //public async Task<IActionResult> ClientMatchingFailedRoom()
+        //{
+        //    string id = _userManager.GetUserId(User);
+        //    Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+        //    Expert eUser = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
+
+        //    foreach (HelpRequest hr in openHelpRequests)
+        //    {
+        //        hr.IsOpen = false;
+        //        context.HelpRequests.Update(hr);
+        //    }
+        //    context.SaveChanges();
+
+        //    RequestFormViewModel viewModel = new RequestFormViewModel();
+        //    viewModel.Services = context.Services.ToList();
+        //    viewModel.HelpRequest = new HelpRequest();
+
+        //    return View(viewModel);
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
