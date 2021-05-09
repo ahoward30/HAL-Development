@@ -6,7 +6,7 @@ CREATE TABLE [ITMUser] (
   [UserName]			VARCHAR(255) NOT NULL,
   [FirstName]			NVARCHAR(30) NOT NULL,
   [LastName]			NVARCHAR(30) NOT NULL,
-  [Email]				NVARCHAR(50) NOT NULL,
+  [Email]				NVARCHAR(255) NOT NULL,
   [PhoneNumber]			NVARCHAR(13) NOT NULL
 )
 
