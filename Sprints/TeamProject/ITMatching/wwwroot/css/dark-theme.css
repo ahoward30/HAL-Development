@@ -13,6 +13,10 @@ a {
     color: #EEEEEE;
 }
 
+td {
+    color: #EEEEEE;
+}
+
 .Logo {
     color: #EEEEEE;
 }
@@ -20,6 +24,11 @@ a {
 .thead-custom {
     background-color: whitesmoke;
     color: #222222;
+}
+
+.thead-account {
+    background-color: #1a344c;
+    color: #EEEEEE;
 }
 
 label { 
