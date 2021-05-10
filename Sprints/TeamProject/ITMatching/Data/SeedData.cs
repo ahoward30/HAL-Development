@@ -12,10 +12,11 @@ namespace ITMatching.Data
     /// </summary>
     public class UserInfoData
     { 
-        public string UserName { get; set; }
-        public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string UserName { get; set; }
         public bool EmailConfirmed { get; set; } = true;
     }
     /// <summary>
@@ -25,11 +26,9 @@ namespace ITMatching.Data
     {
         public static readonly UserInfoData[] UserSeedData = new UserInfoData[]
         {
-            new UserInfoData { UserName = "AlexH", Email = "alexh@mail.com", FirstName = "Alex", LastName = "Howard" },
-            new UserInfoData { UserName = "AdnanA", Email = "adnana@mail.com", FirstName = "Adnan", LastName = "Almarzooq" },
-            new UserInfoData { UserName = "JimmyL", Email = "jimmyl@mail.com", FirstName = "Jimmy", LastName = "Larios" },
-            new UserInfoData { UserName = "Dylan", Email = "dylans@mail.com", FirstName = "Dylan", LastName = "Stewart" },
-            new UserInfoData { UserName = "JuliusC", Email = "juliusc@mail.com", FirstName = "Julius", LastName = "Chen" }
+            new UserInfoData { FirstName = "Alex", LastName = "Howard", Email = "alexh@mail.com", UserName = "AlexH", PhoneNumber = "0123456789" },
+            new UserInfoData { FirstName = "Adnan", LastName = "Almarzooq", Email = "adnana@mail.com", UserName = "AdnanA", PhoneNumber = "0123456789" },
+            new UserInfoData { FirstName = "Jimmy", LastName = "Larios", Email = "jimmyl@mail.com", UserName = "JimmyL", PhoneNumber = "0123456789" }
         };
     }
 }

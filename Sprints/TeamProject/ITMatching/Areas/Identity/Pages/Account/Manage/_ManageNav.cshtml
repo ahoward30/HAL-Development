@@ -21,6 +21,9 @@
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.HelpRequestHistoryNavClass(ViewContext)" id="help-request-history" asp-page="./HelpRequestHistory">View Help Request History</a></li>
     }
+    else{
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ExpertTagsNavClass(ViewContext)" id="expert-tags" asp-page="./ExpertTags">View Subject Tags</a></li>
+    }
     @if (hasExternalLogins)
     {
         <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
