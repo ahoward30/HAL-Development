@@ -127,11 +127,12 @@ namespace ITMatching.Areas.Identity.Pages.Account
                         };
                         _context.Itmusers.Add(Ituser);
                         _context.SaveChanges();
-                        Itmuser use = _context.Itmusers.FirstOrDefault(item => item.Email == Ituser.Email);
+                        Itmuser use = _context.Itmusers.FirstOrDefault(item => item.AspNetUserId == user.Id);
                         Expert exp = new Expert()
                         {
                             //WorkSchedule = Input.StartTime + " - " + Input.EndTime + " " + Input.FromDay + " to " + Input.ToDay,
                             ItmuserId = use.Id
+                            
                         };
                         _context.Experts.Add(exp);
                         _context.SaveChanges();

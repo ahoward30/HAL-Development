@@ -6,7 +6,7 @@ CREATE TABLE [ITMUser] (
   [UserName]			VARCHAR(255) NOT NULL,
   [FirstName]			NVARCHAR(30) NOT NULL,
   [LastName]			NVARCHAR(30) NOT NULL,
-  [Email]				NVARCHAR(50) NOT NULL,
+  [Email]				NVARCHAR(255) NOT NULL,
   [PhoneNumber]			NVARCHAR(13) NOT NULL
 )
 
@@ -19,7 +19,8 @@ GO
 CREATE TABLE [Expert] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ITMUserID]		INT NOT NULL,
-  [WorkSchedule]	NVARCHAR(60)
+  [WorkSchedule]	NVARCHAR(60),
+  [IsAvailable]		BIT NOT NULL
 )
 GO
 
@@ -46,10 +47,15 @@ GO
 
 --Now lists HelpRequest object ID instead of ServiceID (which can be obtained through HelpRequestID)
 CREATE TABLE [Meeting] (
-  [ID]				INT PRIMARY KEY IDENTITY(1, 1),
-  [ClientID]		INT NOT NULL,
-  [ExpertID]		INT NOT NULL,
-  [HelpRequestID]	INT NOT NULL
+  [ID]						INT PRIMARY KEY IDENTITY(1, 1),
+  [Date]					DATETIME NOT NULL,
+  [ClientID]				INT NOT NULL,
+  [ExpertID]				INT NOT NULL,
+  [HelpRequestID]			INT NOT NULL,
+  [Status]					NVARCHAR(20) NOT NULL, 
+  [ClientTimestamp]			DATETIME,
+  [ExpertTimestamp]			DATETIME,
+  [MatchExpireTimestamp]	DATETIME
 )
 GO
 
@@ -78,10 +84,26 @@ CREATE TABLE [HelpRequest] (
   [IsOpen]				BIT NOT NULL
 )
 GO
-create table [WorkSchedule] (
-  [ID]					INT PRIMARY KEY IDENTITY(1,1),
-  [ExpertId]            INT	NOT NULL,
-"Day" NVARCHAR(20),
-"Hour" int
+CREATE TABLE [WorkSchedule] (
+    [ID]                INT PRIMARY KEY IDENTITY(1,1),
+    [ExpertId]          INT	NOT NULL,
+    "Day"               NVARCHAR(20),
+    "Hour"              INT
+)
+GO
+CREATE TABLE [RequestSchedule](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [ClientId]          INT NOT NULL,
+    [RequestId]         INT NOT NULL,
+    [Day]               NVARCHAR(20),
+    [Hour]              INT
+)
+GO
+CREATE TABLE [Message](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [MeetingID]         INT NOT NULL,
+    [SentBy]            INT NOT NULL,
+    [SentTime]          DATETIME,
+    [Text]              NVARCHAR(2000)
 )
 GO

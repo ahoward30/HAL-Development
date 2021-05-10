@@ -9,6 +9,7 @@ namespace ITMatching.Models
     {
         public int Id { get; set; }
         public int ItmuserId { get; set; }
-        public string WorkSchedule { get; set; }
+        public String WorkSchedule { get; set; }
+        public bool IsAvailable { get; set; }
     }
 }

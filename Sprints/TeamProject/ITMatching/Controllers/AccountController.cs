@@ -29,6 +29,7 @@ namespace ITMatching.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult helpRequestHistory()
         {
             return View();

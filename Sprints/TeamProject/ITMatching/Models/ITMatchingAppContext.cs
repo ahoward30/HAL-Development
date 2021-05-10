@@ -28,6 +28,8 @@ namespace ITMatching.Models
         public virtual DbSet<ExpertService> ExpertServices { get; set; }
         public virtual DbSet<RequestService> RequestServices { get; set; }
         public virtual DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public virtual DbSet<RequestSchedule> RequestSchedules { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -60,6 +62,8 @@ namespace ITMatching.Models
                 entity.Property(e => e.ItmuserId).HasColumnName("ITMUserID");
 
                 entity.Property(e => e.WorkSchedule).HasMaxLength(60);
+
+                entity.Property(e => e.IsAvailable).HasColumnName("IsAvailable");
             });
 
             modelBuilder.Entity<ExpertFeedback>(entity =>
@@ -141,11 +145,22 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Date).HasColumnName("Date");
+
                 entity.Property(e => e.ClientId).HasColumnName("ClientID");
 
                 entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
 
                 entity.Property(e => e.HelpRequestId).HasColumnName("HelpRequestID");
+
+                entity.Property(e => e.Status).HasColumnName("Status");
+
+                entity.Property(e => e.ClientTimestamp).HasColumnName("ClientTimestamp");
+
+                entity.Property(e => e.ExpertTimestamp).HasColumnName("ExpertTimestamp");
+
+                entity.Property(e => e.MatchExpireTimestamp).HasColumnName("MatchExpireTimestamp");
+
             });
 
             modelBuilder.Entity<Service>(entity =>
@@ -184,6 +199,34 @@ namespace ITMatching.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Day).HasMaxLength(20);
+            });
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.ToTable("RequestSchedule");
+
+                entity.Property(e => e.ID).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.ToTable("RequestSchedule");
+
+                entity.Property(e => e.ID).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.ToTable("Message");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+
+                entity.Property(e => e.SentBy).HasColumnName("SentBy");
+
+                entity.Property(e => e.SentTime).HasColumnName("SentTime");
+
+                entity.Property(e => e.Text).HasColumnName("Text");
             });
 
             OnModelCreatingPartial(modelBuilder);

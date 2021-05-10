@@ -29,8 +29,7 @@
                             <label for="tags">Select any tags that apply:</label><br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS">
-                                    <span class="text-white">Operating Systems</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS" value="Operating Systems" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseOS">
@@ -61,8 +60,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware">
-                                    <span class="text-white">Hardware</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware" value="Hardware" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseHardware">
@@ -93,8 +91,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware">
-                                    <span class="text-white">Software</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware" value="Software" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseSoftware">
@@ -125,8 +122,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork">
-                                    <span class="text-white">Network</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork" value="Network" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseNetwork">
@@ -147,7 +143,7 @@
                                                             </li>
 
                                                         }
-                                                    }
+                                                    }w
                                                 </ul>
                                             </div>
                                         </div>
@@ -184,8 +180,12 @@
                                 </div>
                             </div>
                             <br />
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-secondary" id="submit">Submit</button>
+                            <div class="row input-group-btn">
+                                <button type="submit" class="btn btn-primary" id="submit" style="margin-left:20px">Submit IT-request</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-primary" style="margin-left:510px" asp-controller="Matching" asp-action="HelpRequestWithSchedule">Submit IT-request and choose your availability schedule </button>
+                            </div>
+                            <div>
+                                <h4 style=" color:red; margin-top:20px;">*Please note: Submitting an availability schedule helps to give you a better match!*</h4>
                             </div>
                         </div>
                     </form>

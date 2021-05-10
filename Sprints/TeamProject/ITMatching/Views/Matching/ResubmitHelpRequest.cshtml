@@ -1,0 +1,231 @@
+@model ITMatching.ViewModels.ResubmitFormViewModel
+
+@{
+    ViewData["Title"] = "IT Help Request Form";
+
+}
+
+<script src="~/js/request-form.js" asp-append-version="true"></script>
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="border-2">
+                <div class="input-area">
+                    <form asp-controller="Matching" asp-action="HelpRequest" method="post" id="requestForm">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="form-group">
+                            <label asp-for="HelpRequest.RequestTitle" class="control-label">Give the request a title:<br></label>
+                            <input class="form-control" asp-for="HelpRequest.RequestTitle" rows="1" value="@Model.HelpRequest.RequestTitle">
+                            <span asp-validation-for="HelpRequest.RequestTitle" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="HelpRequest.RequestDescription" class="control-label">Please describe your IT Issue in detail:<br></label>
+                            <textarea class="form-control" asp-for="HelpRequest.RequestDescription" rows="4" maxlength="2000">@Model.HelpRequest.RequestDescription</textarea>
+                            <span asp-validation-for="HelpRequest.RequestDescription" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">Select any tags that apply:</label><br />
+                            <div class="card-header requestFormCardHeader">
+                                <label>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS" value="Operating Systems" id="OrangeButton">
+                                </label>
+                            </div>
+                            <div class="collapse" id="collapseOS">
+                                <div class="card card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <ul class="formTags">
+                                                    @foreach (Service s in Model.Services)
+                                                    {
+                                                        if (s.ServiceCategory == "OS" && s.ServiceName != "OS")
+                                                        {
+                                                            <li>
+                                                                <label>
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
+                                                                    }
+                                                                    <span class="text-dark">@s.ServiceName </span>
+                                                                </label>
+                                                            </li>
+
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="card-header requestFormCardHeader">
+                                <label>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware" value="Hardware" id="OrangeButton">
+                                </label>
+                            </div>
+                            <div class="collapse" id="collapseHardware">
+                                <div class="card card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <ul class="formTags">
+                                                    @foreach (Service s in Model.Services)
+                                                    {
+                                                        if (s.ServiceCategory == "Hardware" && s.ServiceName != "Hardware")
+                                                        {
+                                                            <li>
+                                                                <label>
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
+                                                                    }                                                                    
+                                                                    <span class="text-dark">@s.ServiceName</span>
+                                                                </label>
+                                                            </li>
+
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="card-header requestFormCardHeader">
+                                <label>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware" value="Software" id="OrangeButton">
+                                </label>
+                            </div>
+                            <div class="collapse" id="collapseSoftware">
+                                <div class="card card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <ul class="formTags">
+                                                    @foreach (Service s in Model.Services)
+                                                    {
+                                                        if (s.ServiceCategory == "Software" && s.ServiceName != "Software")
+                                                        {
+                                                            <li>
+                                                                <label>
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
+                                                                    }                                                                    
+                                                                    <span class="text-dark">@s.ServiceName </span>
+                                                                </label>
+                                                            </li>
+
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="card-header requestFormCardHeader">
+                                <label>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork" value="Network" id="OrangeButton">
+                                </label>
+                            </div>
+                            <div class="collapse" id="collapseNetwork">
+                                <div class="card card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <ul class="formTags">
+                                                    @foreach (Service s in Model.Services)
+                                                    {
+                                                        if (s.ServiceCategory == "Network" && s.ServiceName != "Network")
+                                                        {
+                                                            <li>
+                                                                <label>
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
+                                                                    }                                                                    
+                                                                    <span class="text-dark">@s.ServiceName </span>
+                                                                </label>
+                                                            </li>
+
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="card-header requestFormCardHeader text-center">
+                                <label>
+                                    <span class="text-white font-weight-bold">Select your preferred meeting methods (all that apply):</span>
+                                </label>
+                            </div>
+                            <div class="card card-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="formTagsCommunication">
+                                                @foreach (Service s in Model.Services)
+                                                {
+                                                    if (s.ServiceCategory == "CommunicationMethod" && s.ServiceName != "CommunicationMethod")
+                                                    {
+                                                        <li>
+                                                            <label>
+                                                                @if (Model.checkedBoxes.Contains(s.Id))
+                                                                {
+                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
+                                                                }                                                                
+                                                                <span class="text-dark">@s.ServiceName </span>
+                                                            </label>
+                                                        </li>
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row input-group-btn">
+                                <button type="submit" class="btn btn-primary" id="submit" style="margin-left:20px">Submit IT-request</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-primary"style="margin-left:510px" asp-controller="Matching" asp-action="HelpRequestWithSchedule">Submit IT-request and choose your availability schedule </button>
+                            </div>
+                            <div class="text-center">
+                                <h4 style=" color:red; margin-top:20px;">*Please note: Submitting an availability schedule helps to give you a better match!*</h4>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

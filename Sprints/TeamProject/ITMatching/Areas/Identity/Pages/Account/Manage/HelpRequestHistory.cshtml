@@ -26,9 +26,10 @@
 
                     <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
                         <tr class="thead-custom">
-                                <th scope="col" class="text-center">Help Request Title</th>
-                                <th scope="col" class="text-center">Help Request Description</th>
-                                <th scope="col" class="text-center">IT Subject Tags</th>
+                            <th scope="col" class="text-center">Help Request Title</th>
+                            <th scope="col" class="text-center">Help Request Description</th>
+                            <th scope="col" class="text-center">IT Subject Tags</th>
+                            <th></th>
                         </tr>
                         <tbody>
                             @foreach (HelpRequest hr in helpRequests)
@@ -42,13 +43,16 @@
                                     tags.Add(tag);
                                 }
                                 String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
-                                <tr class="requestFormCardHeader">
-                                    <td class="text-nowrap text-center">@hr.RequestTitle</td>
-                                    <td class="text text-left">@hr.RequestDescription</td>
-                                    <td class="text text-left">@tagsString</td>
-                                </tr>
-                            }
-                        </tbody>
+                                <form asp-controller="Matching" asp-action="ResubmitHelpRequest" method="get" id="requestForm">
+                                    <tr class="requestFormCardHeader">
+                                        <td class="text-nowrap text-center text-white">@hr.RequestTitle</td>
+                                        <td class="text text-left text-white">@hr.RequestDescription</td>
+                                        <td class="text text-left text-white">@tagsString</td>
+                                        <td><button type="submit" class="btn btn-primary" name="HelpRequestID" value="@hr.Id">Resubmit</button></td>
+                                    </tr>
+                                </form>
+                             }
+                            </tbody>
                     </table>
                 }
                 @if (helpRequests?.Any() != true)

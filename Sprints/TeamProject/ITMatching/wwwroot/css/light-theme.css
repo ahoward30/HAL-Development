@@ -1,9 +1,44 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    width: 5px;
+    background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 1em;
+    background-color: #ddd;
+    outline: 1px solid slategrey;
+    border-radius: 1rem;
+}
+
 body {
     background-color: #EEEEEE;
 }
+
+.bg-custom {
+    background-color: #EEEEEE;
+    color: #222222;
+}
+
+.bg-head {
+    background-color: #f8f9fa;
+}
+
+.bg-head.form-control:focus {
+    background-color: #f8f9fa;
+    color: #222222;
+}
+
+    .bg-head.form-control::placeholder {
+        font-size: 0.9rem;
+        color: #222222;
+    }
 
 h1, h2, h3, h4, h5, p {
     color: #222222;

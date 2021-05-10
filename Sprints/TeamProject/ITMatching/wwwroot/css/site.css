@@ -2,11 +2,11 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 h1.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-  font-family: GENUINE;
-  font-size: 48px;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    font-family: GENUINE;
+    font-size: 48px;
 }
 
 a {
@@ -14,26 +14,27 @@ a {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #5089b8;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #5089b8;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #1861ac;
-  background-color: #5089b8;
-  border-color: #1861ac;
+    color: #1861ac;
+    background-color: #5089b8;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 /*.border-top {
@@ -44,31 +45,32 @@ html {
 }*/
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
 }
 
 /* Default Settings End Here
@@ -102,10 +104,9 @@ body {
     background-position: center center;
 }
 
-#HomeJumbotron .container {
-    margin-top: 5%;
-
-}
+    #HomeJumbotron .container {
+        margin-top: 5%;
+    }
 
 #ListJumbotron {
     background-color: #243b45;
@@ -115,15 +116,15 @@ body {
 }
 
 #OrangeButton {
-    background-color: #d8831b;   
+    background-color: #d8831b;
     border: 0px;
 }
 
-#OrangeButton:hover {
-     background-color: #c57000;
-     color: #fff;
-     border: 0px;
-}
+    #OrangeButton:hover {
+        background-color: #c57000;
+        color: #fff;
+        border: 0px;
+    }
 
 #HomeCard {
     background-color: #5089b8;
@@ -173,7 +174,7 @@ header {
     border-radius: 8px;
 }
 
-.large-Margin{
+.large-Margin {
     margin-bottom: 50px;
     margin-top: 50px;
 }
@@ -183,7 +184,7 @@ p {
     font-size: 16px;
 }
 
-.nav-tabs{
+.nav-tabs {
     border: 0px;
 }
 
@@ -232,7 +233,7 @@ p {
 }
 
 .requestFormCardHeader {
-    background-color: #5089b8;
+    background-color: #1a344c;
 }
 
 .editFormCardHeader {
@@ -314,9 +315,99 @@ label.label-floatlabel {
         background-color: #c57000;
         color: white;
     }
+
 .SchedularTable {
-    text-align:center;
-    margin-bottom:50px;
-    margin-top:50px;
-    color:white;
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    color: white;
+}
+
+.button-toggler {
+    height: 100%;
+    color: #9E9E9E;
+    background-color: #585858;
+    box-shadow: 0 0 1px 1px rgb(10,10,10);
+    border: 5px solid #444444;
+    cursor: pointer;
+    position: relative;
+    font-weight: bold;
+    width: 250px;
+    padding: 10px 45px 10px 15px;
+    transition: color .3s ease;
+}
+
+    .button-toggler:hover {
+        color: #b2b2b2;
+    }
+
+    .button-toggler:active {
+        box-shadow: 0 0 1px 1px rgb(10,10,10), inset 0 2px 2px 0px black;
+    }
+
+    .button-toggler:before {
+        position: absolute;
+        content: '';
+        right: 15px;
+        top: 15px;
+        width: 15px;
+        height: 15px;
+        background: #FF4F4F;
+        background-image: radial-gradient(top, #616161 0%, #616161 20%, #535353 60%);
+        border-radius: 50%;
+        box-shadow: 0 0 4px #1C1C17, 0 0 5px #FF4242;
+        transition: all .3s ease;
+    }
+
+    .button-toggler:hover:before {
+        background: #4FFF4F;
+        box-shadow: 0 0 4px #1C1C17, 0 0 5px #42FF42;
+    }
+
+    .button-toggler:active:before {
+        background: #4FFF4F;
+        box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #00CC00;
+    }
+
+    .button-toggler.active:hover:before {
+        background: #FF4F4F;
+        box-shadow: 0 0 4px #1C1C17, 0 0 5px #FF4242;
+    }
+
+    .button-toggler.active:active:before {
+        background: #FF4F4F;
+        box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #CC0000;
+    }
+
+    .button-toggler.active:before {
+        background: #4FFF4F;
+        box-shadow: 0 0 4px #1C1C17, inset 0 2px 2px 0px #00CC00;
+    }
+
+.req-head-bg {
+    background-color: #1a344c;
+}
+
+.req-head-text {
+    color: whitesmoke;
+}
+
+.req-body-bg {
+    background-color: #585858;
+}
+
+    .req-body-bg .badge {
+        font-size: 1.15rem;
+        background-color: #ff9807;
+        border-radius: 0;
+    }
+
+    .req-body-bg button.btn {
+        font-size: 1.25rem;
+        border-radius: 1.75rem;
+        color: #222222;
+    }
+
+.p-3px {
+    padding: 3px;
 }
