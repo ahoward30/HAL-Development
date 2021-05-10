@@ -66,7 +66,7 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
             }
             RequirePassword = await _userManager.HasPasswordAsync(user);
 
-            if (user.Email != Input.SecurityPhrase)
+            if (user.Email.ToLower() != Input.SecurityPhrase.ToLower())
             {
                 ModelState.AddModelError(string.Empty, "Incorrect security phrase.");
                 return Page();
