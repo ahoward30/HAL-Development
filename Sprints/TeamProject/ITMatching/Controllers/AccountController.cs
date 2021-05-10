@@ -65,7 +65,10 @@ namespace ITMatching.Controllers
                     if (!TagIds.Contains(i))
                     {
                         ExpertService serviceToRemove = context.ExpertServices.Where(es => es.ServiceId == i && es.ExpertId == eUser.Id).FirstOrDefault();
-                        context.ExpertServices.Remove(serviceToRemove);
+                        if (serviceToRemove != null)
+                        {
+                            context.ExpertServices.Remove(serviceToRemove);
+                        }
                     }
 
                 }
