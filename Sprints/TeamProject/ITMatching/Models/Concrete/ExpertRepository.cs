@@ -20,6 +20,15 @@ namespace ITMatching.Models.Concrete
             return itmUser;
         }
 
+        public virtual async Task SetStatusAsync(int expertId, bool isAvailable)
+        {
+            var expert = await this.FindByIdAsync(expertId);
+            expert.IsAvailable = isAvailable;
+            _context.Update(expert);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
         public virtual async Task ToggleStatusAsync(int expertId)
         {
             var expert = await this.FindByIdAsync(expertId);
