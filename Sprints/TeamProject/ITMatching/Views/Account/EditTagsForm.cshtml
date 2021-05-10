@@ -20,8 +20,7 @@
                             <label for="tags">Select any tags that apply:</label><br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS">
-                                    <span class="text-white">Operating Systems</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS" value="Operating Systems" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseOS">
@@ -34,25 +33,20 @@
                                                     {
                                                         if (s.ServiceCategory == "OS" && s.ServiceName != "OS")
                                                         {
-                                                            @*<li>
-                                                                    <label>
-                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
-                                                                        <span class="text-dark">@s.ServiceName </span>
-                                                                    </label>
-                                                                </li>*@
                                                             <li>
                                                                 <label>
-                                                                    @if (Model.ExpertServicesIDs.Contains(s.Id)) //If already in the bridge table
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" checked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
                                                                     }
                                                                     else
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" unchecked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
                                                                     }
                                                                     <span class="text-dark">@s.ServiceName </span>
                                                                 </label>
                                                             </li>
+
                                                         }
                                                     }
                                                 </ul>
@@ -64,8 +58,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware">
-                                    <span class="text-white">Hardware</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware" value="Hardware" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseHardware">
@@ -80,17 +73,18 @@
                                                         {
                                                             <li>
                                                                 <label>
-                                                                    @if (Model.ExpertServicesIDs.Contains(s.Id)) 
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" checked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
                                                                     }
                                                                     else
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" unchecked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
                                                                     }
-                                                                    <span class="text-dark">@s.ServiceName </span>
+                                                                    <span class="text-dark">@s.ServiceName</span>
                                                                 </label>
                                                             </li>
+
                                                         }
                                                     }
                                                 </ul>
@@ -102,8 +96,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware">
-                                    <span class="text-white">Software</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware" value="Software" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseSoftware">
@@ -116,19 +109,20 @@
                                                     {
                                                         if (s.ServiceCategory == "Software" && s.ServiceName != "Software")
                                                         {
-                                                           <li>
+                                                            <li>
                                                                 <label>
-                                                                    @if (Model.ExpertServicesIDs.Contains(s.Id)) 
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" checked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
                                                                     }
                                                                     else
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" unchecked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
                                                                     }
                                                                     <span class="text-dark">@s.ServiceName </span>
                                                                 </label>
                                                             </li>
+
                                                         }
                                                     }
                                                 </ul>
@@ -140,8 +134,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="checkbox" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork">
-                                    <span class="text-white">Network</span>
+                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork" value="Network" id="OrangeButton">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseNetwork">
@@ -156,17 +149,18 @@
                                                         {
                                                             <li>
                                                                 <label>
-                                                                    @if (Model.ExpertServicesIDs.Contains(s.Id)) 
+                                                                    @if (Model.checkedBoxes.Contains(s.Id))
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" checked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
                                                                     }
                                                                     else
                                                                     {
-                                                                        <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" unchecked>
+                                                                        <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
                                                                     }
                                                                     <span class="text-dark">@s.ServiceName </span>
                                                                 </label>
                                                             </li>
+
                                                         }
                                                     }
                                                 </ul>
@@ -192,13 +186,13 @@
                                                     {
                                                         <li>
                                                             <label>
-                                                                @if (Model.ExpertServicesIDs.Contains(s.Id)) 
+                                                                @if (Model.checkedBoxes.Contains(s.Id))
                                                                 {
-                                                                    <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" checked>
+                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
                                                                 }
                                                                 else
                                                                 {
-                                                                    <input class="cbox" type="checkbox" name="TagIds" value="@s.Id" unchecked>
+                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
                                                                 }
                                                                 <span class="text-dark">@s.ServiceName </span>
                                                             </label>
@@ -213,7 +207,7 @@
                             <br />
                             <div class="input-group-btn">
                                 <center>
-                                    <a class="btn btn-secondary" asp-area="Identity" asp-page="/Account/Manage/ExpertTags" title="Manage">Cancel</a>
+                                    <a class="btn btn-secondary" asp-area="Identity" asp-page="/Account/Manage/ExpertTags" title="Manage">Cancel</a>&nbsp;
                                     <button type="submit" class="btn btn-primary" id="editForm">Save Changes</button>
                                 </center>
                             </div>
