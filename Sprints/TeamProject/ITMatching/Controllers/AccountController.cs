@@ -40,27 +40,33 @@ namespace ITMatching.Controllers
             {
                 string id = _userManager.GetUserId(User);
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
-                Expert thisExpert = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
+                Expert eUser = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
 
                 Debug.WriteLine("Length of TagIds Array is " + TagIds.Length);
                 foreach (int i in TagIds)
                 {
                     Debug.WriteLine("Tag ID is " + i);
                     ExpertService entry = new ExpertService();
-                    entry.ExpertId = itUser.Id;     //Might have to check later
-                    //entry.ExpertId = thisExpert.Id;
+                    entry.ExpertId = eUser.Id;
                     entry.ServiceId = i;
 
-                    if (context.ExpertServices.Find(i) == null)
+                    int matchingExpertServiceCount = context.ExpertServices.Where(es => es.ExpertId == eUser.Id && es.ServiceId == i).Count();
+
+                    if (matchingExpertServiceCount == 0)
                     {
                         context.ExpertServices.Add(entry);
                     }
+                }
 
-                    //List<int> expertServiceIds = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
-                    //if (!expertServiceIds.contains(entry.ServiceId))
-                    //{
-                    //  context.Update(entry);
-                    //}
+                List<int> expertServiceIDsInDataTable = context.ExpertServices.Select(es => es.ServiceId).ToList();
+
+                foreach (int i in expertServiceIDsInDataTable)
+                {
+                    if (!TagIds.Contains(i))
+                    {
+                        ExpertService serviceToRemove = context.ExpertServices.Where(es => es.ServiceId == i && es.ExpertId == eUser.Id).FirstOrDefault();
+                        context.ExpertServices.Remove(serviceToRemove);
+                    }
 
                 }
                 context.SaveChanges();
@@ -74,14 +80,15 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
-                EditTagsFormViewModel viewModel = new EditTagsFormViewModel();
-
                 string id = _userManager.GetUserId(User);
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
-                Expert thisExpert = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
+                Expert eUser = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
 
-                viewModel.ExpertServicesIDs = context.ExpertServices.Where(es => es.ExpertId == thisExpert.Id).Select(i => i.ServiceId).ToList();
+                List<int> checkedServiceBoxes = context.ExpertServices.Where(es => es.ExpertId == eUser.Id).Select(id => id.ServiceId).ToList();
+
+                EditTagsFormViewModel viewModel = new EditTagsFormViewModel();
                 viewModel.Services = context.Services.ToList();
+                viewModel.checkedBoxes = checkedServiceBoxes;
 
                 return View(viewModel);
             }

@@ -8,7 +8,7 @@ namespace ITMatching.ViewModels
 {
     public class EditTagsFormViewModel
     {
-        public List<int> ExpertServicesIDs { get; set; }
         public List<Service> Services { get; set; }
+        public List<int> checkedBoxes { get; set; }
     }
 }
