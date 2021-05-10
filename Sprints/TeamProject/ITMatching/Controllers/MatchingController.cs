@@ -517,19 +517,21 @@ namespace ITMatching.Controllers
         {
             string message = string.Empty;
             var meeting = await _meetingRepo.FindByIdAsync(id);
-            if (meeting != null )
+            if (meeting != null)
             {
                 if (meeting.Status.ToLower() != "Closed".ToLower())
                 {
                     string userId = _userManager.GetUserId(User);
                     var itUser = await _itmuserRepo.GetByAspNetUserIdAsync(userId);
                     var expert = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
-                    if (meeting.Status.ToLower() == "Matched".ToLower() && ( meeting.ClientId == itUser.Id || (expert != null && meeting.ExpertId == expert.Id)))
+                    if (meeting.Status.ToLower() == "Matched".ToLower() && (meeting.ClientId == itUser.Id || (expert != null && meeting.ExpertId == expert.Id)))
                     {
+                        var isExpert = (expert != null && meeting.ExpertId == expert.Id);
+                        if (isExpert) await _expertRepo.SetStatusAsync(expert.Id, false);
                         var meetingExpert = await _expertRepo.FindByIdAsync(meeting.ExpertId);
                         var crVM = new ChatRoomViewModel
                         {
-                            IsExpert = (expert != null && meeting.ExpertId == expert.Id),
+                            IsExpert = isExpert,
                             Client = await _itmuserRepo.FindByIdAsync(meeting.ClientId),
                             Expert = await _itmuserRepo.FindByIdAsync(meetingExpert.ItmuserId),
                             HelpRequest = await _helpRequestRepo.FindByIdAsync(meeting.HelpRequestId),
@@ -543,7 +545,7 @@ namespace ITMatching.Controllers
                 else { message = "This meeting is closed."; }
             }
             else { message = "Invalid meeting Id."; }
-            return View(new ChatRoomViewModel {ErrorMessage = message });
+            return View(new ChatRoomViewModel { ErrorMessage = message });
         }
 
         [HttpPost]
@@ -561,7 +563,7 @@ namespace ITMatching.Controllers
         public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
         {
             await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");
-            return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching"): RedirectToAction("ClientWaitingRoom", "Matching");
+            return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching") : RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
