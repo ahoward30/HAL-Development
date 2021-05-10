@@ -311,13 +311,49 @@ namespace ITMatching.Controllers
             //Algorithm Second Pass (Trying to find offline experts to meet with later)
             List<(int, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs, clientMaxPoints);
 
-            var expertClientMatchingViewModel = new ExpertClientMatchingViewModel
+            List<int> expertIdList = offlineExpertIdsAndScores.Select(e => e.Item1).ToList();
+
+            List<Itmuser> itmuserList = new List<Itmuser>();
+
+            List<int> itmMatchingExpertIds = new List<int>();
+
+            List<Expert> matchingExperts = new List<Expert>();
+
+            List<ExpertService> tempExpertServices = new List<ExpertService>();
+
+            List<ExpertService> listOfExpertServices = new List<ExpertService>();
+
+            int tempId = 0;
+            foreach (int i in expertIdList)
             {
-                OfflineExpertIdsAndScores = offlineExpertIdsAndScores,
+                tempId = context.Experts.Where(e => e.Id == i).Select(e => e.ItmuserId).FirstOrDefault();
 
-            };
+                itmMatchingExpertIds.Add(tempId);
 
-            return View(offlineExpertIdsAndScores);
+                tempExpertServices = context.ExpertServices.Where(es => es.ExpertId == i).ToList();
+
+                foreach (ExpertService es in tempExpertServices)
+                {
+                    listOfExpertServices.Add(es);
+                }
+            }
+
+            Itmuser tempItUser = new Itmuser();
+            foreach (int i in itmMatchingExpertIds)
+            {
+                tempItUser = context.Itmusers.Where(it => it.Id == i).FirstOrDefault();
+
+                itmuserList.Add(tempItUser);
+            }
+
+            ExpertClientMatchingViewModel vm = new ExpertClientMatchingViewModel();
+
+            vm.OfflineExpertIdsAndScores = offlineExpertIdsAndScores;
+            vm.Itmusers = itmuserList;
+            vm.Services = context.Services.ToList();
+            vm.ExpertTags = listOfExpertServices;
+
+            return View(vm);
         }
 
         public List<(int, double)> FindThresholdMeetingExperts(List<int> expertIDs, List<int> helpRequestServiceIDs, int clientMaxPoints)
@@ -338,15 +374,20 @@ namespace ITMatching.Controllers
                 List<int> ExpertServiceIDs = context.ExpertServices.Where(es => es.ExpertId == id).Select(es => es.ServiceId).ToList();
 
                 //Compile list of the IDs of the services shared by the expert and the help request
-                List<int> sharedServiceIDs = ExpertServiceIDs.Where(id => helpRequestServiceIDs.Contains(id)).ToList();
+                List<int> sharedServiceIDs = ExpertServiceIDs.Where(esid => helpRequestServiceIDs.Contains(esid)).ToList();
 
                 //Determine the value of tags that the current expert shares with the client's help request
                 int expertMatchingPoints = GetServicePoints(sharedServiceIDs);
 
                 //Calculate matching score for current expert
-                expertMatchingScore = expertMatchingPoints / clientMaxPoints;
+                expertMatchingScore = (double)expertMatchingPoints / (double)clientMaxPoints;
                 if (expertMatchingScore >= threshold)
                 {
+                    if (expertMatchingScore > 1)
+                    {
+                        expertMatchingScore = 1;
+                    }
+
                     IdMatchingScorePair = (id, expertMatchingScore);
                     thresholdMeetingExperts.Add(IdMatchingScorePair);
                 }
@@ -431,7 +472,10 @@ namespace ITMatching.Controllers
                     List<(int, double)> top10sortedExperts = sortedExperts.Take(10).ToList();
                     return top10sortedExperts;
                 }
-
+                else
+                {
+                    return sortedExperts;
+                }
             }
 
                 List<(int, double)> emptyList = new List<(int, double)>();
@@ -559,27 +603,6 @@ namespace ITMatching.Controllers
                 return BadRequest();
             }
         }
-
-        //[Authorize]
-        //public async Task<IActionResult> ClientMatchingFailedRoom()
-        //{
-        //    string id = _userManager.GetUserId(User);
-        //    Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
-        //    Expert eUser = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
-
-        //    foreach (HelpRequest hr in openHelpRequests)
-        //    {
-        //        hr.IsOpen = false;
-        //        context.HelpRequests.Update(hr);
-        //    }
-        //    context.SaveChanges();
-
-        //    RequestFormViewModel viewModel = new RequestFormViewModel();
-        //    viewModel.Services = context.Services.ToList();
-        //    viewModel.HelpRequest = new HelpRequest();
-
-        //    return View(viewModel);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]

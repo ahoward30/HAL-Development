@@ -10,10 +10,9 @@ namespace ITMatching.ViewModels
 {
     public class ExpertClientMatchingViewModel
     {
-        Itmuser Itmuser { get; set; } //Name, email
-        Expert Expert { get; set; } //Schedule
-        public List<Service> Services { get; set; } // tags
-
-        List<(int, double)> OfflineExpertIdsAndScores { get; set; } // matching score
+        public List<Itmuser> Itmusers { get; set; } //Name, email
+        public List<Service> Services { get; set; }
+        public List<(int, double)> OfflineExpertIdsAndScores { get; set; } // matching score
+        public List<ExpertService> ExpertTags { get; set; }
     }
 }
