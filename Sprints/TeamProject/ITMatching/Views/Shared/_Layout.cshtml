@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html class="h-100" lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,7 @@
     <link rel="stylesheet" id="theme" type="text/css" href="~/css/light-theme.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="h-100 d-flex flex-column">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-color box-shadow">
             <div class="container-fluid">
@@ -41,23 +41,26 @@
             </div>
         </nav>
     </header>
-    <!--<div class="container-fluid">-->
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        <!--</div>*-->
+    <div class="flex-grow-1 d-flex flex-column">
+        <main role="main" class="flex-grow-1">
+            @RenderBody()
+        </main>
 
         <footer class="border-top footer text-muted border-custom">
             <div class="container">
-                <div class="Logo"> &copy; 2021 -
-                <a href="https://github.com/ahoward30/HAL-Development"><img src="https://media.discordapp.net/attachments/790693889325137930/818343232109805619/logo_Hal_edit_color_blue_website.png?width=1440&height=491" alt="HAL Development Logo" id="HalLogo">
-                     HAL Development</a>
+                <div class="Logo">
+                    &copy; 2021 -
+                    <a href="https://github.com/ahoward30/HAL-Development">
+                        <img src="https://media.discordapp.net/attachments/790693889325137930/818343232109805619/logo_Hal_edit_color_blue_website.png?width=1440&height=491" alt="HAL Development Logo" id="HalLogo">
+                        HAL Development
+                    </a>
                 </div>
             </div>
         </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
-    </html>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
