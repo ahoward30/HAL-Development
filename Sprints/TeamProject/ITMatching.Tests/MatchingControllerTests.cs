@@ -131,7 +131,7 @@ namespace ITMatching.Tests
             //mockContext.SetupGet(ctx => ctx.User).Returns(user);
 
             MatchingController controller = new MatchingController(null, mockUserManager.Object, null,
-                mockItmuserRepo.Object, mockExpertRepo.Object, mockMeetingRepo.Object, mockHelpRequestRepo.Object)
+                mockItmuserRepo.Object, mockExpertRepo.Object, mockMeetingRepo.Object, mockHelpRequestRepo.Object, null)
             {
                 ControllerContext = new ControllerContext
                 {

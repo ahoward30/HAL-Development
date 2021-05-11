@@ -234,6 +234,10 @@ p {
     background-color: #1a344c;
 }
 
+.editFormCardHeader {
+    background-color: #5089b8;
+}
+
 /*Styling Registration form*/
 .centered-form {
     margin-top: 60px;
@@ -401,3 +405,7 @@ label.label-floatlabel {
         border-radius: 1.75rem;
         color: #222222;
     }
+
+.p-3px {
+    padding: 3px;
+}

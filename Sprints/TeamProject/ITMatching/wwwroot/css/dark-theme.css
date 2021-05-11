@@ -1,8 +1,53 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    width: 5px;
+    background-color: #444444;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 1em;
+    background-color: #888888;
+    outline: 1px solid #007bff;
+    border-radius: 1rem;
+}
+
 body {
     background-color: #202427;
+}
+
+.shadow {
+    box-shadow: 0 0 1.5rem rgba(255,255,255,.15) !important;
+}
+
+.bg-custom {
+    background-color: #202427;
+    color: #EEEEEE;
+}
+
+.bg-head {
+    background-color: #444444;
+}
+
+    .bg-head.form-control:focus {
+        background-color: #444444;
+        color: #EEEEEE;
+        box-shadow: 0 0 0 0.2rem rgb(255 255 255 / 25%);
+    }
+
+    .bg-head.form-control::placeholder {
+        font-size: 0.9rem;
+        color: #EEEEEE;
+    }
+
+input.bg-head {
+    background-color: #444444;
+    color: #EEEEEE;
 }
 
 h1, h2, h3, h4, h5, p{
@@ -13,6 +58,10 @@ a {
     color: #EEEEEE;
 }
 
+td {
+    color: #EEEEEE;
+}
+
 .Logo {
     color: #EEEEEE;
 }
@@ -20,6 +69,11 @@ a {
 .thead-custom {
     background-color: whitesmoke;
     color: #222222;
+}
+
+.thead-account {
+    background-color: #1a344c;
+    color: #EEEEEE;
 }
 
 label { 

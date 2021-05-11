@@ -22,9 +22,10 @@ namespace ITMatching.Controllers
         private readonly IExpertRepository _expertRepo;
         private readonly IMeetingRepository _meetingRepo;
         private readonly IHelpRequestRepository _helpRequestRepo;
+        private readonly IMessageRepository _messageRepo;
 
         public MatchingController(ILogger<MatchingController> logger, UserManager<IdentityUser> userManager, ITMatchingAppContext ctx,
-            IItmuserRepository itmuserRepo, IExpertRepository expertRepo, IMeetingRepository meetingRepo, IHelpRequestRepository helpRequestRepo)
+            IItmuserRepository itmuserRepo, IExpertRepository expertRepo, IMeetingRepository meetingRepo, IHelpRequestRepository helpRequestRepo, IMessageRepository messageRepo)
         {
             this.logger = logger;
             _userManager = userManager;
@@ -33,6 +34,7 @@ namespace ITMatching.Controllers
             _expertRepo = expertRepo;
             _meetingRepo = meetingRepo;
             _helpRequestRepo = helpRequestRepo;
+            _messageRepo = messageRepo;
         }
 
         [Authorize]
@@ -256,7 +258,7 @@ namespace ITMatching.Controllers
 
                         //Set timestamp for expert waiting room to verify that we are still around
                         meeting.ClientTimestamp = DateTime.UtcNow;
-                        
+
                         context.Meetings.Update(meeting);
                         context.SaveChanges();
 
@@ -344,18 +346,18 @@ namespace ITMatching.Controllers
                         //Get schedule values that have a matching value in the expert's schedule
                         List<WorkSchedule> expertSchedule = context.WorkSchedules.Where(ws => ws.ExpertId == thresholdMeetingExperts[i].Item1).ToList();
                         List<WorkSchedule> expertScheduleMatchingClientHours = new List<WorkSchedule>();
-                        
+
                         //iterate through expert's work schedule and create a list of only the times that they share with the helpRequest
-                        foreach(WorkSchedule ws in expertSchedule)
+                        foreach (WorkSchedule ws in expertSchedule)
                         {
-                            foreach(RequestSchedule rs in requestSchedule)
+                            foreach (RequestSchedule rs in requestSchedule)
                             {
                                 if (ws.Day == rs.Day && ws.Hour == rs.Hour)
                                 {
                                     expertScheduleMatchingClientHours.Add(ws);
                                 }
                             }
-                            
+
                         }
 
                         int expertMatchingHoursWithClient = expertScheduleMatchingClientHours.Count;
@@ -377,7 +379,7 @@ namespace ITMatching.Controllers
                     tiedExperts.Add(sortedExperts[0]);
 
                     //check if and how many ties for highest matching score exist
-                    for(int i = 1; i < sortedExperts.Count; i++)
+                    for (int i = 1; i < sortedExperts.Count; i++)
                     {
                         if (sortedExperts[i].Item2 < maxScore)
                         {
@@ -403,8 +405,8 @@ namespace ITMatching.Controllers
 
             }
 
-                List<(int, double)> emptyList = new List<(int, double)>();
-                return emptyList;
+            List<(int, double)> emptyList = new List<(int, double)>();
+            return emptyList;
         }
 
         //Calculates the total point value of corresponding services from a list of serviceIDs
@@ -502,11 +504,66 @@ namespace ITMatching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
         {
-            await _meetingRepo.UpdateStatusAsync(meetingId, status);
-            if (status != "accept")
+            bool isAccepted = status.ToLower() == "accept";
+            await _meetingRepo.UpdateStatusAsync(meetingId, isAccepted ? "Matched" : "Rejected");
+            if (!isAccepted)
             { return RedirectToAction("ExpertWaitingRoom"); }
             else
-            { return RedirectToAction("Meeting", new { meetingId }); }
+            { return RedirectToAction("ChatRoom", new { id = meetingId }); }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ChatRoom(int id)
+        {
+            string message = string.Empty;
+            var meeting = await _meetingRepo.FindByIdAsync(id);
+            if (meeting != null)
+            {
+                if (meeting.Status.ToLower() != "Closed".ToLower())
+                {
+                    string userId = _userManager.GetUserId(User);
+                    var itUser = await _itmuserRepo.GetByAspNetUserIdAsync(userId);
+                    var expert = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
+                    if (meeting.Status.ToLower() == "Matched".ToLower() && (meeting.ClientId == itUser.Id || (expert != null && meeting.ExpertId == expert.Id)))
+                    {
+                        var isExpert = (expert != null && meeting.ExpertId == expert.Id);
+                        if (isExpert) await _expertRepo.SetStatusAsync(expert.Id, false);
+                        var meetingExpert = await _expertRepo.FindByIdAsync(meeting.ExpertId);
+                        var crVM = new ChatRoomViewModel
+                        {
+                            IsExpert = isExpert,
+                            Client = await _itmuserRepo.FindByIdAsync(meeting.ClientId),
+                            Expert = await _itmuserRepo.FindByIdAsync(meetingExpert.ItmuserId),
+                            HelpRequest = await _helpRequestRepo.FindByIdAsync(meeting.HelpRequestId),
+                            Meeting = meeting,
+                            Messages = await _messageRepo.GetMessagesByMeetingIdAsync(meeting.Id)
+                        };
+                        return View(crVM);
+                    }
+                    else { message = "You don't have access to this meeting."; }
+                }
+                else { message = "This meeting is closed."; }
+            }
+            else { message = "Invalid meeting Id."; }
+            return View(new ChatRoomViewModel { ErrorMessage = message });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostMessage(Message message)
+        {
+            if (ModelState.IsValid)
+            {
+                await _messageRepo.AddOrUpdateAsync(message);
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
+        {
+            await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");
+            return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching") : RedirectToAction("Index", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

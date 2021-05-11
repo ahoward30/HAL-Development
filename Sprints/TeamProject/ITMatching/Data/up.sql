@@ -6,7 +6,7 @@ CREATE TABLE [ITMUser] (
   [UserName]			VARCHAR(255) NOT NULL,
   [FirstName]			NVARCHAR(30) NOT NULL,
   [LastName]			NVARCHAR(30) NOT NULL,
-  [Email]				NVARCHAR(50) NOT NULL,
+  [Email]				NVARCHAR(255) NOT NULL,
   [PhoneNumber]			NVARCHAR(13) NOT NULL
 )
 
@@ -97,5 +97,13 @@ CREATE TABLE [RequestSchedule](
     [RequestId]         INT NOT NULL,
     [Day]               NVARCHAR(20),
     [Hour]              INT
+)
+GO
+CREATE TABLE [Message](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [MeetingID]         INT NOT NULL,
+    [SentBy]            INT NOT NULL,
+    [SentTime]          DATETIME,
+    [Text]              NVARCHAR(2000)
 )
 GO

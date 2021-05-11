@@ -1,0 +1,76 @@
+﻿@page
+@model ExpertTagsModel
+@using ITMatching.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ITMatchingAppContext AppContext
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.ExpertTags;
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+
+    List<ExpertService> expertServices = AppContext.ExpertServices.Where(es => es.ExpertId == eUser.Id).ToList();
+
+    <div class="container-fluid  justify-content-center">
+        <div class="row justify-content-center">
+            @if (expertServices.Count > 0)
+            {
+                <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
+                    <tr class="thead-account">
+                        <th colspan="2" class="text-center">My Subject Tags</th>
+                    </tr>
+                    <tr class="thead-account">
+                        <th class="text-center">Tag Category</th>
+                        <th class="text-center">Tag Name</th>
+                    </tr>
+                    <tbody>
+                        @if (expertServices != null)
+                        {
+                            int[] serviceIds = AppContext.ExpertServices.Where(eI => eI.ExpertId == eUser.Id).Select(sI => sI.ServiceId).ToArray();
+                            List<Service> tags = new List<Service>();
+                            Service tag;
+
+                            @foreach (int si in serviceIds)
+                            {
+                                tag = AppContext.Services.Where(s => s.Id == si).FirstOrDefault();
+                                tags.Add(tag);
+
+                                <tr class="editFormCardHeader">
+                                    <td class="text-center">@tag.ServiceCategory</td>
+                                    <td class="text-center">@tag.ServiceName</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <h3>You currently do not have any expert subject tags selected.</h3>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-9">
+            <center>
+                @Html.ActionLink("Add/Edit Subject Tags", "EditTagsForm", "Account", null, new { @class = "btn btn-primary" })
+            </center>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
