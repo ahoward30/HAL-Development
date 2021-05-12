@@ -303,6 +303,9 @@ namespace ITMatching.Controllers
                 }
             }
 
+            meeting.Status = "No match";
+            context.Meetings.Update(meeting);
+
             //perform 2nd pass of algorithm since matching with a currently-available expert has failed
 
             //Check database to see if there are preferred hours for this help request then do one of two second passes depending on if any preferred hours are found
@@ -616,11 +619,22 @@ namespace ITMatching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
         {
+            Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+
             await _meetingRepo.UpdateStatusAsync(meetingId, status);
+
             if (status != "accept")
-            { return RedirectToAction("ExpertWaitingRoom"); }
+            {
+                meeting.ExpertId = 0;
+                context.Meetings.Update(meeting);
+                return RedirectToAction("ExpertWaitingRoom"); 
+            }
             else
-            { return RedirectToAction("Meeting", new { meetingId }); }
+            {
+                meeting.Status = "Matched";
+                context.Meetings.Update(meeting);
+                return RedirectToAction("Meeting", new { meetingId }); 
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
