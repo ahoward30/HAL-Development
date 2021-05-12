@@ -276,7 +276,7 @@ namespace ITMatching.Controllers
                         meetingStatus = context.Meetings.Where(m => m.Id == meeting.Id).Select(s => s.Status).SingleOrDefault();
                         if (meetingStatus == "Matched")
                         {
-                            return RedirectToAction("Meeting", "Matching", new { id = meeting.Id });
+                            return RedirectToAction("ChatRoom", new { id = meeting.Id });
                         }
 
                         //Set timestamp for expert waiting room to verify that we are still around
