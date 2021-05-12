@@ -79,7 +79,9 @@ namespace ITMatching.Controllers
             return View();
         }
 
-        [Route("/ViewSchedule/{ExpertId}")]
+        //Had to comment out the routing while trying to fix the view for the ExpertClientMatching. REMEMBER TO FIX
+        //[Route("/ViewSchedule/{ExpertId}")]
+        [HttpPost]
         public IActionResult ViewSchedule(int ExpertId)
         {
             Expert exp = appContext.Experts.Find(ExpertId);
