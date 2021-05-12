@@ -29,10 +29,10 @@ namespace ITMatching.Models.Concrete
         public virtual async Task UpdateStatusAsync(int meetingId, string status)
         {
             var meeting = await this.FindByIdAsync(meetingId);
-            if (status != "accept")
+            if (status.ToLower() == "rejected")
             { meeting.ExpertId = 0; }
             else
-            { meeting.Status = "Matched"; }
+            { meeting.Status = status; }
             _context.Update(meeting);
             await _context.SaveChangesAsync();
             return;

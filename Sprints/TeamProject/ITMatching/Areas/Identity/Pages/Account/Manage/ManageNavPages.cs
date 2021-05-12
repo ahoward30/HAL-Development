@@ -14,6 +14,8 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
 
         public static string ChangePassword => "ChangePassword";
 
+        public static string ExpertTags => "ExpertTags";
+
         public static string HelpRequestHistory => "HelpRequestHistory";
 
         public static string DownloadPersonalData => "DownloadPersonalData";
@@ -33,6 +35,8 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 
         public static string HelpRequestHistoryNavClass(ViewContext viewContext) => PageNavClass(viewContext, HelpRequestHistory);
+
+        public static string ExpertTagsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExpertTags);
 
         public static string DownloadPersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DownloadPersonalData);
 

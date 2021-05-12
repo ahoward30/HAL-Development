@@ -29,6 +29,7 @@ namespace ITMatching.Models
         public virtual DbSet<RequestService> RequestServices { get; set; }
         public virtual DbSet<WorkSchedule> WorkSchedules { get; set; }
         public virtual DbSet<RequestSchedule> RequestSchedules { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -211,6 +212,21 @@ namespace ITMatching.Models
                 entity.ToTable("RequestSchedule");
 
                 entity.Property(e => e.ID).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.ToTable("Message");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+
+                entity.Property(e => e.SentBy).HasColumnName("SentBy");
+
+                entity.Property(e => e.SentTime).HasColumnName("SentTime");
+
+                entity.Property(e => e.Text).HasColumnName("Text");
             });
 
             OnModelCreatingPartial(modelBuilder);

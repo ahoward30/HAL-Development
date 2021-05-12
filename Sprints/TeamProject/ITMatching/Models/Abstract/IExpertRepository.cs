@@ -8,6 +8,7 @@ namespace ITMatching.Models.Abstract
     public interface IExpertRepository : IRepository<Expert>
     {
         Task<Expert> GetByItmUserIdAsync(int itmUserId);
+        Task SetStatusAsync(int expertId, bool isAvailable);
         Task ToggleStatusAsync(int expertId);
     }
 }
