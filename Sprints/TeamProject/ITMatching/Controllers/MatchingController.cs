@@ -305,8 +305,9 @@ namespace ITMatching.Controllers
                 }
             }
 
-            meeting.Status = "No match";
+            meeting.Status = "No Match";
             context.Meetings.Update(meeting);
+            context.SaveChanges();
 
             //perform 2nd pass of algorithm since matching with a currently-available expert has failed
 
@@ -631,12 +632,14 @@ namespace ITMatching.Controllers
             {
                 meeting.ExpertId = 0;
                 context.Meetings.Update(meeting);
+                context.SaveChanges();
                 return RedirectToAction("ExpertWaitingRoom"); 
             }
             else
             {
                 meeting.Status = "Matched";
                 context.Meetings.Update(meeting);
+                context.SaveChanges();
                 return RedirectToAction("ChatRoom", new { id = meetingId }); 
             }
         }

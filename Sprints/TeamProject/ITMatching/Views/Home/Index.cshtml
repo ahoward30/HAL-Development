@@ -13,6 +13,13 @@
         Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
         Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
         isExpert = eUser != null;
+
+        if (isExpert)
+        {
+            eUser.IsAvailable = false;
+            AppContext.Experts.Update(eUser);
+            AppContext.SaveChanges();
+        }
     }
 }
 

@@ -15,13 +15,15 @@ namespace ITMatching.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         ITMatchingAppContext context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, ITMatchingAppContext ctx)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ITMatchingAppContext ctx)
         {
             _logger = logger;
             _userManager = userManager;
+            _signInManager = signInManager;
             context = ctx;
         }
 
@@ -45,11 +47,46 @@ namespace ITMatching.Controllers
 
         public IActionResult About()
         {
+
+            bool isUserLoggedIn = _signInManager.IsSignedIn(User);
+            bool isExpert = false;
+            if (isUserLoggedIn)
+            {
+                string id = _userManager.GetUserId(User);
+                Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+                Expert eUser = context.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+                isExpert = eUser != null;
+
+                if (isExpert)
+                {
+                    eUser.IsAvailable = false;
+                    context.Experts.Update(eUser);
+                    context.SaveChanges();
+                }
+            }
+
             return View();
         }
 
         public IActionResult FAQ()
         {
+            bool isUserLoggedIn = _signInManager.IsSignedIn(User);
+            bool isExpert = false;
+            if (isUserLoggedIn)
+            {
+                string id = _userManager.GetUserId(User);
+                Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+                Expert eUser = context.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+                isExpert = eUser != null;
+
+                if (isExpert)
+                {
+                    eUser.IsAvailable = false;
+                    context.Experts.Update(eUser);
+                    context.SaveChanges();
+                }
+            }
+
             List<FAQ> qAndAList = context.FAQs.ToList();
 
             return View(qAndAList);
@@ -57,12 +94,46 @@ namespace ITMatching.Controllers
 
         public IActionResult ServicesList()
         {
+            bool isUserLoggedIn = _signInManager.IsSignedIn(User);
+            bool isExpert = false;
+            if (isUserLoggedIn)
+            {
+                string id = _userManager.GetUserId(User);
+                Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+                Expert eUser = context.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+                isExpert = eUser != null;
+
+                if (isExpert)
+                {
+                    eUser.IsAvailable = false;
+                    context.Experts.Update(eUser);
+                    context.SaveChanges();
+                }
+            }
+
             List<Service> services = context.Services.ToList();
             return View(services);
         }
 
         public IActionResult Privacy()
         {
+            bool isUserLoggedIn = _signInManager.IsSignedIn(User);
+            bool isExpert = false;
+            if (isUserLoggedIn)
+            {
+                string id = _userManager.GetUserId(User);
+                Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+                Expert eUser = context.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+                isExpert = eUser != null;
+
+                if (isExpert)
+                {
+                    eUser.IsAvailable = false;
+                    context.Experts.Update(eUser);
+                    context.SaveChanges();
+                }
+            }
+
             return View();
         }
 
