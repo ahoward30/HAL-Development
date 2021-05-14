@@ -269,6 +269,7 @@ namespace ITMatching.Controllers
                     int expertId = ex.Item1;
                     meeting.ExpertId = ex.Item1;
                     meeting.MatchExpireTimestamp = DateTime.UtcNow.AddMinutes(2);
+                    meeting.ClientTimestamp = DateTime.UtcNow;
                     string meetingStatus;
                     context.Meetings.Update(meeting);
                     context.SaveChanges();
@@ -284,22 +285,28 @@ namespace ITMatching.Controllers
                         //Set timestamp for expert waiting room to verify that we are still around
                         meeting.ClientTimestamp = DateTime.UtcNow;
 
-                        context.Meetings.Update(meeting);
-                        context.SaveChanges();
+                        //Timestamp editing does not work on Azure. Overwrites ExpertWaitingRoom changes. Need to find a fix!
+                        //context.Meetings.Update(meeting);
+                        //context.SaveChanges();
 
                         //If expert does not update timestamp for 30 seconds, they are assumed to be afk and are set to unavailable
                         if (ExpertIsNotThere(meeting.ExpertTimestamp))
                         {
                             Expert afkExpert = context.Experts.Where(e => e.Id == expertId).FirstOrDefault();
                             afkExpert.IsAvailable = false;
-                            context.Update(afkExpert);
-                            context.SaveChanges();
                             expertId = 0;
+                            meeting.ExpertId = 0;
+                            context.Update(afkExpert);
+                            context.Update(meeting);
+                            context.SaveChanges();
                         }
 
                         if (DateTime.Compare(DateTime.UtcNow, meeting.MatchExpireTimestamp) > 0)
                         {
                             expertId = 0;
+                            meeting.ExpertId = 0;
+                            context.Update(meeting);
+                            context.SaveChanges();
                         }
                     }
                 }
