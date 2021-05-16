@@ -8,6 +8,7 @@ namespace ITMatching.ViewModels
         public Itmuser Client { get; set; }
         public Itmuser Expert { get; set; }
         public HelpRequest HelpRequest { get; set; }
+        public int ChatRoomID { get; set; }
         public Meeting Meeting { get; set; }
         public IEnumerable<Message> Messages { get; set; }
         public bool IsExpert { get; set; }

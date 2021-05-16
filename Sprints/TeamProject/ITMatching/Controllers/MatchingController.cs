@@ -675,6 +675,7 @@ namespace ITMatching.Controllers
                             Expert = await _itmuserRepo.FindByIdAsync(meetingExpert.ItmuserId),
                             HelpRequest = await _helpRequestRepo.FindByIdAsync(meeting.HelpRequestId),
                             Meeting = meeting,
+                            ChatRoomID = id,
                             Messages = await _messageRepo.GetMessagesByMeetingIdAsync(meeting.Id)
                         };
                         return View(crVM);
@@ -684,7 +685,7 @@ namespace ITMatching.Controllers
                 else { message = "This meeting is closed."; }
             }
             else { message = "Invalid meeting Id."; }
-            return View(new ChatRoomViewModel { ErrorMessage = message });
+            return View(new ChatRoomViewModel { ErrorMessage = message, ChatRoomID = id });
         }
 
         [HttpPost]

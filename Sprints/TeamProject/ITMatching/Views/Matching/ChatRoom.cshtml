@@ -1,8 +1,27 @@
-﻿@inject ITMatchingAppContext AppContext
+﻿@using Microsoft.AspNetCore.Identity
+@inject ITMatchingAppContext AppContext
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @model ITMatching.ViewModels.ChatRoomViewModel
 @{
     ViewData["Title"] = "Chat Room";
     bool hasError = !string.IsNullOrWhiteSpace(Model.ErrorMessage);
+
+    bool isUserLoggedIn = SignInManager.IsSignedIn(User);
+    bool isExpert = false;
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    Client cUser = AppContext.Clients.Where(cu => cu.ItmuserId == itUser.Id).FirstOrDefault();
+    Meeting meeting = AppContext.Meetings.Where(m => m.Id == Model.ChatRoomID).FirstOrDefault();
+    isExpert = eUser != null;
+
+    if (isExpert)
+    {
+        eUser.IsAvailable = false;
+        AppContext.Experts.Update(eUser);
+        AppContext.SaveChanges();
+    }
 }
 
 @if (!hasError)
@@ -129,4 +148,24 @@ else
     <div class="alert alert-danger m-3" role="alert">
         @Model.ErrorMessage
     </div>
+    @if (Model.ErrorMessage == "This meeting is closed.")
+    {
+        <form asp-controller="Matching" asp-action="MeetingFeedback" method="post">
+            @if (!isExpert)
+            {
+            <div>@cUser.Id</div>
+                <div>@meeting.ClientId</div>
+                if (cUser.ItmuserId == meeting.ClientId)
+                {
+                    <input name="meetingId" type="hidden" value="@Model.ChatRoomID" />
+                    <button type="submit" class="btn btn-primary font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Leave Feedback</button>
+                }
+            }
+            else
+            {
+                <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-primary font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Enter expert waiting room</button>
+            }
+            <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-primary font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Return to home page</button>
+        </form>
+    }
 }
