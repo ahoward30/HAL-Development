@@ -597,6 +597,7 @@ namespace ITMatching.Controllers
                 meeting.ExpertId = 0;
                 meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
                 meeting.Status = "Matching";
+                meeting.Feedback = null;
 
                 context.Meetings.Add(meeting);
                 context.SaveChanges();
@@ -689,6 +690,52 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        public IActionResult Feedback(int meetingId)
+        {
+            return RedirectToAction("MeetingFeedback", new { id = meetingId });
+        }
+
+        [Authorize]
+        public IActionResult MeetingFeedback(int id)
+        {
+            Meeting meeting = context.Meetings.Where(m => m.Id == id).FirstOrDefault();
+
+            if (meeting == null)
+            {
+                meeting = new Meeting { Id = 0 };
+            }
+
+            return View(meeting);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult SubmitFeedback(string feedback, int meetingID)
+        {
+            Meeting meeting = context.Meetings.Where(m => m.Id == meetingID).FirstOrDefault();
+             
+            switch (feedback)
+            {
+                case "Helpful":
+                    meeting.Feedback = 1;
+                    break;
+                case "Not Helpful":
+                    meeting.Feedback = 0;
+                    break;
+                default:
+                    meeting.Feedback = null;
+                    break;
+            }
+
+            context.Meetings.Update(meeting);
+            context.SaveChanges();
+            Debug.WriteLine("The meeting Feedback is " + meeting.Feedback + "because the feedback is " + feedback);
+
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> PostMessage(Message message)
         {
             if (ModelState.IsValid)
@@ -703,7 +750,7 @@ namespace ITMatching.Controllers
         public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
         {
             await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");
-            return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching") : RedirectToAction("Index", "Home");
+            return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching") : RedirectToAction("ChatRoom", new { id = meetingId });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -711,5 +758,6 @@ namespace ITMatching.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

@@ -55,7 +55,8 @@ CREATE TABLE [Meeting] (
   [Status]					NVARCHAR(20) NOT NULL, 
   [ClientTimestamp]			DATETIME,
   [ExpertTimestamp]			DATETIME,
-  [MatchExpireTimestamp]	DATETIME
+  [MatchExpireTimestamp]	DATETIME,
+  [Feedback]                INT
 )
 GO
 
@@ -64,7 +65,7 @@ CREATE TABLE [ExpertFeedback] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ExpertID]		INT NOT NULL,
   [ClientID]		INT NOT NULL,
-  [FeedbackText]	NVARCHAR(100),
+  [MeetingID]	    INT NOT NULL,
   [Rating]			INT NOT NULL
 )
 GO

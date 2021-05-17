@@ -16,6 +16,6 @@ namespace ITMatching.Models
         public DateTime ClientTimestamp { get; set; }
         public DateTime ExpertTimestamp { get; set; }
         public DateTime MatchExpireTimestamp { get; set; }
-
+        public int? Feedback { get; set; }
     }
 }

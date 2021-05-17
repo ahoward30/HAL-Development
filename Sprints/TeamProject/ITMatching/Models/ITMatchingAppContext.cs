@@ -76,7 +76,9 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
 
-                entity.Property(e => e.FeedbackText).HasMaxLength(100);
+                entity.Property(e => e.MeetingID).HasColumnName("MeetingID");
+
+                entity.Property(e => e.Rating).HasColumnName("Rating");
             });
 
             modelBuilder.Entity<FAQ>(entity =>
@@ -160,6 +162,8 @@ namespace ITMatching.Models
                 entity.Property(e => e.ExpertTimestamp).HasColumnName("ExpertTimestamp");
 
                 entity.Property(e => e.MatchExpireTimestamp).HasColumnName("MatchExpireTimestamp");
+
+                entity.Property(e => e.Feedback).HasColumnName("Feedback");
 
             });
 

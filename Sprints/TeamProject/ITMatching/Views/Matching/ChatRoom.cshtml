@@ -145,27 +145,29 @@
 }
 else
 {
-    <div class="alert alert-danger m-3" role="alert">
-        @Model.ErrorMessage
+    <div class="container">
+        <div class="alert alert-danger m-3" role="alert">
+            @Model.ErrorMessage
+        </div>
     </div>
     @if (Model.ErrorMessage == "This meeting is closed.")
     {
-        <form asp-controller="Matching" asp-action="MeetingFeedback" method="post">
-            @if (!isExpert)
-            {
-            <div>@cUser.Id</div>
-                <div>@meeting.ClientId</div>
-                if (cUser.ItmuserId == meeting.ClientId)
+        <form asp-controller="Matching" asp-action="Feedback" method="post">
+            <div class="row justify-content-center">
+                @if (!isExpert)
                 {
-                    <input name="meetingId" type="hidden" value="@Model.ChatRoomID" />
-                    <button type="submit" class="btn btn-primary font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Leave Feedback</button>
+                    if (cUser.ItmuserId == meeting.ClientId)
+                    {
+                        <input name="meetingId" type="hidden" value="@Model.ChatRoomID" />
+                        <button type="submit" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Leave Feedback</button>
+                    }
                 }
-            }
-            else
-            {
-                <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-primary font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Enter expert waiting room</button>
-            }
-            <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-primary font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Return to home page</button>
+                else
+                {
+                    <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Enter expert waiting room</button>
+                }
+                <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Return to home page</button>
+            </div>
         </form>
     }
 }
