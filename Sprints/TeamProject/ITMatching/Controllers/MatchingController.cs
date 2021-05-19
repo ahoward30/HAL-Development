@@ -587,28 +587,36 @@ namespace ITMatching.Controllers
 
             if (itUser != null)
             {
+                var clientWaitingRoomVM = new ClientWaitingRoomViewModel();
 
-                Meeting meeting = new Meeting();
-                meeting.Date = DateTime.UtcNow;
-                meeting.ClientTimestamp = DateTime.UtcNow;
-                meeting.ExpertTimestamp = DateTime.UtcNow;
-                meeting.MatchExpireTimestamp = DateTime.UtcNow;
-                meeting.ClientId = itUser.Id;
-                meeting.ExpertId = 0;
-                meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
-                meeting.Status = "Matching";
-                meeting.Feedback = null;
+                var currentRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
 
-                context.Meetings.Add(meeting);
-                context.SaveChanges();
-
-                HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
-
-                var clientWaitingRoomVM = new ClientWaitingRoomViewModel
+                if (currentRequest != null)
                 {
-                    HelpRequest = helpRequest,
-                    Meeting = meeting
-                };
+                    Meeting meeting = new Meeting();
+                    meeting.Date = DateTime.UtcNow;
+                    meeting.ClientTimestamp = DateTime.UtcNow;
+                    meeting.ExpertTimestamp = DateTime.UtcNow;
+                    meeting.MatchExpireTimestamp = DateTime.UtcNow;
+                    meeting.ClientId = itUser.Id;
+                    meeting.ExpertId = 0;
+                    meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
+                    meeting.Status = "Matching";
+                    meeting.Feedback = null;
+
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+
+                    HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
+
+                    clientWaitingRoomVM.HelpRequest = helpRequest;
+                    clientWaitingRoomVM.Meeting = meeting;
+                }
+                else
+                {
+                    clientWaitingRoomVM.HelpRequest = new HelpRequest() { Id = 0 };
+                    clientWaitingRoomVM.Meeting = new Meeting() { Id = 0 };
+                }
 
                 return View(clientWaitingRoomVM);
             }
