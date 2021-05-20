@@ -8,11 +8,12 @@
 
 <div class="container">
 
-    <h1 class="mt-4 mb-5 text-center">Unavailable Online Experts</h1>
-
     @if (Model.OfflineExpertIdsAndScores.Count > 0)
     {
         var cnt = 0;
+        <h1 class="mt-5 mb-3 text-center"><strong>No matching experts are currently online to help</strong></h1><br />
+        <h3 class="mt-4 mb-2 text-center">Here are some offline matching experts who may be able to help you later.</h3>
+
 
         <div class="accordion" id="accordionReq">
             <div class="row no-gutters">
@@ -59,7 +60,7 @@
                         <div class="d-flex justify-content-center mt-3 flex-wrap">
                             <form asp-controller="SchedulerUtil" asp-action="ViewSchedule" asp-route-id="@tempExpert.Id" method="post">
                                 <input name="ExpertId" type="hidden" value="@tempExpert.Id" />
-                                
+
                                 <button type="submit" class="btn btn-warning text-white font-weight-bold py-2 px-4 mx-5" @Url.Action("ViewSchedule", "SchedulerUtil", new { ExpertId = tempExpert.Id })>View Expert Schedule</button>
                             </form>
                         </div>
@@ -74,10 +75,8 @@
 
     else
     {
-        <div class="d-flex justify-content-center">
-            <h1>Sorry, no registered experts have the ability to help you.</h1>
-            <p>Did you make sure to properly tag your help request?</p>
-        </div>
+        <h1 class="mt-5 mb-5 text-center"><strong>Sorry, no registered experts have the ability to help you.</strong></h1><br />
+        <h3 class="mt-5 mb-2 text-center">Did you make sure to properly tag your help request?</h3>
     }
 
 </div>

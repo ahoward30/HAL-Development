@@ -238,14 +238,13 @@ namespace ITMatching.Controllers
             return View();
         }
 
-        [HttpPost]
         //Attempt to meet with an online expert, and either navigate to a meeting room to talk to them, or to a page listing expert information if no matching experts are available.
-        public IActionResult ClientExpertMatching(int meetingId)
+        public IActionResult ClientExpertMatching()
         {
-            Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
 
-            //Compile a list of IDs from all experts who are currently available for matching
-            List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
+            Meeting meeting = context.Meetings.Where(m => m.ClientId == itUser.Id && m.Status == "Matching").FirstOrDefault();
 
             //Compile a list of the IDs of the services tagged by the client for their help request
             List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
@@ -253,74 +252,16 @@ namespace ITMatching.Controllers
             //Find the maximum value of points associated with a client's help request to compare experts against
             int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
 
+            meeting.Status = "No Match";
+            context.Meetings.Update(meeting);
+            context.SaveChanges();
+
             //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
             if (clientMaxPoints == 0)
             {
                 List<(int, double)> emptyList = new List<(int, double)>();
                 return View(emptyList);
             }
-
-            //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
-            List<(int, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints);
-
-            //Attempt to meet with online experts who meet the matching score threshold for this help request
-            if (thresholdMeetingExperts.Any())
-            {
-                //Create new list for Experts who meet the threshold sorted by descending order
-                List<(int, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ToList();
-
-                //Iterate through each expert in the list, starting from highest matching score, until an expert accepts to meet, or until the list is exhausted
-                foreach ((int, double) ex in sortedExperts)
-                {
-                    int expertId = ex.Item1;
-                    meeting.ExpertId = ex.Item1;
-                    meeting.MatchExpireTimestamp = DateTime.UtcNow.AddMinutes(2);
-                    meeting.ClientTimestamp = DateTime.UtcNow;
-                    string meetingStatus;
-                    context.Meetings.Update(meeting);
-                    context.SaveChanges();
-                    while (expertId != 0)
-                    {
-                        expertId = context.Meetings.Where(m => m.Id == meeting.Id).Select(e => e.ExpertId).SingleOrDefault();
-                        meetingStatus = context.Meetings.Where(m => m.Id == meeting.Id).Select(s => s.Status).SingleOrDefault();
-                        if (meetingStatus == "Matched")
-                        {
-                            return RedirectToAction("ChatRoom", new { id = meeting.Id });
-                        }
-
-                        //Set timestamp for expert waiting room to verify that we are still around
-                        meeting.ClientTimestamp = DateTime.UtcNow;
-
-                        //Timestamp editing does not work on Azure. Overwrites ExpertWaitingRoom changes. Need to find a fix!
-                        //context.Meetings.Update(meeting);
-                        //context.SaveChanges();
-
-                        //If expert does not update timestamp for 30 seconds, they are assumed to be afk and are set to unavailable
-                        if (ExpertIsNotThere(meeting.ExpertTimestamp))
-                        {
-                            Expert afkExpert = context.Experts.Where(e => e.Id == expertId).FirstOrDefault();
-                            afkExpert.IsAvailable = false;
-                            expertId = 0;
-                            meeting.ExpertId = 0;
-                            context.Update(afkExpert);
-                            context.Update(meeting);
-                            context.SaveChanges();
-                        }
-
-                        if (DateTime.Compare(DateTime.UtcNow, meeting.MatchExpireTimestamp) > 0)
-                        {
-                            expertId = 0;
-                            meeting.ExpertId = 0;
-                            context.Update(meeting);
-                            context.SaveChanges();
-                        }
-                    }
-                }
-            }
-
-            meeting.Status = "No Match";
-            context.Meetings.Update(meeting);
-            context.SaveChanges();
 
             //perform 2nd pass of algorithm since matching with a currently-available expert has failed
 
@@ -593,7 +534,7 @@ namespace ITMatching.Controllers
 
             if (itUser != null)
             {
-                var clientWaitingRoomVM = new ClientWaitingRoomViewModel();
+                var HelpRequestSubmissionVM = new HelpRequestSubmissionViewModel();
 
                 var currentRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
 
@@ -621,18 +562,60 @@ namespace ITMatching.Controllers
                     context.Meetings.Add(meeting);
                     context.SaveChanges();
 
+                    meeting = context.Meetings.Where(m => m.Status == "Matching" && m.ClientId == itUser.Id).FirstOrDefault();
+
+                    //Compile a list of IDs from all experts who are currently available for matching
+                    List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
+
+                    //Compile a list of the IDs of the services tagged by the client for their help request
+                    List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+
+                    //Find the maximum value of points associated with a client's help request to compare experts against
+                    int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
+
+                    //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
+                    if (clientMaxPoints == 0)
+                    {
+                        List<(int, double)> emptyList = new List<(int, double)>();
+                        return Redirect("ClientExpertMatching");
+                    }
+
+                    //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
+                    List<(int, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints);
+
+                    //Attempt to meet with online experts who meet the matching score threshold for this help request
+                    if (thresholdMeetingExperts.Any())
+                    {
+                        //Create new list for Experts who meet the threshold sorted by descending order
+                        List<(int, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ToList();
+
+                        PotentialMatch tempPotentialMatch = new PotentialMatch();
+
+                        //Iterate through each expert in the list, starting from highest matching score, until an expert accepts to meet, or until the list is exhausted
+                        foreach ((int, double) ex in sortedExperts)
+                        {
+                            tempPotentialMatch.MeetingId = meeting.Id;
+                            tempPotentialMatch.ExpertId = ex.Item1;
+                            tempPotentialMatch.MatchingScore = ex.Item2;
+
+                            context.PotentialMatches.Add(tempPotentialMatch);
+                        }
+
+                        context.SaveChanges();
+                    }
+
                     HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
 
-                    clientWaitingRoomVM.HelpRequest = helpRequest;
-                    clientWaitingRoomVM.Meeting = meeting;
+                    HelpRequestSubmissionVM.HelpRequest = helpRequest;
+                    HelpRequestSubmissionVM.Meeting = meeting;
                 }
                 else
                 {
-                    clientWaitingRoomVM.HelpRequest = new HelpRequest() { Id = 0 };
-                    clientWaitingRoomVM.Meeting = new Meeting() { Id = 0 };
+                    HelpRequestSubmissionVM.HelpRequest = new HelpRequest() { Id = 0 };
+                    HelpRequestSubmissionVM.Meeting = new Meeting() { Id = 0 };
                 }
 
-                return View(clientWaitingRoomVM);
+                return View(HelpRequestSubmissionVM);
             }
             else
             {
@@ -641,20 +624,90 @@ namespace ITMatching.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ClientWaitingRoom(int? meetingId)
+        public async Task<IActionResult> ClientWaitingRoom()
         {
             string id = _userManager.GetUserId(User);
             Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
 
             var clientWaitingRoomVM = new ClientWaitingRoomViewModel();
 
+            Meeting meeting = context.Meetings.Where(m => m.ClientId == itUser.Id && ( m.Status == "Matched" || m.Status == "Matching")).FirstOrDefault();
 
             if (itUser != null)
             {
-                if (meetingId != null)
+                if (meeting != null)
                 {
-                    clientWaitingRoomVM.Meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
-                    clientWaitingRoomVM.HelpRequest = context.HelpRequests.Where(hr => hr.Id == clientWaitingRoomVM.Meeting.HelpRequestId).FirstOrDefault();
+                    if (meeting.ExpertId == 0)
+                    {
+                        List<PotentialMatch> potentialMatches = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id).ToList();
+                        if (!potentialMatches.Any())
+                        {
+                            return RedirectToAction("ClientExpertMatching");
+                        }
+                        else
+                        {
+                            List<PotentialMatch> orderedMatches = potentialMatches.OrderByDescending(pm => pm.MatchingScore).ToList();
+                            PotentialMatch nextMatch = orderedMatches.First();
+                            meeting.ExpertId = nextMatch.ExpertId;
+                            meeting.ClientTimestamp = DateTime.UtcNow;
+                            meeting.ExpertTimestamp = DateTime.UtcNow;
+                            meeting.MatchExpireTimestamp = DateTime.UtcNow.AddMinutes(2);
+                            context.Meetings.Update(meeting);
+                            context.SaveChanges();
+                        }
+                    }
+                    else if (meeting.Status == "Matched")
+                    {
+                        return RedirectToAction("ChatRoom", new { id = meeting.Id });
+                    }
+
+                    //meeting.ClientTimestamp = DateTime.UtcNow;
+
+                    //Timestamp editing does not work on Azure. Overwrites ExpertWaitingRoom changes. Need to find a fix!
+                    //context.Meetings.Update(meeting);
+                    //context.SaveChanges();
+
+                    Expert currentExpert = context.Experts.Where(e => e.Id == meeting.ExpertId).FirstOrDefault();
+
+                    //If expert does not update timestamp for 30 seconds, they are assumed to be afk and are set to unavailable
+                    if (ExpertIsNotThere(meeting.ExpertTimestamp))
+                    {
+                        if (currentExpert != null)
+                        {
+                            currentExpert.IsAvailable = false;
+                            context.Experts.Update(currentExpert);
+                        }
+                        meeting.ExpertId = 0;
+                        context.Meetings.Update(meeting);
+                        context.SaveChanges();
+                    }
+
+                    if (DateTime.Compare(DateTime.UtcNow, meeting.MatchExpireTimestamp) > 0)
+                    {
+                        PotentialMatch afkMatch = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id && pm.ExpertId == meeting.ExpertId).FirstOrDefault();
+                        if (afkMatch != null)
+                        {
+                            context.PotentialMatches.Remove(afkMatch);
+                        }
+                        meeting.ExpertId = 0;
+                        context.Meetings.Update(meeting);
+                        context.SaveChanges();
+                    }
+
+                    if (!currentExpert.IsAvailable)
+                    {
+                        PotentialMatch unavailableMatch = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id && pm.ExpertId == meeting.ExpertId).FirstOrDefault();
+                        if (unavailableMatch != null)
+                        {
+                            context.PotentialMatches.Remove(unavailableMatch);
+                        }
+                        meeting.ExpertId = 0;
+                        context.Meetings.Update(meeting);
+                        context.SaveChanges();
+                    }
+
+                    clientWaitingRoomVM.Meeting = context.Meetings.Where(m => m.Id == meeting.Id).FirstOrDefault();
+                    clientWaitingRoomVM.HelpRequest = context.HelpRequests.Where(hr => hr.Id == meeting.HelpRequestId).FirstOrDefault();
 
                     return View(clientWaitingRoomVM);
 
@@ -683,6 +736,10 @@ namespace ITMatching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
         {
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+            Expert eUser = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
+
             Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
 
             //await _meetingRepo.UpdateStatusAsync(meetingId, status);
@@ -691,6 +748,10 @@ namespace ITMatching.Controllers
 
             if (!isAccepted)
             {
+                PotentialMatch pm = context.PotentialMatches.Where(pm => pm.MeetingId == meetingId && pm.ExpertId == eUser.Id).FirstOrDefault();
+                context.PotentialMatches.Remove(pm);
+                context.SaveChanges();
+
                 meeting.ExpertId = 0;
                 context.Meetings.Update(meeting);
                 context.SaveChanges();
@@ -803,6 +864,14 @@ namespace ITMatching.Controllers
         public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
         {
             await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");
+            Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+            List<PotentialMatch> potentialMatches = context.PotentialMatches.Where(pm => pm.MeetingId == meetingId).ToList();
+            foreach(PotentialMatch pm in potentialMatches)
+            {
+                context.PotentialMatches.Remove(pm);
+                context.SaveChanges();
+            }
+
             return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching") : RedirectToAction("ChatRoom", new { id = meetingId });
         }
 

@@ -24,6 +24,7 @@ namespace ITMatching.Models
         public virtual DbSet<HelpRequest> HelpRequests { get; set; }
         public virtual DbSet<Itmuser> Itmusers { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<PotentialMatch> PotentialMatches { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ExpertService> ExpertServices { get; set; }
         public virtual DbSet<RequestService> RequestServices { get; set; }
@@ -165,6 +166,19 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Feedback).HasColumnName("Feedback");
 
+            });
+
+            modelBuilder.Entity<PotentialMatch>(entity =>
+            {
+                entity.ToTable("PotentialMatch");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+
+                entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
+
+                entity.Property(e => e.MatchingScore).HasColumnName("MatchingScore");
             });
 
             modelBuilder.Entity<Service>(entity =>

@@ -60,6 +60,14 @@ CREATE TABLE [Meeting] (
 )
 GO
 
+CREATE TABLE [PotentialMatch] (
+  [ID]						INT PRIMARY KEY IDENTITY(1, 1),
+  [MeetingID]				INT NOT NULL,
+  [ExpertID]				INT NOT NULL,
+  [MatchingScore]           FLOAT NOT NULL
+)
+GO
+
 --Should we change feedback text to be at least the length of a tweet?
 CREATE TABLE [ExpertFeedback] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),

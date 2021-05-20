@@ -1,9 +1,7 @@
 ﻿var timeOutRefreshPage;
 
 function refreshPage() {
-    if (document.hasFocus()) {
         location.reload();
-    }
 }
 
 function autoRefresh() {
