@@ -8,7 +8,7 @@
 <div class="container">
     @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
     {
-        <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Waiting for Matching Expert...</strong></h1>
+        <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Do you want to submit this help request?</strong></h1>
 
         <div class="accordion" id="accordionReq">
             <div class="row no-gutters">
@@ -83,7 +83,3 @@
     }
 
 </div>
-
-@section Scripts {
-    <script src="~/js/client-waiting-room.js" asp-append-version="true"></script>
-}

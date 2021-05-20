@@ -40,7 +40,10 @@ namespace ITMatching.Controllers
         [Authorize]
         public IActionResult RequestForm()
         {
-            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true).ToList();
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
+
+            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true && hr.ClientId == itUser.Id).ToList();
             foreach (HelpRequest hr in openHelpRequests)
             {
                 hr.IsOpen = false;
@@ -59,7 +62,7 @@ namespace ITMatching.Controllers
         public IActionResult HelpRequestAdded()
         {
             //return View();
-            return RedirectToAction("ClientWaitingRoom");
+            return RedirectToAction("HelpRequestSubmission");
         }
 
 
@@ -206,7 +209,10 @@ namespace ITMatching.Controllers
         public IActionResult ResubmitHelpRequest(int helpRequestID)
         {
             //Grabs list of open help requests and sets them to false
-            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true).ToList();
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
+
+            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true && hr.ClientId == itUser.Id).ToList();
             foreach (HelpRequest hr in openHelpRequests)
             {
                 hr.IsOpen = false;
@@ -580,7 +586,7 @@ namespace ITMatching.Controllers
 
         
         [Authorize]
-        public async Task<IActionResult> ClientWaitingRoom()
+        public async Task<IActionResult> HelpRequestSubmission()
         {
             string id = _userManager.GetUserId(User);
             Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
@@ -590,6 +596,14 @@ namespace ITMatching.Controllers
                 var clientWaitingRoomVM = new ClientWaitingRoomViewModel();
 
                 var currentRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
+
+                List<Meeting> matchingMeetings = context.Meetings.Where(m => m.Status == "Matching" && m.ClientId == itUser.Id).ToList();
+                foreach (Meeting m in matchingMeetings)
+                {
+                    m.Status = "No Match";
+                    context.Meetings.Update(m);
+                }
+                context.SaveChanges();
 
                 if (currentRequest != null)
                 {
@@ -624,6 +638,37 @@ namespace ITMatching.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ClientWaitingRoom(int? meetingId)
+        {
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+
+            var clientWaitingRoomVM = new ClientWaitingRoomViewModel();
+
+
+            if (itUser != null)
+            {
+                if (meetingId != null)
+                {
+                    clientWaitingRoomVM.Meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+                    clientWaitingRoomVM.HelpRequest = context.HelpRequests.Where(hr => hr.Id == clientWaitingRoomVM.Meeting.HelpRequestId).FirstOrDefault();
+
+                    return View(clientWaitingRoomVM);
+
+                }
+                else
+                {
+                    return RedirectToAction("HelpRequestSubmission");
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpPost]

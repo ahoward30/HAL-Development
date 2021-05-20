@@ -6,13 +6,10 @@ function refreshPage() {
     }
 }
 
-function getRequests() {
-    let isAvailable = $(hdnIsAvailable).val() === 'true';
-    if (isAvailable) {
-        timeOutRefreshPage = setInterval(refreshPage, 30000); //30 secs
-    }
+function autoRefresh() {
+        timeOutRefreshPage = setInterval(refreshPage, 5000); //5 secs
 }
 
 $(document).ready(function () {
-    getRequests();
+    autoRefresh();
 });
