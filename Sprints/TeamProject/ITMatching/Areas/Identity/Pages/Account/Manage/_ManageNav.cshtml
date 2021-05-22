@@ -10,6 +10,7 @@
     <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Personal Info</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Change Email</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Change Password</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.MeetingLogNavClass(ViewContext)" id="meeting-log" asp-page="./MeetingLog">View Meeting Logs</a></li>
 
     @{
         string id = UserManager.GetUserId(User);
@@ -21,7 +22,8 @@
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.HelpRequestHistoryNavClass(ViewContext)" id="help-request-history" asp-page="./HelpRequestHistory">View Help Request History</a></li>
     }
-    else{
+    else
+    {
         <li class="nav-item"><a class="nav-link @ManageNavPages.ExpertTagsNavClass(ViewContext)" id="expert-tags" asp-page="./ExpertTags">View Subject Tags</a></li>
     }
     @if (hasExternalLogins)

@@ -1,0 +1,100 @@
+﻿@page
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@using ITMatching.Models
+@model List<ITMatching.Models.MeetingLogModel>
+
+
+@inject ITMatchingAppContext AppContext
+@{
+    ViewData["Title"] = "Meeting Logs History";
+
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    bool isExpert = eUser != null;
+}
+
+
+<div class="container">
+
+    <h1 class="col-lg-10 text-center"><strong>Meeting Logs History</strong></h1>
+
+    <hr />
+    <br />
+
+    @if (!Model.Any())
+    {
+
+    var cnt = 0;
+
+    <div class="accordion" id="accordionReq">
+        <div class="row no-gutters">
+
+
+            @foreach (ITMatching.Models.MeetingLogModel m in Model)
+            {
+                <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
+                    <div class="col-12 p-3 req-head-bg">
+                        <h3 class="mb-0 req-head-text font-weight-bold text-left">@m.RequestTitle</h3>
+                    </div>
+                </button>
+
+                <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
+                    <p class="font-weight-bold text-white">
+                        @m.RequestDescription
+                        <br />
+                        Met with: @m.MatchedUserName
+                        <br />
+                        User's Email: @m.MatchedUserEmail
+                        <br />
+                        Time of meeting: @m.TimeOfMeeting
+                    </p>
+
+                    <div>
+
+                    </div>
+
+                    <div class="d-flex m-n3 flex-wrap">
+                        @foreach (Service tag in m.HelpRequestTags)
+                        {
+                            <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag.ServiceName</span>
+                        }
+                    </div>
+                </div>
+
+                cnt++;
+            }
+
+        </div>
+    </div>
+    }
+
+        else
+        {
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-10">
+                <h3>No Past Meetings Available</h3>
+            </div>
+            @if (isExpert)
+            {
+                <div class="col-lg-10">
+                    <p>Submit a help request and get matched up to view your meeting log history. </p>
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-10">
+                    <p>Accept a client's help request to view your meeting log history. </p>
+                </div>
+            }
+        </div>
+    </div>
+    }
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
