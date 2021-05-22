@@ -29,29 +29,22 @@ function refreshDateTime() {
 }
 
 function scrollToBottom() {
-    console.log('here');
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 function onImageLoaded() {
-    console.log('here1');
     scrollToBottom();
-
 }
 
 function reloadImage(obj) {
-    console.log('here2', obj);
     let src = obj.src;
     if (!obj.cnt || obj.cnt <= 3) {
         obj.cnt++;
         obj.src = null;
         obj.src = src;
-        console.log('here3');
     } else {
         obj.onerror = null;
-        console.log('here3.5');
     }
-    console.log('here4');
 }
 
 function joinRoom() {
