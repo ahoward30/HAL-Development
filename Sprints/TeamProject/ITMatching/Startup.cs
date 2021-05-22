@@ -18,6 +18,8 @@ using ITMatching.Models;
 using ITMatching.Models.Abstract;
 using ITMatching.Models.Concrete;
 using ITMatching.Hubs;
+using ITMatching.Services.Abstract;
+using ITMatching.Services.Concrete;
 
 namespace ITMatching
 {
@@ -42,12 +44,16 @@ namespace ITMatching
                      Configuration.GetConnectionString("ITMatchingConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
-             
+
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
             services.AddScoped<IItmuserRepository, ItmuserRepository>();
             services.AddScoped<IExpertRepository, ExpertRepository>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
             services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+
+            services.AddScoped<IPhotoService, PhotoService>();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()                          //Enable Roles

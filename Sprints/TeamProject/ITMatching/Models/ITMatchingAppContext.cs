@@ -227,6 +227,8 @@ namespace ITMatching.Models
                 entity.Property(e => e.SentTime).HasColumnName("SentTime");
 
                 entity.Property(e => e.Text).HasColumnName("Text");
+
+                entity.Property(e => e.FileURL).HasColumnName("FileURL");
             });
 
             OnModelCreatingPartial(modelBuilder);
