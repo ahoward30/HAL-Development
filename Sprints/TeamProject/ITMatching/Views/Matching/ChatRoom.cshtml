@@ -49,6 +49,17 @@
             .rounded-lg {
                 border-radius: 0.5rem;
             }
+
+            .img-wrapper {
+                width: 100%;
+                height: 100%;
+            }
+
+                .img-wrapper img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
         </style>
     }
 
@@ -94,6 +105,13 @@
             </div>
             <!-- Chat Box-->
             <div class="col-sm-7 px-0">
+                <div id="spinner" class="position-absolute h-100 w-100" style="display: none;">
+                    <div class="h-100 w-100 d-flex justify-content-center align-items-center">
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="position-absolute h-100 w-100 modal-backdrop show"></div>
+                </div>
                 <div id="chat-box" class="p-4 chat-box bg-custom">
 
                     @foreach (var message in Model.Messages)
@@ -102,7 +120,18 @@
                         <div class="media w-50 mb-3@(isSender ? "" : " ml-auto")">
                             <div class="media-body">
                                 <div class="rounded py-2 px-3 mb-2 @(isSender ? "bg-light" : "bg-primary")">
-                                    <p class="text-small mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</p>
+                                    @if (message.IsAttachment)
+                                    {
+                                        <small class="font-italic mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</small>
+                                        <div class="img-thumbnail img-wrapper mb-2">
+                                            <img src="@message.FileURL" onerror="function () { reloadImage(this); }" onload="onImageLoaded()"
+                                                 alt="@($"{message.Text} - {message.SentTime.Value.ToString("yyyyMMddHHmmss")}")" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-small mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</p>
+                                    }
                                 </div>
                                 <p class="small text-muted" data-utcdate="@(System.Text.Json.JsonSerializer.Serialize(message.SentTime.Value).Replace("\"", ""))"></p>
                             </div>
@@ -112,22 +141,36 @@
                 </div>
 
                 <!-- Typing area -->
-                <form asp-controller="Matching" asp-action="PostMessage" class="bg-head"
+                <form id="postMessage" asp-controller="Matching" asp-action="PostMessage" class="bg-head"
                       data-ajax-begin="clearInputField" data-ajax-complete=""
-                      data-ajax-failure="alert('fail')" data-ajax-success="sendMessage"
-                      data-ajax="true" data-ajax-method="post">
+                      data-ajax-failure="sendMessageFailure" data-ajax-success="sendMessage"
+                      data-ajax="true" data-ajax-method="post" data-ajax-loading="#spinner">
                     <div asp-validation-summary="ModelOnly"></div>
                     <div class="input-group p-3px">
-                        <input type="hidden" id="meetingId" name="meetingId" value="@Model.Meeting.Id">
-                        <input type="hidden" id="sentBy" name="sentBy" value="@Model.CurrentUserId">
-                        <input type="hidden" id="sentTime" name="sentTime">
-                        <input type="text" id="text" name="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-head">
+                        <input type="hidden" id="postMessage-meetingId" name="meetingId" value="@Model.Meeting.Id">
+                        <input type="hidden" id="postMessage-sentBy" name="sentBy" value="@Model.CurrentUserId">
+                        <input type="hidden" id="postMessage-sentTime" name="sentTime">
+                        <input type="text" id="postMessage-text" name="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-head">
+                        <div class="input-group-append">
+                            <button id="sendFile" type="button" class="btn btn-link"> <i class="fa fa-paperclip"></i></button>
+                        </div>
                         <div class="input-group-append">
                             <button id="sendButton" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
                         </div>
                     </div>
                 </form>
-
+                <form id="uploadFile" asp-controller="Matching" asp-action="UploadFile" enctype="multipart/form-data"
+                      data-ajax-begin="" data-ajax-complete=""
+                      data-ajax-failure="sendMessageFailure" data-ajax-success="sendMessage"
+                      data-ajax="true" data-ajax-method="post" data-ajax-loading="#spinner">
+                    <input type="hidden" id="uploadFile-meetingId" name="meetingId" value="@Model.Meeting.Id">
+                    <input type="hidden" id="uploadFile-sentBy" name="sentBy" value="@Model.CurrentUserId">
+                    <input type="hidden" id="uploadFile-sentTime" name="sentTime">
+                    <input type="hidden" id="uploadFile-text" name="text">
+                    <input type="hidden" id="uploadFile-file" name="fileURL" value="https://phinational.org/wp-content/uploads/2017/07/fb-test-image-470x246.jpg">
+                    <input type="file" id="fileInput" name="file" accept=".png, .jpg, .jpeg" hidden />
+                    <button id="sendFileButton" type="submit" hidden />
+                </form>
             </div>
         </div>
     </div>

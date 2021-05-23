@@ -105,6 +105,7 @@ CREATE TABLE [Message](
     [MeetingID]         INT NOT NULL,
     [SentBy]            INT NOT NULL,
     [SentTime]          DATETIME,
-    [Text]              NVARCHAR(2000)
+    [Text]              NVARCHAR(2000),
+    [FileURL]           NVARCHAR(500),
 )
 GO

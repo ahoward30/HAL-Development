@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using ITMatching.ViewModels;
 using ITMatching.Models.Abstract;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using ITMatching.Services.Abstract;
 
 namespace ITMatching.Controllers
 {
@@ -23,9 +25,11 @@ namespace ITMatching.Controllers
         private readonly IMeetingRepository _meetingRepo;
         private readonly IHelpRequestRepository _helpRequestRepo;
         private readonly IMessageRepository _messageRepo;
+        private readonly IPhotoService _photoService;
 
         public MatchingController(ILogger<MatchingController> logger, UserManager<IdentityUser> userManager, ITMatchingAppContext ctx,
-            IItmuserRepository itmuserRepo, IExpertRepository expertRepo, IMeetingRepository meetingRepo, IHelpRequestRepository helpRequestRepo, IMessageRepository messageRepo)
+            IItmuserRepository itmuserRepo, IExpertRepository expertRepo, IMeetingRepository meetingRepo, IHelpRequestRepository helpRequestRepo, IMessageRepository messageRepo,
+            IPhotoService photoService)
         {
             this.logger = logger;
             _userManager = userManager;
@@ -35,6 +39,7 @@ namespace ITMatching.Controllers
             _meetingRepo = meetingRepo;
             _helpRequestRepo = helpRequestRepo;
             _messageRepo = messageRepo;
+            _photoService = photoService;
         }
 
         [Authorize]
@@ -740,10 +745,25 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _messageRepo.AddOrUpdateAsync(message);
-                return Ok();
+                message = await _messageRepo.AddOrUpdateAsync(message);
+                return Ok(message);
             }
-            return BadRequest();
+            return BadRequest("Invalid request.");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadFile(Message message, IFormFile file)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _photoService.AddPhotoAsync(file);
+                if (result.Error != null) return BadRequest(result.Error.Message);
+
+                message.FileURL = result.SecureUrl.AbsoluteUri;
+                message = await _messageRepo.AddOrUpdateAsync(message);
+                return Ok(message);
+            }
+            return BadRequest("Invalid request.");
         }
 
         [HttpPost]
