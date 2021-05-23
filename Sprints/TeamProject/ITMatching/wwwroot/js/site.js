@@ -8,19 +8,19 @@
         themeToggle.innerText = storedText;
     }
     themeToggle.addEventListener('click', () => {
+        if (themeStylesheet.href.includes('dark')) {
+            // toggle light mode from dark
+            //$(body).fadeOut( function() {
+            themeStylesheet.href = '/css/light-theme.css';
+            themeToggle.innerText = 'Toggle Dark Mode';
+            //$(this).fadeIn();
+            //});
+        }
         // toggle dark mode from light
-        if (themeStylesheet.href.includes('light')) {
+        else{
            // $(body).fadeOut( function() {
                 themeStylesheet.href = '/css/dark-theme.css';
                 themeToggle.innerText = 'Toggle Light Mode';
-                //$(this).fadeIn();
-            //});
-        }
-        else {
-            // toggle light mode from dark
-            //$(body).fadeOut( function() {
-                themeStylesheet.href = '/css/light-theme.css';
-                themeToggle.innerText = 'Toggle Dark Mode';
                 //$(this).fadeIn();
             //});
         }

@@ -245,74 +245,80 @@ namespace ITMatching.Controllers
             Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
 
             Meeting meeting = context.Meetings.Where(m => m.ClientId == itUser.Id && m.Status == "Matching").FirstOrDefault();
-
-            //Compile a list of the IDs of the services tagged by the client for their help request
-            List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
-
-            //Find the maximum value of points associated with a client's help request to compare experts against
-            int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
-
-            meeting.Status = "No Match";
-            context.Meetings.Update(meeting);
-            context.SaveChanges();
-
-            //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
-            if (clientMaxPoints == 0)
-            {
-                List<(int, double)> emptyList = new List<(int, double)>();
-                return View(emptyList);
-            }
-
-            //perform 2nd pass of algorithm since matching with a currently-available expert has failed
-
-            //Check database to see if there are preferred hours for this help request then do one of two second passes depending on if any preferred hours are found
-            bool helpRequestHasSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).Any();
-
-            //Algorithm Second Pass (Trying to find offline experts to meet with later)
-            List<(int, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs, clientMaxPoints);
-
-            List<int> expertIdList = offlineExpertIdsAndScores.Select(e => e.Item1).ToList();
-
-            List<Itmuser> itmuserList = new List<Itmuser>();
-
-            List<int> itmMatchingExpertIds = new List<int>();
-
-            List<Expert> matchingExperts = new List<Expert>();
-
-            List<ExpertService> tempExpertServices = new List<ExpertService>();
-
-            List<ExpertService> listOfExpertServices = new List<ExpertService>();
-
-            int tempId = 0;
-            foreach (int i in expertIdList)
-            {
-                tempId = context.Experts.Where(e => e.Id == i).Select(e => e.ItmuserId).FirstOrDefault();
-
-                itmMatchingExpertIds.Add(tempId);
-
-                tempExpertServices = context.ExpertServices.Where(es => es.ExpertId == i).ToList();
-
-                foreach (ExpertService es in tempExpertServices)
-                {
-                    listOfExpertServices.Add(es);
-                }
-            }
-
-            Itmuser tempItUser = new Itmuser();
-            foreach (int i in itmMatchingExpertIds)
-            {
-                tempItUser = context.Itmusers.Where(it => it.Id == i).FirstOrDefault();
-
-                itmuserList.Add(tempItUser);
-            }
-
             ExpertClientMatchingViewModel vm = new ExpertClientMatchingViewModel();
 
-            vm.OfflineExpertIdsAndScores = offlineExpertIdsAndScores;
-            vm.Itmusers = itmuserList;
-            vm.Services = context.Services.ToList();
-            vm.ExpertTags = listOfExpertServices;
+            vm.OfflineExpertIdsAndScores = new List<(int, double)>() { (0, 0) };
+            vm.Itmusers = new List<Itmuser>();
+            vm.Services = new List<Service>();
+            vm.ExpertTags = new List<ExpertService>();
 
+            if (meeting != null)
+            {
+                //Compile a list of the IDs of the services tagged by the client for their help request
+                List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+
+                //Find the maximum value of points associated with a client's help request to compare experts against
+                int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
+
+                meeting.Status = "No Match";
+                context.Meetings.Update(meeting);
+                context.SaveChanges();
+
+                //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
+                if (clientMaxPoints == 0)
+                {
+                    List<(int, double)> emptyList = new List<(int, double)>();
+                    return View(emptyList);
+                }
+
+                //perform 2nd pass of algorithm since matching with a currently-available expert has failed
+
+                //Check database to see if there are preferred hours for this help request then do one of two second passes depending on if any preferred hours are found
+                bool helpRequestHasSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).Any();
+
+                //Algorithm Second Pass (Trying to find offline experts to meet with later)
+                List<(int, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs, clientMaxPoints);
+
+                List<int> expertIdList = offlineExpertIdsAndScores.Select(e => e.Item1).ToList();
+
+                List<Itmuser> itmuserList = new List<Itmuser>();
+
+                List<int> itmMatchingExpertIds = new List<int>();
+
+                List<Expert> matchingExperts = new List<Expert>();
+
+                List<ExpertService> tempExpertServices = new List<ExpertService>();
+
+                List<ExpertService> listOfExpertServices = new List<ExpertService>();
+
+                int tempId = 0;
+                foreach (int i in expertIdList)
+                {
+                    tempId = context.Experts.Where(e => e.Id == i).Select(e => e.ItmuserId).FirstOrDefault();
+
+                    itmMatchingExpertIds.Add(tempId);
+
+                    tempExpertServices = context.ExpertServices.Where(es => es.ExpertId == i).ToList();
+
+                    foreach (ExpertService es in tempExpertServices)
+                    {
+                        listOfExpertServices.Add(es);
+                    }
+                }
+
+                Itmuser tempItUser = new Itmuser();
+                foreach (int i in itmMatchingExpertIds)
+                {
+                    tempItUser = context.Itmusers.Where(it => it.Id == i).FirstOrDefault();
+
+                    itmuserList.Add(tempItUser);
+                }
+
+                vm.OfflineExpertIdsAndScores = offlineExpertIdsAndScores;
+                vm.Itmusers = itmuserList;
+                vm.Services = context.Services.ToList();
+                vm.ExpertTags = listOfExpertServices;
+            }
             return View(vm);
         }
 

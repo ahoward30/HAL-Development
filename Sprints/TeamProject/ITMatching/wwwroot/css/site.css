@@ -441,3 +441,17 @@ label.label-floatlabel {
     border:5px solid #c57000;
     transform: scale(1.1);
 }
+
+.clientWaitingRoomCard{
+    width: 160px;
+    background-color: grey;
+}
+
+.clientWaitingRoomCardOrange {
+    background-color: #d8831b;
+}
+
+.clientWaitingRoomCardCol {
+    vertical-align: middle;
+    top: 30%;
+}

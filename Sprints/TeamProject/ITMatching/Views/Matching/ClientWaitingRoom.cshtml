@@ -9,11 +9,28 @@
     <div class="row justify-content-center">
         @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
         {
-            <div class="col-md-2">
-                <p>@Model.numOfOnlineExperts</p>
-                <p>@Model.currentExpertInList</p>
-                <p>@Model.numOfPotentialMatches</p>
+        <div class="col-md-2">
+            <div class="card clientWaitingRoomCardCol clientWaitingRoomCard m-3">
+                <div class="card-header text-center clientWaitingRoomCardOrange text-white">
+                    <strong>Online Experts:</strong>
+                </div>
+                <div class="card-body text-center req-body-bg text-white">
+                    <h3 class="text-white">@Model.numOfOnlineExperts</h3>
+                </div>
             </div>
+            <div class="card clientWaitingRoomCardCol clientWaitingRoomCard m-3">
+                <div class="card-header text-center clientWaitingRoomCardOrange text-white">
+                    <strong>Connecting to:</strong>
+                </div>
+                <div class="card-body text-center req-body-bg text-white">
+                    <strong>Expert</strong> <br /><br />
+                    <h3 class="text-white">@Model.currentExpertInList</h3><br />
+                    <strong>of</strong><br /><br />
+                    <h3 class="text-white">@Model.numOfPotentialMatches</h3>
+                    <strong>Potential Matches</strong>
+                </div>
+            </div>
+        </div>
             <div class="col-md-7">
                 <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Waiting for Matching Expert...</strong></h1>
 
