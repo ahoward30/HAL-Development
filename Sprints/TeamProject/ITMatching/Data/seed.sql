@@ -94,6 +94,3 @@ INSERT INTO [FAQ](Question,Answer) VALUES('Is it possible not to be matched with
 INSERT INTO [FAQ](Question,Answer) VALUES('My question is not answered here', 'Try contacting us by phone at 1-503-555-5555 or by email at HAL@example-email.com');
 
 --Insert Test Meeting objects to test Expert Waiting Room
-INSERT INTO [Meeting]("Date",ClientID,ExpertID,HelpRequestID,"Status", ClientTimestamp, ExpertTimestamp, MatchExpireTimestamp) VALUES('2021-04-26 00:00:00.000', '1', '1','1','Matching','2021-04-26 00:00:00.000', '2021-04-26 00:00:00.000', '2021-04-26 00:00:00.000');
-INSERT INTO [Meeting]("Date",ClientID,ExpertID,HelpRequestID,"Status", ClientTimestamp, ExpertTimestamp, MatchExpireTimestamp) VALUES('2021-04-26 00:00:00.000', '1', '1','2','Matching','2021-04-26 00:00:00.000', '2021-04-26 00:00:00.000', '2021-04-26 00:00:00.000');
-INSERT INTO [Meeting]("Date",ClientID,ExpertID,HelpRequestID,"Status", ClientTimestamp, ExpertTimestamp, MatchExpireTimestamp) VALUES('2021-04-26 00:00:00.000', '1', '1','3','Matching','2021-04-26 00:00:00.000', '2021-04-26 00:00:00.000', '2021-04-26 00:00:00.000');

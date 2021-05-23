@@ -48,6 +48,10 @@ a {
     color: #222222;
 }
 
+td {
+    color: #222222;
+}
+
 label {
     color: #222222;
 }
@@ -73,6 +77,11 @@ label {
 .thead-custom {
     background-color: #1a344c;
     color: #EEEEEE
+}
+
+.thead-account {
+    background-color: #1a344c;
+    color: #EEEEEE;
 }
 
 #service-Card {

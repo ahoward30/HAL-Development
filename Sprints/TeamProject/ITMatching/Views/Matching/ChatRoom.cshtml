@@ -1,8 +1,27 @@
-﻿@inject ITMatchingAppContext AppContext
+﻿@using Microsoft.AspNetCore.Identity
+@inject ITMatchingAppContext AppContext
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @model ITMatching.ViewModels.ChatRoomViewModel
 @{
     ViewData["Title"] = "Chat Room";
     bool hasError = !string.IsNullOrWhiteSpace(Model.ErrorMessage);
+
+    bool isUserLoggedIn = SignInManager.IsSignedIn(User);
+    bool isExpert = false;
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    Client cUser = AppContext.Clients.Where(cu => cu.ItmuserId == itUser.Id).FirstOrDefault();
+    Meeting meeting = AppContext.Meetings.Where(m => m.Id == Model.ChatRoomID).FirstOrDefault();
+    isExpert = eUser != null;
+
+    if (isExpert)
+    {
+        eUser.IsAvailable = false;
+        AppContext.Experts.Update(eUser);
+        AppContext.SaveChanges();
+    }
 }
 
 @if (!hasError)
@@ -57,7 +76,7 @@
 
                     <div class="bg-head px-4 py-3">
                         <div class="media">
-                            <img src="https://res.cloudinary.com/it-matching/image/upload/v1621589949/vbseeiemkoikym8tudgt.png" alt="user" width="50" class="rounded-circle">
+                            <img src="https://cdn.discordapp.com/attachments/798252040295415879/841407092875067412/avatar_usae7z.png" alt="user" width="50" class="rounded-circle">
                             <div class="media-body ml-4 align-self-center">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
                                     <h4 class="mb-0">@(Model.DisplayName)</h4>
@@ -169,7 +188,29 @@
 }
 else
 {
-    <div class="alert alert-danger m-3" role="alert">
-        @Model.ErrorMessage
+    <div class="container">
+        <div class="alert alert-danger m-3" role="alert">
+            @Model.ErrorMessage
+        </div>
     </div>
+    @if (Model.ErrorMessage == "This meeting is closed.")
+    {
+        <form asp-controller="Matching" asp-action="Feedback" method="post">
+            <div class="row justify-content-center">
+                @if (!isExpert)
+                {
+                    if (cUser.ItmuserId == meeting.ClientId)
+                    {
+                        <input name="meetingId" type="hidden" value="@Model.ChatRoomID" />
+                        <button type="submit" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Leave Feedback</button>
+                    }
+                }
+                else
+                {
+                    <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Enter expert waiting room</button>
+                }
+                <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Return to home page</button>
+            </div>
+        </form>
+    }
 }

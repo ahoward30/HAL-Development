@@ -6,7 +6,7 @@ CREATE TABLE [ITMUser] (
   [UserName]			VARCHAR(255) NOT NULL,
   [FirstName]			NVARCHAR(30) NOT NULL,
   [LastName]			NVARCHAR(30) NOT NULL,
-  [Email]				NVARCHAR(50) NOT NULL,
+  [Email]				NVARCHAR(255) NOT NULL,
   [PhoneNumber]			NVARCHAR(13) NOT NULL
 )
 
@@ -55,7 +55,8 @@ CREATE TABLE [Meeting] (
   [Status]					NVARCHAR(20) NOT NULL, 
   [ClientTimestamp]			DATETIME,
   [ExpertTimestamp]			DATETIME,
-  [MatchExpireTimestamp]	DATETIME
+  [MatchExpireTimestamp]	DATETIME,
+  [Feedback]                INT
 )
 GO
 
@@ -64,7 +65,7 @@ CREATE TABLE [ExpertFeedback] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ExpertID]		INT NOT NULL,
   [ClientID]		INT NOT NULL,
-  [FeedbackText]	NVARCHAR(100),
+  [MeetingID]	    INT NOT NULL,
   [Rating]			INT NOT NULL
 )
 GO
