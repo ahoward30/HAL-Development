@@ -442,9 +442,9 @@ label.label-floatlabel {
     transform: scale(1.1);
 }
 
-.clientWaitingRoomCard{
+.clientWaitingRoomCard {
     width: 160px;
-    background-color: grey;
+    background-color: #585858;
 }
 
 .clientWaitingRoomCardOrange {
@@ -454,4 +454,23 @@ label.label-floatlabel {
 .clientWaitingRoomCardCol {
     vertical-align: middle;
     top: 30%;
+}
+
+.loader {
+    border: 32px solid #585858;
+    border-bottom: 32px solid #d8831b;
+    border-radius: 80%;
+    width: 150px;
+    height: 150px;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
