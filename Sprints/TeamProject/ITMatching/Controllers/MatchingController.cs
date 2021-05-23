@@ -559,11 +559,6 @@ namespace ITMatching.Controllers
                     meeting.Status = "Matching";
                     meeting.Feedback = null;
 
-                    context.Meetings.Add(meeting);
-                    context.SaveChanges();
-
-                    meeting = context.Meetings.Where(m => m.Status == "Matching" && m.ClientId == itUser.Id).FirstOrDefault();
-
                     //Compile a list of IDs from all experts who are currently available for matching
                     List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
 
@@ -583,6 +578,14 @@ namespace ITMatching.Controllers
                     //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
                     List<(int, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints);
 
+                    meeting.numOfPotentialMatches = thresholdMeetingExperts.Count();
+
+
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+
+                    meeting = context.Meetings.Where(m => m.Status == "Matching" && m.ClientId == itUser.Id).FirstOrDefault();
+
                     //Attempt to meet with online experts who meet the matching score threshold for this help request
                     if (thresholdMeetingExperts.Any())
                     {
@@ -590,17 +593,20 @@ namespace ITMatching.Controllers
                         List<(int, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ToList();
 
                         PotentialMatch tempPotentialMatch = new PotentialMatch();
+                        List<PotentialMatch> tempPotentialMatchList = new List<PotentialMatch>();
 
                         //Iterate through each expert in the list, starting from highest matching score, until an expert accepts to meet, or until the list is exhausted
                         foreach ((int, double) ex in sortedExperts)
                         {
+                            tempPotentialMatch = new PotentialMatch();
+
                             tempPotentialMatch.MeetingId = meeting.Id;
                             tempPotentialMatch.ExpertId = ex.Item1;
                             tempPotentialMatch.MatchingScore = ex.Item2;
 
-                            context.PotentialMatches.Add(tempPotentialMatch);
+                            tempPotentialMatchList.Add(tempPotentialMatch);
                         }
-
+                        context.PotentialMatches.AddRange(tempPotentialMatchList);
                         context.SaveChanges();
                     }
 
@@ -706,8 +712,28 @@ namespace ITMatching.Controllers
                         context.SaveChanges();
                     }
 
+                    //Compile a list of IDs from all experts who are currently available for matching
+                    List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
+
+                    //Compile a list of the IDs of the services tagged by the client for their help request
+                    List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+
+                    //Find the maximum value of points associated with a client's help request to compare experts against
+                    int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
+
+                    //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
+                    int numOfThresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints).Count();
+                    int remainingPotentialMatches = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id).Count();
+
                     clientWaitingRoomVM.Meeting = context.Meetings.Where(m => m.Id == meeting.Id).FirstOrDefault();
                     clientWaitingRoomVM.HelpRequest = context.HelpRequests.Where(hr => hr.Id == meeting.HelpRequestId).FirstOrDefault();
+                    clientWaitingRoomVM.numOfPotentialMatches = meeting.numOfPotentialMatches;
+                    clientWaitingRoomVM.numOfOnlineExperts = onlineExperts.Count();
+                    clientWaitingRoomVM.currentExpertInList = (meeting.numOfPotentialMatches - remainingPotentialMatches) + 1;
+                    if (clientWaitingRoomVM.currentExpertInList > clientWaitingRoomVM.numOfPotentialMatches)
+                    {
+                        clientWaitingRoomVM.currentExpertInList = clientWaitingRoomVM.numOfPotentialMatches;
+                    }
 
                     return View(clientWaitingRoomVM);
 

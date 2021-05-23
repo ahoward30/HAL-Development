@@ -56,7 +56,8 @@ CREATE TABLE [Meeting] (
   [ClientTimestamp]			DATETIME,
   [ExpertTimestamp]			DATETIME,
   [MatchExpireTimestamp]	DATETIME,
-  [Feedback]                INT
+  [Feedback]                INT,
+  [numOfPotentialMatches]   INT NOT NULL
 )
 GO
 

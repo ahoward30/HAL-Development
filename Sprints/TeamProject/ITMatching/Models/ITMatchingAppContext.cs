@@ -166,6 +166,8 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Feedback).HasColumnName("Feedback");
 
+                entity.Property(e => e.numOfPotentialMatches).HasColumnName("numOfPotentialMatches");
+
             });
 
             modelBuilder.Entity<PotentialMatch>(entity =>

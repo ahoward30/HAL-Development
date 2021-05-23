@@ -5,73 +5,84 @@
     ViewData["Title"] = "Client Waiting Room";
 }
 
-<div class="container">
-    @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
-    {
-        <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Waiting for Matching Expert...</strong></h1>
-
-        <div class="accordion" id="accordionReq">
-            <div class="row no-gutters">
-
-                @{
-                    var cnt = 0;
-                    Meeting meeting = Model.Meeting;
-
-                    var meetingId = Model.Meeting.Id;
-                    var hr = Model.HelpRequest;
-                    var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
-                    var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
-                }
-
-                <div class="col-12 p-3 mt-5 req-head-bg">
-                    <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
-                </div>
-                <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
-                    <p class="font-weight-bold text-white">
-                        @Model.HelpRequest.RequestDescription
-                    </p>
-                    <div class="d-flex m-n3 flex-wrap">
-                        @foreach (var tag in tags)
-                        {
-                            <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
-                        }
-                    </div>
-                </div>
+<div class="container-fluid justify-content-center">
+    <div class="row justify-content-center">
+        @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
+        {
+            <div class="col-md-2">
+                <p>@Model.numOfOnlineExperts</p>
+                <p>@Model.currentExpertInList</p>
+                <p>@Model.numOfPotentialMatches</p>
             </div>
-        </div>
+            <div class="col-md-7">
+                <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Waiting for Matching Expert...</strong></h1>
 
-        @*var meetingId = Model.Meeting.Id;
-            var hr = Model.HelpRequest;
-            var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
-            var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
-
-            <div class="card-header clientWaitingCardHeader">
-                <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
-            </div>
-
-            <div class="card card-body" id="clientWaiting">
-                <div class="col-12 p-3 req-body-bg">
+                <div class="accordion" id="accordionReq">
                     <div class="row no-gutters">
-                        <p class="font-weight-bold text-black">
-                            @Model.HelpRequest.RequestDescription
-                        </p>
-                        <div class="d-flex m-n3 flex-wrap">
-                            @foreach (var tag in tags)
-                            {
-                                <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
-                            }
+
+                        @{
+                            var cnt = 0;
+                            Meeting meeting = Model.Meeting;
+
+                            var meetingId = Model.Meeting.Id;
+                            var hr = Model.HelpRequest;
+                            var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+                            var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+                        }
+
+                        <div class="col-12 p-3 mt-5 req-head-bg">
+                            <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+                        </div>
+                        <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
+                            <p class="font-weight-bold text-white">
+                                @Model.HelpRequest.RequestDescription
+                            </p>
+                            <div class="d-flex m-n3 flex-wrap">
+                                @foreach (var tag in tags)
+                                {
+                                    <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>*@
-    }
-    else
-    {
-        <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>No open help requests found.</strong></h1><br />
-        <h3 class="mt-5 mb-5 text-center">Please submit a help request using our help request form</h3>
-        <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Create Help Request"></a><br />
-    }
+            </div>
+            <div class="col-md-2">
+                <p>stuff</p>
+            </div>
 
+            @*var meetingId = Model.Meeting.Id;
+                var hr = Model.HelpRequest;
+                var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+                var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+
+                <div class="card-header clientWaitingCardHeader">
+                    <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+                </div>
+
+                <div class="card card-body" id="clientWaiting">
+                    <div class="col-12 p-3 req-body-bg">
+                        <div class="row no-gutters">
+                            <p class="font-weight-bold text-black">
+                                @Model.HelpRequest.RequestDescription
+                            </p>
+                            <div class="d-flex m-n3 flex-wrap">
+                                @foreach (var tag in tags)
+                                {
+                                    <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+        }
+        else
+        {
+            <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>No open help requests found.</strong></h1><br />
+            <h3 class="mt-5 mb-5 text-center">Please submit a help request using our help request form</h3>
+            <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Create Help Request"></a><br />
+        }
+    </div>
 </div>
 
 @section Scripts {
