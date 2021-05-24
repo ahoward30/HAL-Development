@@ -456,6 +456,15 @@ label.label-floatlabel {
     top: 30%;
 }
 
+.infoColWrapper {
+    flex: 1;
+}
+
+.infoCol {
+    display: flex;
+    flex-direction: row;
+}
+
 .loader {
     border: 32px solid #585858;
     border-bottom: 32px solid #d8831b;

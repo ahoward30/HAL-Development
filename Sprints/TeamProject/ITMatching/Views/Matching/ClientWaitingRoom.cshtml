@@ -15,7 +15,7 @@
                     <strong>Online Experts:</strong>
                 </div>
                 <div class="card-body text-center req-body-bg text-white">
-                    <h3 class="text-white">@Model.numOfOnlineExperts</h3>
+                    <h2 class="text-white">@Model.numOfOnlineExperts</h2>
                 </div>
             </div>
             <div class="card clientWaitingRoomCardCol clientWaitingRoomCard m-3">
@@ -24,17 +24,17 @@
                 </div>
                 <div class="card-body text-center req-body-bg text-white">
                     <strong>Expert</strong> <br /><br />
-                    <h3 class="text-white">@Model.currentExpertInList</h3><br />
+                    <h2 class="text-white">@Model.currentExpertInList</h2><br />
                     <strong>of</strong><br /><br />
-                    <h3 class="text-white">@Model.numOfPotentialMatches</h3>
+                    <h2 class="text-white">@Model.numOfPotentialMatches</h2><br />
                     <strong>Potential Matches</strong>
                 </div>
             </div>
         </div>
-            <div class="col-md-7">
+            <div class="col-md-8 mr-5">
                 <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Waiting for Matching Expert...</strong></h1>
 
-                <div class="accordion" id="accordionReq">
+                <div class="accordion mb-5" id="accordionReq">
                     <div class="row no-gutters justify-content-center">
                         <div class="loader"></div>
                         @{
@@ -64,42 +64,39 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <p>stuff</p>
-            </div>
+           
+                @*var meetingId = Model.Meeting.Id;
+        var hr = Model.HelpRequest;
+        var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+        var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
 
-            @*var meetingId = Model.Meeting.Id;
-                var hr = Model.HelpRequest;
-                var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
-                var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+        <div class="card-header clientWaitingCardHeader">
+            <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+        </div>
 
-                <div class="card-header clientWaitingCardHeader">
-                    <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
-                </div>
-
-                <div class="card card-body" id="clientWaiting">
-                    <div class="col-12 p-3 req-body-bg">
-                        <div class="row no-gutters">
-                            <p class="font-weight-bold text-black">
-                                @Model.HelpRequest.RequestDescription
-                            </p>
-                            <div class="d-flex m-n3 flex-wrap">
-                                @foreach (var tag in tags)
-                                {
-                                    <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
-                                }
-                            </div>
-                        </div>
+        <div class="card card-body" id="clientWaiting">
+            <div class="col-12 p-3 req-body-bg">
+                <div class="row no-gutters">
+                    <p class="font-weight-bold text-black">
+                        @Model.HelpRequest.RequestDescription
+                    </p>
+                    <div class="d-flex m-n3 flex-wrap">
+                        @foreach (var tag in tags)
+                        {
+                            <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
+                        }
                     </div>
-                </div>*@
-        }
-        else
-        {
-            <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>No open help requests found.</strong></h1><br />
-            <h3 class="mt-5 mb-5 text-center">Please submit a help request using our help request form</h3>
-            <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Create Help Request"></a><br />
-        }
-    </div>
+                </div>
+            </div>
+        </div>*@
+                }
+                else
+                {
+                <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>No open help requests found.</strong></h1><br />
+                <h3 class="mt-5 mb-5 text-center">Please submit a help request using our help request form</h3>
+                <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Create Help Request"></a><br />
+                }
+            </div>
 </div>
 
 @section Scripts {

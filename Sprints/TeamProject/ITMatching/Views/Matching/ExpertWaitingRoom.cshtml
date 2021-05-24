@@ -10,7 +10,7 @@
 <input id="hdnIsAvailable" type="hidden" value="@(JsonSerializer.Serialize(isAvailable))" />
 
 <form asp-controller="Matching" asp-action="ChangeExpertStatus" method="post">
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center m-5">
         <input name="expertId" type="hidden" value="@expertId" />
         <button type="submit" class="button-toggler @(isAvailable? "active " : "")mt-3">Go @(isAvailable ? "Offline" : "Online")</button>
     </div>
@@ -21,6 +21,7 @@
     <h1 class="mt-4 mb-5 text-center">@(isAvailable ? "Help Request Matches" : "Go online to get matched with clients")</h1>
     @if (isAvailable)
     {
+
         var meetings = Model.Meetings;
         var cnt = 0;
 
@@ -68,8 +69,11 @@
         }
         @if (meetings?.Any() != true)
         {
+            <div class="row justify-content-center m-5">
+                <div class="loader"></div>
+            </div>
             <div class="d-flex justify-content-center">
-                <h3>No request(s) found.</h3>
+                <h3>Searching for help requests...</h3>
             </div>
         }
     }
