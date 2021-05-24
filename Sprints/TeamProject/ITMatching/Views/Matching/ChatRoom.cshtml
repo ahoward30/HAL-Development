@@ -1,0 +1,216 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject ITMatchingAppContext AppContext
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model ITMatching.ViewModels.ChatRoomViewModel
+@{
+    ViewData["Title"] = "Chat Room";
+    bool hasError = !string.IsNullOrWhiteSpace(Model.ErrorMessage);
+
+    bool isUserLoggedIn = SignInManager.IsSignedIn(User);
+    bool isExpert = false;
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    Client cUser = AppContext.Clients.Where(cu => cu.ItmuserId == itUser.Id).FirstOrDefault();
+    Meeting meeting = AppContext.Meetings.Where(m => m.Id == Model.ChatRoomID).FirstOrDefault();
+    isExpert = eUser != null;
+
+    if (isExpert)
+    {
+        eUser.IsAvailable = false;
+        AppContext.Experts.Update(eUser);
+        AppContext.SaveChanges();
+    }
+}
+
+@if (!hasError)
+{
+    @section Styles {
+        <link rel="stylesheet" href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
+        <style>
+            .text-small {
+                font-size: 0.9rem;
+            }
+
+            .meeting-detail-box {
+                height: 482px;
+            }
+
+            .chat-box {
+                height: 510px;
+            }
+
+            .meeting-detail-box,
+            .chat-box {
+                overflow-y: scroll;
+            }
+
+            .rounded-lg {
+                border-radius: 0.5rem;
+            }
+
+            .img-wrapper {
+                width: 100%;
+                height: 100%;
+            }
+
+                .img-wrapper img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+        </style>
+    }
+
+
+    var hr = Model.HelpRequest;
+    var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+    var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+
+    <div class="container py-5 px-4">
+        <div class="row rounded-lg overflow-hidden shadow">
+            <!-- Meeting Details -->
+            <div class="col-sm-5 px-0">
+                <div class="bg-custom">
+
+                    <div class="bg-head px-4 py-3">
+                        <div class="media">
+                            <img src="https://cdn.discordapp.com/attachments/798252040295415879/841407092875067412/avatar_usae7z.png" alt="user" width="50" class="rounded-circle">
+                            <div class="media-body ml-4 align-self-center">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <h4 class="mb-0">@(Model.DisplayName)</h4>
+                                    <form asp-controller="Matching" asp-action="CloseMeeting">
+                                        <input type="hidden" name="meetingId" value="@Model.Meeting.Id">
+                                        <input type="hidden" name="isExpert" value="@Model.IsExpert.ToString()">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Close Meeting</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="meeting-detail-box px-4 py-3">
+                        <h5 class="py-1">@(Model.HelpRequest.RequestTitle)</h5>
+                        <p>@(Model.HelpRequest.RequestDescription)</p>
+
+                        <div class="d-flex m-n2 flex-wrap">
+                            @foreach (var tag in tags)
+                            {
+                                <span class="badge badge-primary m-2 p-2">@tag</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Chat Box-->
+            <div class="col-sm-7 px-0">
+                <div id="spinner" class="position-absolute h-100 w-100" style="display: none;">
+                    <div class="h-100 w-100 d-flex justify-content-center align-items-center">
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="position-absolute h-100 w-100 modal-backdrop show"></div>
+                </div>
+                <div id="chat-box" class="p-4 chat-box bg-custom">
+
+                    @foreach (var message in Model.Messages)
+                    {
+                        var isSender = message.SentBy != Model.CurrentUserId;
+                        <div class="media w-50 mb-3@(isSender ? "" : " ml-auto")">
+                            <div class="media-body">
+                                <div class="rounded py-2 px-3 mb-2 @(isSender ? "bg-light" : "bg-primary")">
+                                    @if (message.IsAttachment)
+                                    {
+                                        <small class="font-italic mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</small>
+                                        <div class="img-thumbnail img-wrapper mb-2">
+                                            <img src="@message.FileURL" onerror="function () { reloadImage(this); }" onload="onImageLoaded()"
+                                                 alt="@($"{message.Text} - {message.SentTime.Value.ToString("yyyyMMddHHmmss")}")" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-small mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</p>
+                                    }
+                                </div>
+                                <p class="small text-muted" data-utcdate="@(System.Text.Json.JsonSerializer.Serialize(message.SentTime.Value).Replace("\"", ""))"></p>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+                <!-- Typing area -->
+                <form id="postMessage" asp-controller="Matching" asp-action="PostMessage" class="bg-head"
+                      data-ajax-begin="clearInputField" data-ajax-complete=""
+                      data-ajax-failure="sendMessageFailure" data-ajax-success="sendMessage"
+                      data-ajax="true" data-ajax-method="post" data-ajax-loading="#spinner">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="input-group p-3px">
+                        <input type="hidden" id="postMessage-meetingId" name="meetingId" value="@Model.Meeting.Id">
+                        <input type="hidden" id="postMessage-sentBy" name="sentBy" value="@Model.CurrentUserId">
+                        <input type="hidden" id="postMessage-sentTime" name="sentTime">
+                        <input type="text" id="postMessage-text" name="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-head">
+                        <div class="input-group-append">
+                            <button id="sendFile" type="button" class="btn btn-link"> <i class="fa fa-paperclip"></i></button>
+                        </div>
+                        <div class="input-group-append">
+                            <button id="sendButton" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </form>
+                <form id="uploadFile" asp-controller="Matching" asp-action="UploadFile" enctype="multipart/form-data"
+                      data-ajax-begin="" data-ajax-complete=""
+                      data-ajax-failure="sendMessageFailure" data-ajax-success="sendMessage"
+                      data-ajax="true" data-ajax-method="post" data-ajax-loading="#spinner">
+                    <input type="hidden" id="uploadFile-meetingId" name="meetingId" value="@Model.Meeting.Id">
+                    <input type="hidden" id="uploadFile-sentBy" name="sentBy" value="@Model.CurrentUserId">
+                    <input type="hidden" id="uploadFile-sentTime" name="sentTime">
+                    <input type="hidden" id="uploadFile-text" name="text">
+                    <input type="hidden" id="uploadFile-file" name="fileURL" value="https://phinational.org/wp-content/uploads/2017/07/fb-test-image-470x246.jpg">
+                    <input type="file" id="fileInput" name="file" accept=".png, .jpg, .jpeg" hidden />
+                    <button id="sendFileButton" type="submit" hidden />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+        var CurrentUserId = @Model.CurrentUserId;
+        </script>
+        <script src="~/lib/moment.js/moment.min.js" asp-append-version="true"></script>
+        <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
+        <script src="~/js/chat-room.js" asp-append-version="true"></script>
+        <script src="~/js/signalr-req-handler.js" asp-append-version="true"></script>
+    }
+}
+else
+{
+    <div class="container">
+        <div class="alert alert-danger m-3" role="alert">
+            @Model.ErrorMessage
+        </div>
+    </div>
+    @if (Model.ErrorMessage == "This meeting is closed.")
+    {
+        <form asp-controller="Matching" asp-action="Feedback" method="post">
+            <div class="row justify-content-center">
+                @if (!isExpert)
+                {
+                    if (cUser.ItmuserId == meeting.ClientId)
+                    {
+                        <input name="meetingId" type="hidden" value="@Model.ChatRoomID" />
+                        <button type="submit" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Leave Feedback</button>
+                    }
+                }
+                else
+                {
+                    <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Enter expert waiting room</button>
+                }
+                <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Return to home page</button>
+            </div>
+        </form>
+    }
+}

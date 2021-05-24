@@ -1,6 +1,74 @@
+@using ITMatching.ViewModels
 @{
-    ViewData["Title"] = "About IT Matching";
+                ViewData["Title"] = "About IT Matching";
+                var slides = new List<SlideDetail>() {
+        new SlideDetail {                                                    //Refrence: used a project from udemy course author: Brad Traversy, course title: 50 projects in 50 days.
+            BackColor = "#617E60",                                          //Course author allows students to use course material. 
+            ImageURL = "https://cdn.discordapp.com/attachments/790693889325137930/843968691761971200/logo_Hal_edit_color_green_more_canvas.png",
+            Title = "We are HAL Development",
+            Description = ("We are computer science students from Western Oregon University. The name 'HAL' comes from a combination of the first letters of all of our last names, those being:" + "\n" + "Alex Howard" + "\n" + "Adnan Almarzooq" + "\n" + "Jimmy Larios"),
+            },
+        new SlideDetail {
+            BackColor = "#2A86BA",
+            ImageURL = "https://images.unsplash.com/photo-1540921002383-b2a7ff6a716d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80",
+            Title = "Our Mission",
+            Description = "This website was built in 2021 as a capstone project for the Computer Science senior sequence at Western Oregon University. The development of this website took place between the months of January and June, from initial inception to completed web app."
+        },
+        new SlideDetail {
+            BackColor = "#252E33",
+            ImageURL = "https://images.unsplash.com/photo-1591696331111-ef9586a5b17a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+            Title = "IT-Matching",
+            Description = "As we built this website, we thought about what is required from us. The first most important requirement was that the idea of the website mustbe totally unique. We considered that IT-help existed online, but that most of the existing services either were tied to one specific product or brand, or that these services would match users to a 'Jack-of-all-trades' expert, who may not be the best person to help solve a particular problem. Furthermore, many of these sites weren't automated at all, and required users to seek out help themselves. It is for these reasons that we set out to design a website that would automatically match users to the expert who would help them most with their specific needs"
+        },
+        new SlideDetail {
+            BackColor = "#FFB866",
+            ImageURL = "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+            Title = "Contact Info",
+            Description = "For questions or suggestions, please use our contact info provided below." + "\n" + "Email: HAL@gmail.com"
+        },
+    };
+    var totalSlides = slides.Count;
 }
-<h1>@ViewData["Title"]</h1>
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/about.css" />
+}
+<div class="d-flex h-100">
+    <div class="flex-grow-1">
+        <div class="slider-container">
+            <div class="left-slide">
+                @for (var i = totalSlides - 1; i >= 0; i--)
+                {
+                    <div style="background-color: @slides[i].BackColor">
+                        <h1 class="text-white">@slides[i].Title</h1>
+                        <div class="container justify-content-center">
+                            <div class="row justify-content-center">
+                                 <div class="col-md-10">
+                                     <p class="text-white">@slides[i].Description.Replace("\n", System.Environment.NewLine)</p>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="right-slide">
+                @for (var i = 0; i <= totalSlides - 1; i++)
+                {
+                    <div style="background-image: url('@slides[i].ImageURL')"></div>
+                }
+            </div>
+            <div class="action-buttons">
+                <button class="down-button">
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+                <button class="up-button">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>Empty About Page.</p>
+@section Scripts {
+    <script src="~/js/about.js" asp-append-version="true"></script>
+}

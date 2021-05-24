@@ -24,15 +24,19 @@ namespace ITMatching.Models
         public virtual DbSet<HelpRequest> HelpRequests { get; set; }
         public virtual DbSet<Itmuser> Itmusers { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<PotentialMatch> PotentialMatches { get; set; }
         public virtual DbSet<Service> Services { get; set; }
-        public virtual DbSet<ServiceTag> ServiceTags { get; set; }
+        public virtual DbSet<ExpertService> ExpertServices { get; set; }
+        public virtual DbSet<RequestService> RequestServices { get; set; }
         public virtual DbSet<WorkSchedule> WorkSchedules { get; set; }
+        public virtual DbSet<RequestSchedule> RequestSchedules { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Name=ITMatchingConnection");
             }
         }
@@ -59,6 +63,8 @@ namespace ITMatching.Models
                 entity.Property(e => e.ItmuserId).HasColumnName("ITMUserID");
 
                 entity.Property(e => e.WorkSchedule).HasMaxLength(60);
+
+                entity.Property(e => e.IsAvailable).HasColumnName("IsAvailable");
             });
 
             modelBuilder.Entity<ExpertFeedback>(entity =>
@@ -71,7 +77,9 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
 
-                entity.Property(e => e.FeedbackText).HasMaxLength(100);
+                entity.Property(e => e.MeetingID).HasColumnName("MeetingID");
+
+                entity.Property(e => e.Rating).HasColumnName("Rating");
             });
 
             modelBuilder.Entity<FAQ>(entity =>
@@ -101,7 +109,8 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.RequestTitle).HasMaxLength(40);
 
-                entity.Property(e => e.ServiceTagId).HasColumnName("ServiceTagID");
+                entity.Property(e => e.IsOpen).HasColumnName("IsOpen");
+
             });
 
             modelBuilder.Entity<Itmuser>(entity =>
@@ -139,11 +148,39 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Date).HasColumnName("Date");
+
                 entity.Property(e => e.ClientId).HasColumnName("ClientID");
 
                 entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
 
                 entity.Property(e => e.HelpRequestId).HasColumnName("HelpRequestID");
+
+                entity.Property(e => e.Status).HasColumnName("Status");
+
+                entity.Property(e => e.ClientTimestamp).HasColumnName("ClientTimestamp");
+
+                entity.Property(e => e.ExpertTimestamp).HasColumnName("ExpertTimestamp");
+
+                entity.Property(e => e.MatchExpireTimestamp).HasColumnName("MatchExpireTimestamp");
+
+                entity.Property(e => e.Feedback).HasColumnName("Feedback");
+
+                entity.Property(e => e.numOfPotentialMatches).HasColumnName("numOfPotentialMatches");
+
+            });
+
+            modelBuilder.Entity<PotentialMatch>(entity =>
+            {
+                entity.ToTable("PotentialMatch");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+
+                entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
+
+                entity.Property(e => e.MatchingScore).HasColumnName("MatchingScore");
             });
 
             modelBuilder.Entity<Service>(entity =>
@@ -161,9 +198,16 @@ namespace ITMatching.Models
                     .HasMaxLength(100);
             });
 
-            modelBuilder.Entity<ServiceTag>(entity =>
+            modelBuilder.Entity<ExpertService>(entity =>
             {
-                entity.ToTable("ServiceTag");
+                entity.ToTable("ExpertService");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<RequestService>(entity =>
+            {
+                entity.ToTable("RequestService");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
             });
@@ -175,6 +219,36 @@ namespace ITMatching.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Day).HasMaxLength(20);
+            });
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.ToTable("RequestSchedule");
+
+                entity.Property(e => e.ID).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.ToTable("RequestSchedule");
+
+                entity.Property(e => e.ID).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.ToTable("Message");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+
+                entity.Property(e => e.SentBy).HasColumnName("SentBy");
+
+                entity.Property(e => e.SentTime).HasColumnName("SentTime");
+
+                entity.Property(e => e.Text).HasColumnName("Text");
+
+                entity.Property(e => e.FileURL).HasColumnName("FileURL");
             });
 
             OnModelCreatingPartial(modelBuilder);

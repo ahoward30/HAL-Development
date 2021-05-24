@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
+using ITMatching.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,15 +15,18 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly ITMatchingAppContext _context;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            ITMatchingAppContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -29,6 +34,10 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Security Phrase")]
+            public string SecurityPhrase { get; set; }
+
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
@@ -55,8 +64,14 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             RequirePassword = await _userManager.HasPasswordAsync(user);
+
+            if (user.Email.ToLower() != Input.SecurityPhrase.ToLower())
+            {
+                ModelState.AddModelError(string.Empty, "Incorrect security phrase.");
+                return Page();
+            }
+
             if (RequirePassword)
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
@@ -65,17 +80,25 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-
-            var result = await _userManager.DeleteAsync(user);
-            var userId = await _userManager.GetUserIdAsync(user);
+            user.UserName = $"deleted@user-{user.Id}.com";
+            user.Email = user.UserName;
+            var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
+                throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{user.Id}'.");
             }
+
+            Itmuser itmUser = _context.Itmusers.FirstOrDefault(item => item.AspNetUserId == user.Id);
+            itmUser.UserName = user.UserName;
+            itmUser.Email = user.UserName;
+            itmUser.FirstName = "Deleted";
+            itmUser.LastName = "User";
+            _context.Update(itmUser);
+            await _context.SaveChangesAsync();
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", user.Id);
 
             return Redirect("~/");
         }

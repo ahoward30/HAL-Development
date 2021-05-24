@@ -1,0 +1,74 @@
+﻿@page
+@model HelpRequestHistoryModel
+@using ITMatching.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ITMatchingAppContext AppContext
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.HelpRequestHistory;
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+
+    HelpRequest[] helpRequests = AppContext.HelpRequests.Where(hr => hr.ClientId == itUser.Id).ToArray();
+
+    <div class="container-fluid  justify-content-center" >
+        <div class="row justify-content-center">
+                @if (helpRequests?.Any() == true)
+                {
+
+                    <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
+                        <tr class="thead-custom">
+                            <th scope="col" class="text-center">Help Request Title</th>
+                            <th scope="col" class="text-center">Help Request Description</th>
+                            <th scope="col" class="text-center">IT Subject Tags</th>
+                            <th></th>
+                        </tr>
+                        <tbody>
+                            @foreach (HelpRequest hr in helpRequests)
+                            {
+                                int[] serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId).ToArray();
+                                List<String> tags = new List<String>();
+                                String tag;
+                                @foreach (int si in serviceIds)
+                                {
+                                    tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
+                                    tags.Add(tag);
+                                }
+                                String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
+                                <form asp-controller="Matching" asp-action="ResubmitHelpRequest" method="get" id="requestForm">
+                                    <tr class="requestFormCardHeader">
+                                        <td class="text-nowrap text-center text-white">@hr.RequestTitle</td>
+                                        <td class="text text-left text-white">@hr.RequestDescription</td>
+                                        <td class="text text-left text-white">@tagsString</td>
+                                        <td><button type="submit" class="btn btn-primary" name="HelpRequestID" value="@hr.Id">Resubmit</button></td>
+                                    </tr>
+                                </form>
+                             }
+                            </tbody>
+                    </table>
+                }
+                @if (helpRequests?.Any() != true)
+                {
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <h3>Your account has created no IT help requests.</h3>
+                            </div>
+                        </div>
+                    </div>
+                }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

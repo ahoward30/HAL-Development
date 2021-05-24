@@ -15,6 +15,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ITMatching.Services;
 using ITMatching.Models;
+using ITMatching.Models.Abstract;
+using ITMatching.Models.Concrete;
+using ITMatching.Hubs;
+using ITMatching.Services.Abstract;
+using ITMatching.Services.Concrete;
 
 namespace ITMatching
 {
@@ -40,12 +45,27 @@ namespace ITMatching
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
+            services.AddScoped<IItmuserRepository, ItmuserRepository>();
+            services.AddScoped<IExpertRepository, ExpertRepository>();
+            services.AddScoped<IMeetingRepository, MeetingRepository>();
+            services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+
+            services.AddScoped<IPhotoService, PhotoService>();
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()                          //Enable Roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             // Added to enable runtime compilation
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
             //Adds EmailSender as a transient service
             services.AddTransient<IEmailSender, EmailSender>();
@@ -81,6 +101,8 @@ namespace ITMatching
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseEndpoints(route => { route.MapHub<ChatHub>("/ChatHub"); });
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model Meeting
+@inject ITMatchingAppContext AppContext
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Meeting Feedback";
+
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    Client cUser = AppContext.Clients.Where(cu => cu.ItmuserId == itUser.Id).FirstOrDefault();
+    bool isExpert = eUser != null;
+}
+
+@if (Model.Id == 0)
+{
+    <div class="alert alert-danger m-3" role="alert">
+        The Meeting ID is invalid
+    </div>
+}
+else{
+
+    @if (!isExpert && cUser.ItmuserId == @Model.ClientId)
+    {
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <br />
+                <h1 style="margin-top: 80px;" class="text-center">How would you describe your matched expert?</h1>
+            </div>
+            <form asp-controller="Matching" asp-action="SubmitFeedback">
+                <input name="meetingId" type="hidden" value="@Model.Id" />
+                <div class="row vertical-center">
+                    <div class="col feedbackCol">
+                        @*<input name="feedback" type="hidden" value="Not Helpful" />*@
+                        <button type="submit"name="feedback" value="Not Helpful" class="feedbackButton rounded" alt="Not Helpful">
+                            <img class="feedbackPicture" src="~/Images/NotHelpful.png"  />
+                        </button>
+                        <h3 class="text-center">Not Helpful</h3>
+                    </div>
+                    <div class="col feedbackCol">
+                        <button type="submit" name="feedback" value="No Opinion/Unsure" class="feedbackButton rounded" alt="No Opinion/Unsure">
+                            <img class="feedbackPicture" src="~/Images/Unsure.png" />
+                        </button>
+                        <h3 class="text-center">No Opinion/Unsure</h3>
+                    </div>
+                    <div class="col feedbackCol">
+                        <button type="submit" name="feedback" value="Helpful" class="feedbackButton rounded" alt="Helpful">
+                            <img class="feedbackPicture" src="~/Images/Helpful.png" />
+                        </button>
+                        <h3 class="text-center">Helpful</h3>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger m-3" role="alert">
+            You do not have permission to leave feedback on this meeting
+        </div>
+    }
+}

@@ -6,7 +6,7 @@ CREATE TABLE [ITMUser] (
   [UserName]			VARCHAR(255) NOT NULL,
   [FirstName]			NVARCHAR(30) NOT NULL,
   [LastName]			NVARCHAR(30) NOT NULL,
-  [Email]				NVARCHAR(50) NOT NULL,
+  [Email]				NVARCHAR(255) NOT NULL,
   [PhoneNumber]			NVARCHAR(13) NOT NULL
 )
 
@@ -19,7 +19,8 @@ GO
 CREATE TABLE [Expert] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ITMUserID]		INT NOT NULL,
-  [WorkSchedule]	NVARCHAR(60)
+  [WorkSchedule]	NVARCHAR(60),
+  [IsAvailable]		BIT NOT NULL
 )
 GO
 
@@ -30,20 +31,41 @@ CREATE TABLE [Service] (
 )
 GO 
 
---Likely have to rework so that this isn't tied to expert, so that we can use with HelpRequest as well
-CREATE TABLE [ServiceTag] (
+CREATE TABLE [ExpertService] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ServiceId]		INT NOT NULL,
   [ExpertId]		INT
 )
 GO 
 
+CREATE TABLE [RequestService] (
+  [ID]				INT PRIMARY KEY IDENTITY(1, 1),
+  [ServiceId]		INT NOT NULL,
+  [RequestId]		INT
+)
+GO 
+
 --Now lists HelpRequest object ID instead of ServiceID (which can be obtained through HelpRequestID)
 CREATE TABLE [Meeting] (
-  [ID]				INT PRIMARY KEY IDENTITY(1, 1),
-  [ClientID]		INT NOT NULL,
-  [ExpertID]		INT NOT NULL,
-  [HelpRequestID]	INT NOT NULL
+  [ID]						INT PRIMARY KEY IDENTITY(1, 1),
+  [Date]					DATETIME NOT NULL,
+  [ClientID]				INT NOT NULL,
+  [ExpertID]				INT NOT NULL,
+  [HelpRequestID]			INT NOT NULL,
+  [Status]					NVARCHAR(20) NOT NULL, 
+  [ClientTimestamp]			DATETIME,
+  [ExpertTimestamp]			DATETIME,
+  [MatchExpireTimestamp]	DATETIME,
+  [Feedback]                INT,
+  [numOfPotentialMatches]   INT NOT NULL
+)
+GO
+
+CREATE TABLE [PotentialMatch] (
+  [ID]						INT PRIMARY KEY IDENTITY(1, 1),
+  [MeetingID]				INT NOT NULL,
+  [ExpertID]				INT NOT NULL,
+  [MatchingScore]           FLOAT NOT NULL
 )
 GO
 
@@ -52,7 +74,7 @@ CREATE TABLE [ExpertFeedback] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ExpertID]		INT NOT NULL,
   [ClientID]		INT NOT NULL,
-  [FeedbackText]	NVARCHAR(100),
+  [MeetingID]	    INT NOT NULL,
   [Rating]			INT NOT NULL
 )
 GO
@@ -67,15 +89,32 @@ GO
 CREATE TABLE [HelpRequest] (
   [ID]					INT PRIMARY KEY IDENTITY(1, 1),
   [ClientID]			INT NOT NULL,
-  [RequestTitle]		NVARCHAR(40),
-  [RequestDescription]	NVARCHAR(2000),
-  [ServiceTagID]		INT NOT NULL,
+  [RequestTitle]		NVARCHAR(40) NOT NULL,
+  [RequestDescription]	NVARCHAR(2000) NOT NULL,
+  [IsOpen]				BIT NOT NULL
 )
 GO
-create table [WorkSchedule] (
-  [ID]					INT PRIMARY KEY IDENTITY(1,1),
-  [ExpertId]            INT	NOT NULL,
-"Day" NVARCHAR(20),
-"Hour" int
+CREATE TABLE [WorkSchedule] (
+    [ID]                INT PRIMARY KEY IDENTITY(1,1),
+    [ExpertId]          INT	NOT NULL,
+    "Day"               NVARCHAR(20),
+    "Hour"              INT
+)
+GO
+CREATE TABLE [RequestSchedule](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [ClientId]          INT NOT NULL,
+    [RequestId]         INT NOT NULL,
+    [Day]               NVARCHAR(20),
+    [Hour]              INT
+)
+GO
+CREATE TABLE [Message](
+    [ID]                INT PRIMARY KEY IDENTITY,
+    [MeetingID]         INT NOT NULL,
+    [SentBy]            INT NOT NULL,
+    [SentTime]          DATETIME,
+    [Text]              NVARCHAR(2000),
+    [FileURL]           NVARCHAR(500),
 )
 GO

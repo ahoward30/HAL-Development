@@ -92,3 +92,5 @@ INSERT INTO [FAQ](Question,Answer) VALUES('I forgot the scheduled meeting time w
 INSERT INTO [FAQ](Question,Answer) VALUES('Is there a fee to sign up as a client user?', 'No, there a no fees, as well as hidden fees, when you create a client account.');
 INSERT INTO [FAQ](Question,Answer) VALUES('Is it possible not to be matched with an expert?', 'No. We have created a selection system in which you will be paired up with at least one expert.');
 INSERT INTO [FAQ](Question,Answer) VALUES('My question is not answered here', 'Try contacting us by phone at 1-503-555-5555 or by email at HAL@example-email.com');
+
+--Insert Test Meeting objects to test Expert Waiting Room

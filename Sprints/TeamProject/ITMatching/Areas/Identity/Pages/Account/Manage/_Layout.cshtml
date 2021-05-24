@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using ITMatching.Models
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ITMatchingAppContext AppContext
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
     {
         Layout = (string)parentLayout;
@@ -7,6 +12,25 @@
     {
         Layout = "/Areas/Identity/Pages/_Layout.cshtml";
     }
+
+    bool isUserLoggedIn = SignInManager.IsSignedIn(User);
+    bool isExpert = false;
+    if (isUserLoggedIn)
+    {
+        string id = UserManager.GetUserId(User);
+        Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+        Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+        isExpert = eUser != null;
+
+        if (isExpert)
+        {
+            eUser.IsAvailable = false;
+            AppContext.Experts.Update(eUser);
+            AppContext.SaveChanges();
+        }
+    }
+
+
 }
 
 
@@ -33,6 +57,6 @@
         </div>
     </div>
 </div>
-    @section Scripts {
-        @RenderSection("Scripts", required: false)
-    }
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
