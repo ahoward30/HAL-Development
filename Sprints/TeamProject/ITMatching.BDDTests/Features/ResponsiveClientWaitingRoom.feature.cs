@@ -218,7 +218,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 29
- testRunner.Given("I am an ITMUser with an ID of \'<ID>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am an ITMUser with userName of \'<UserName>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 30
  testRunner.And("I have an open Help Request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -268,7 +268,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 36
- testRunner.Given("I am an ITMUser with an ID of \'<ID>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am an ITMUser with userName of \'<UserName>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 37
  testRunner.And("I have an open Help Request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -318,7 +318,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 43
- testRunner.Given("I am an ITMUser with an ID of \'<ID>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am an ITMUser with userName of \'<UserName>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 44
  testRunner.And("I have an open Help Request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
