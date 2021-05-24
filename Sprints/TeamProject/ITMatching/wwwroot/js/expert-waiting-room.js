@@ -1,15 +1,13 @@
 ﻿var timeOutRefreshPage;
 
 function refreshPage() {
-    if (document.hasFocus()) {
         location.reload();
-    }
 }
 
 function getRequests() {
     let isAvailable = $(hdnIsAvailable).val() === 'true';
     if (isAvailable) {
-        timeOutRefreshPage = setInterval(refreshPage, 30000); //30 secs
+        timeOutRefreshPage = setInterval(refreshPage, 20000); //20 secs
     }
 }
 

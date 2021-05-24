@@ -5,31 +5,79 @@
     ViewData["Title"] = "Client Waiting Room";
 }
 
-<div class="container">
-    <h1 class="mt-4 mb-5 text-center" id="clientWaitingText"><strong>Do you want to submit this help request?</strong></h1>
+<div class="container-fluid justify-content-center">
+    <div class="row justify-content-center">
+        @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
+        {
+        <div class="col-md-2">
+            <div class="card clientWaitingRoomCardCol clientWaitingRoomCard m-3">
+                <div class="card-header text-center clientWaitingRoomCardOrange text-white">
+                    <strong>Online Experts:</strong>
+                </div>
+                <div class="card-body text-center req-body-bg text-white">
+                    <h2 class="text-white">@Model.numOfOnlineExperts</h2>
+                </div>
+            </div>
+            <div class="card clientWaitingRoomCardCol clientWaitingRoomCard m-3">
+                <div class="card-header text-center clientWaitingRoomCardOrange text-white">
+                    <strong>Connecting to:</strong>
+                </div>
+                <div class="card-body text-center req-body-bg text-white">
+                    <strong>Expert</strong> <br /><br />
+                    <h2 class="text-white">@Model.currentExpertInList</h2><br />
+                    <strong>of</strong><br /><br />
+                    <h2 class="text-white">@Model.numOfPotentialMatches</h2><br />
+                    <strong>Potential Matches</strong>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-8 mr-5">
+                <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>Waiting for Matching Expert...</strong></h1>
 
-    @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
-    {
-        <div class="accordion" id="accordionReq">
-            <div class="row no-gutters">
+                <div class="accordion mb-5" id="accordionReq">
+                    <div class="row no-gutters justify-content-center">
+                        <div class="loader"></div>
+                        @{
+                            var cnt = 0;
+                            Meeting meeting = Model.Meeting;
 
-                @{
-                    var cnt = 0;
-                    Meeting meeting = Model.Meeting;
+                            var meetingId = Model.Meeting.Id;
+                            var hr = Model.HelpRequest;
+                            var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+                            var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+                        }
 
-                    var meetingId = Model.Meeting.Id;
-                    var hr = Model.HelpRequest;
-                    var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
-                    var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
-                }
-
-                <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
-                    <div class="col-12 p-3 req-head-bg">
-                        <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+                        <div class="col-12 p-3 mt-5 req-head-bg">
+                            <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+                        </div>
+                        <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
+                            <p class="font-weight-bold text-white">
+                                @Model.HelpRequest.RequestDescription
+                            </p>
+                            <div class="d-flex m-n3 flex-wrap">
+                                @foreach (var tag in tags)
+                                {
+                                    <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
+                                }
+                            </div>
+                        </div>
                     </div>
-                </button>
-                <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
-                    <p class="font-weight-bold text-white">
+                </div>
+            </div>
+           
+                @*var meetingId = Model.Meeting.Id;
+        var hr = Model.HelpRequest;
+        var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
+        var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
+
+        <div class="card-header clientWaitingCardHeader">
+            <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+        </div>
+
+        <div class="card card-body" id="clientWaiting">
+            <div class="col-12 p-3 req-body-bg">
+                <div class="row no-gutters">
+                    <p class="font-weight-bold text-black">
                         @Model.HelpRequest.RequestDescription
                     </p>
                     <div class="d-flex m-n3 flex-wrap">
@@ -38,54 +86,19 @@
                             <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
                         }
                     </div>
-                    <div class="d-flex justify-content-center mt-3 flex-wrap">
-                        <form asp-controller="Matching" asp-action="ClientExpertMatching" method="post">
-                            <input name="meetingId" type="hidden" value="@meeting.Id" />
-                            <button type="submit" class="btn btn-success font-weight-bold py-2 px-4 mx-5">Submit</button>
-
-                            <input name="helpRequestID" type="hidden" value="@Model.HelpRequest.Id" />
-                            <button type="submit" asp-controller="Matching" asp-action="ResubmitHelpRequest" class="btn btn-danger font-weight-bold py-2 px-4 mx-5">Make more changes</button>
-
-                        </form>
-                    </div>
                 </div>
             </div>
-        </div>
-
-        @*var meetingId = Model.Meeting.Id;
-            var hr = Model.HelpRequest;
-            var serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId);
-            var tags = AppContext.Services.Where(s => serviceIds.Contains(s.Id)).Select(s => s.ServiceName).ToList();
-
-            <div class="card-header clientWaitingCardHeader">
-                <h3 class="mb-0 req-head-text font-weight-bold text-left">@Model.HelpRequest.RequestTitle</h3>
+        </div>*@
+                }
+                else
+                {
+                <h1 class="mt-5 mb-5 text-center" id="clientWaitingText"><strong>No open help requests found.</strong></h1><br />
+                <h3 class="mt-5 mb-5 text-center">Please submit a help request using our help request form</h3>
+                <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Create Help Request"></a><br />
+                }
             </div>
-
-            <div class="card card-body" id="clientWaiting">
-                <div class="col-12 p-3 req-body-bg">
-                    <div class="row no-gutters">
-                        <p class="font-weight-bold text-black">
-                            @Model.HelpRequest.RequestDescription
-                        </p>
-                        <div class="d-flex m-n3 flex-wrap">
-                            @foreach (var tag in tags)
-                            {
-                                <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-    }
-    @*@if(Model.Meeting.Id == null)
-        {
-            <div class="d-flex justify-content-center">
-                <h3>No request(s) found.</h3>
-            </div>
-        }*@
-
 </div>
 
 @section Scripts {
-    <script src="~/js/expert-waiting-room.js" asp-append-version="true"></script>
+    <script src="~/js/client-waiting-room.js" asp-append-version="true"></script>
 }

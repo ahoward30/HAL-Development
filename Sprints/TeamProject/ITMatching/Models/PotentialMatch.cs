@@ -5,12 +5,11 @@ using System.Collections.Generic;
 
 namespace ITMatching.Models
 {
-    public partial class ExpertFeedback
+    public partial class PotentialMatch
     {
         public int Id { get; set; }
+        public int MeetingId { get; set; }
         public int ExpertId { get; set; }
-        public int ClientId { get; set; }
-        public int MeetingID { get; set; }
-        public int Rating { get; set; }
+        public double MatchingScore { get; set; } 
     }
 }

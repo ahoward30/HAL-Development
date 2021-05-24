@@ -55,7 +55,17 @@ CREATE TABLE [Meeting] (
   [Status]					NVARCHAR(20) NOT NULL, 
   [ClientTimestamp]			DATETIME,
   [ExpertTimestamp]			DATETIME,
-  [MatchExpireTimestamp]	DATETIME
+  [MatchExpireTimestamp]	DATETIME,
+  [Feedback]                INT,
+  [numOfPotentialMatches]   INT NOT NULL
+)
+GO
+
+CREATE TABLE [PotentialMatch] (
+  [ID]						INT PRIMARY KEY IDENTITY(1, 1),
+  [MeetingID]				INT NOT NULL,
+  [ExpertID]				INT NOT NULL,
+  [MatchingScore]           FLOAT NOT NULL
 )
 GO
 
@@ -64,7 +74,7 @@ CREATE TABLE [ExpertFeedback] (
   [ID]				INT PRIMARY KEY IDENTITY(1, 1),
   [ExpertID]		INT NOT NULL,
   [ClientID]		INT NOT NULL,
-  [FeedbackText]	NVARCHAR(100),
+  [MeetingID]	    INT NOT NULL,
   [Rating]			INT NOT NULL
 )
 GO
@@ -104,6 +114,7 @@ CREATE TABLE [Message](
     [MeetingID]         INT NOT NULL,
     [SentBy]            INT NOT NULL,
     [SentTime]          DATETIME,
-    [Text]              NVARCHAR(2000)
+    [Text]              NVARCHAR(2000),
+    [FileURL]           NVARCHAR(500),
 )
 GO

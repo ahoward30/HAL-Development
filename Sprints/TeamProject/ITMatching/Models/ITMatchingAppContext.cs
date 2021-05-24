@@ -24,6 +24,7 @@ namespace ITMatching.Models
         public virtual DbSet<HelpRequest> HelpRequests { get; set; }
         public virtual DbSet<Itmuser> Itmusers { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<PotentialMatch> PotentialMatches { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ExpertService> ExpertServices { get; set; }
         public virtual DbSet<RequestService> RequestServices { get; set; }
@@ -76,7 +77,9 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
 
-                entity.Property(e => e.FeedbackText).HasMaxLength(100);
+                entity.Property(e => e.MeetingID).HasColumnName("MeetingID");
+
+                entity.Property(e => e.Rating).HasColumnName("Rating");
             });
 
             modelBuilder.Entity<FAQ>(entity =>
@@ -161,6 +164,23 @@ namespace ITMatching.Models
 
                 entity.Property(e => e.MatchExpireTimestamp).HasColumnName("MatchExpireTimestamp");
 
+                entity.Property(e => e.Feedback).HasColumnName("Feedback");
+
+                entity.Property(e => e.numOfPotentialMatches).HasColumnName("numOfPotentialMatches");
+
+            });
+
+            modelBuilder.Entity<PotentialMatch>(entity =>
+            {
+                entity.ToTable("PotentialMatch");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+
+                entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
+
+                entity.Property(e => e.MatchingScore).HasColumnName("MatchingScore");
             });
 
             modelBuilder.Entity<Service>(entity =>
@@ -227,6 +247,8 @@ namespace ITMatching.Models
                 entity.Property(e => e.SentTime).HasColumnName("SentTime");
 
                 entity.Property(e => e.Text).HasColumnName("Text");
+
+                entity.Property(e => e.FileURL).HasColumnName("FileURL");
             });
 
             OnModelCreatingPartial(modelBuilder);

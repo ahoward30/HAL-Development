@@ -17,5 +17,10 @@ namespace ITMatching.Models
         public DateTime? SentTime { get; set; }
         [Required]
         public string Text { get; set; }
+        public string FileURL { get; set; }
+        public bool IsAttachment
+        {
+            get => !string.IsNullOrWhiteSpace(FileURL);
+        }
     }
 }

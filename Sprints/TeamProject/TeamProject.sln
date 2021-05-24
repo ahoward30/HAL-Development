@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITMatching", "ITMatching\IT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITMatching.Tests", "ITMatching.Tests\ITMatching.Tests.csproj", "{7CB80D4B-7F35-492E-9E67-B262B0116612}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITMatching.BDDTests", "ITMatching.BDDTests\ITMatching.BDDTests.csproj", "{005DBE20-32F4-454B-BF54-8D252E668BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITMatching.BDDTests", "ITMatching.BDDTests\ITMatching.BDDTests.csproj", "{005DBE20-32F4-454B-BF54-8D252E668BA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

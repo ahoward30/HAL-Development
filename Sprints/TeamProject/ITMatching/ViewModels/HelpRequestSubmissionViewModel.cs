@@ -7,12 +7,9 @@ using ITMatching.Models;
 
 namespace ITMatching.ViewModels
 {
-    public class ClientWaitingRoomViewModel
+    public class HelpRequestSubmissionViewModel
     {
         public HelpRequest HelpRequest { get; set; }
         public Meeting Meeting { get; set; }
-        public int numOfOnlineExperts { get; set; }
-        public int currentExpertInList { get; set; }
-        public int numOfPotentialMatches { get; set; }
     }
 }
