@@ -1,0 +1,152 @@
+﻿@page
+@using ITMatching.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ITMatchingAppContext AppContext
+
+@{
+    ViewData["Title"] = "Meeting Logs History";
+    ViewData["ActivePage"] = ManageNavPages.MeetingLog;
+
+    string id = UserManager.GetUserId(User);
+    Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
+    Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    bool isExpert = eUser != null;
+
+    HelpRequest tempHelpRequest = new HelpRequest();
+    Itmuser tempItmuser = new Itmuser();
+    Expert tempeUser = new Expert();
+    List<RequestService> tempRequestServices = new List<RequestService>();
+
+    List<Meeting> meetings = new List<Meeting>();
+
+    if (isExpert)
+    {
+        meetings = AppContext.Meetings.Where(m => m.ExpertId == eUser.Id && m.Status == "Closed").ToList();
+    }
+    else
+    {
+        meetings = AppContext.Meetings.Where(m => m.ClientId == itUser.Id && m.Status == "Closed").ToList();
+    }
+
+    List<ITMatching.Models.MeetingLogModel> meetingInfo = new List<ITMatching.Models.MeetingLogModel>();
+
+    foreach (Meeting m in meetings)
+    {
+        ITMatching.Models.MeetingLogModel tempMeetingLogModel = new ITMatching.Models.MeetingLogModel();
+
+        tempHelpRequest = AppContext.HelpRequests.Where(hr => hr.Id == m.HelpRequestId).FirstOrDefault();
+        tempMeetingLogModel.RequestTitle = tempHelpRequest.RequestTitle;
+        tempMeetingLogModel.RequestDescription = tempHelpRequest.RequestDescription;
+        tempMeetingLogModel.MeetingId = m.Id;
+        tempMeetingLogModel.IsExpert = isExpert;
+
+        if (isExpert)
+        {
+            tempItmuser = AppContext.Itmusers.Where(it => it.Id == m.ClientId).FirstOrDefault();
+            tempMeetingLogModel.MatchedUserName = tempItmuser.FirstName + " " + tempItmuser.LastName;
+            tempMeetingLogModel.MatchedUserEmail = tempItmuser.Email;
+        }
+        else
+        {
+            tempeUser = AppContext.Experts.Where(e => e.Id == m.ExpertId).FirstOrDefault();
+            tempItmuser = AppContext.Itmusers.Where(it => it.Id == tempeUser.ItmuserId).FirstOrDefault();
+            tempMeetingLogModel.MatchedUserName = tempItmuser.FirstName + " " + tempItmuser.LastName;
+            tempMeetingLogModel.MatchedUserEmail = tempItmuser.Email;
+        }
+        tempMeetingLogModel.TimeOfMeeting = m.Date;
+        tempRequestServices = AppContext.RequestServices.Where(rs => rs.RequestId == tempHelpRequest.Id).ToList();
+
+        Service tempService = new Service();
+        foreach (RequestService rs in tempRequestServices)
+        {
+            tempService = AppContext.Services.Where(s => s.Id == rs.ServiceId).FirstOrDefault();
+            tempMeetingLogModel.HelpRequestTags.Add(tempService);
+        }
+
+        meetingInfo.Add(tempMeetingLogModel);
+    }
+}
+
+
+<div class="container">
+    <div class="container-fluid justify-content-center">
+        <div class="row justify-content-center">
+
+            <h1 class="col-lg-10 text-center"><strong>Meeting Logs History</strong></h1>
+
+            <hr />
+            <br />
+
+            @if (meetingInfo.Any())
+            {
+
+                var cnt = 0;
+
+                <div class="accordion" id="accordionReq">
+                    <div class="row no-gutters mb-5">
+
+                        @foreach (ITMatching.Models.MeetingLogModel m in meetingInfo)
+                        {
+                            <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
+                                <div class="col-12 p-3 req-head-bg">
+                                    <h3 class="mb-0 req-head-text font-weight-bold text-left">@m.RequestTitle</h3>
+                                </div>
+                            </button>
+
+                            <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
+                                <p class="font-weight-bold text-white">
+                                    @m.RequestDescription
+                                    <br />
+                                    Met with: @m.MatchedUserName
+                                    <br />
+                                    User's Email: @m.MatchedUserEmail
+                                    <br />
+                                    Time of meeting: @m.TimeOfMeeting
+                                </p>
+
+                                <div class="d-flex m-n3 flex-wrap">
+                                    @foreach (Service tag in m.HelpRequestTags)
+                                    {
+                                        <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag.ServiceName</span>
+                                    }
+                                </div>
+                            </div>
+                            cnt++;
+                        }
+                    </div>
+                </div>
+            }
+
+            else
+            {
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-lg-10">
+                            <h3>No Past Meetings Available</h3>
+                        </div>
+                        @if (isExpert)
+                        {
+                            <div class="col-lg-10">
+                                <p>Submit a help request and get matched up to view your meeting log history. </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-lg-10">
+                                <p>Accept a client's help request to view your meeting log history. </p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
