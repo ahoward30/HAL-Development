@@ -441,3 +441,45 @@ label.label-floatlabel {
     border:5px solid #c57000;
     transform: scale(1.1);
 }
+
+.clientWaitingRoomCard {
+    width: 160px;
+    background-color: #585858;
+}
+
+.clientWaitingRoomCardOrange {
+    background-color: #d8831b;
+}
+
+.clientWaitingRoomCardCol {
+    vertical-align: middle;
+    top: 30%;
+}
+
+.infoColWrapper {
+    flex: 1;
+}
+
+.infoCol {
+    display: flex;
+    flex-direction: row;
+}
+
+.loader {
+    border: 32px solid #585858;
+    border-bottom: 32px solid #d8831b;
+    border-radius: 80%;
+    width: 150px;
+    height: 150px;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

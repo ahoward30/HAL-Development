@@ -45,7 +45,10 @@ namespace ITMatching.Controllers
         [Authorize]
         public IActionResult RequestForm()
         {
-            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true).ToList();
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
+
+            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true && hr.ClientId == itUser.Id).ToList();
             foreach (HelpRequest hr in openHelpRequests)
             {
                 hr.IsOpen = false;
@@ -64,7 +67,7 @@ namespace ITMatching.Controllers
         public IActionResult HelpRequestAdded()
         {
             //return View();
-            return RedirectToAction("ClientWaitingRoom");
+            return RedirectToAction("HelpRequestSubmission");
         }
 
 
@@ -211,7 +214,10 @@ namespace ITMatching.Controllers
         public IActionResult ResubmitHelpRequest(int helpRequestID)
         {
             //Grabs list of open help requests and sets them to false
-            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true).ToList();
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
+
+            List<HelpRequest> openHelpRequests = context.HelpRequests.Where(hr => hr.IsOpen == true && hr.ClientId == itUser.Id).ToList();
             foreach (HelpRequest hr in openHelpRequests)
             {
                 hr.IsOpen = false;
@@ -237,151 +243,105 @@ namespace ITMatching.Controllers
             return View();
         }
 
-        [HttpPost]
         //Attempt to meet with an online expert, and either navigate to a meeting room to talk to them, or to a page listing expert information if no matching experts are available.
-        public IActionResult ClientExpertMatching(int meetingId)
+        public IActionResult ClientExpertMatching()
         {
-            Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = context.Itmusers.Where(it => it.AspNetUserId == id).FirstOrDefault();
 
-            //Compile a list of IDs from all experts who are currently available for matching
-            List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
-
-            //Compile a list of the IDs of the services tagged by the client for their help request
-            List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
-
-            //Find the maximum value of points associated with a client's help request to compare experts against
-            int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
-
-            //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
-            if (clientMaxPoints == 0)
-            {
-                List<(int, double)> emptyList = new List<(int, double)>();
-                return View(emptyList);
-            }
-
-            //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
-            List<(int, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints);
-
-            //Attempt to meet with online experts who meet the matching score threshold for this help request
-            if (thresholdMeetingExperts.Any())
-            {
-                //Create new list for Experts who meet the threshold sorted by descending order
-                List<(int, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ToList();
-
-                //Iterate through each expert in the list, starting from highest matching score, until an expert accepts to meet, or until the list is exhausted
-                foreach ((int, double) ex in sortedExperts)
-                {
-                    int expertId = ex.Item1;
-                    meeting.ExpertId = ex.Item1;
-                    meeting.MatchExpireTimestamp = DateTime.UtcNow.AddMinutes(2);
-                    meeting.ClientTimestamp = DateTime.UtcNow;
-                    string meetingStatus;
-                    context.Meetings.Update(meeting);
-                    context.SaveChanges();
-                    while (expertId != 0)
-                    {
-                        expertId = context.Meetings.Where(m => m.Id == meeting.Id).Select(e => e.ExpertId).SingleOrDefault();
-                        meetingStatus = context.Meetings.Where(m => m.Id == meeting.Id).Select(s => s.Status).SingleOrDefault();
-                        if (meetingStatus == "Matched")
-                        {
-                            return RedirectToAction("ChatRoom", new { id = meeting.Id });
-                        }
-
-                        //Set timestamp for expert waiting room to verify that we are still around
-                        meeting.ClientTimestamp = DateTime.UtcNow;
-
-                        //Timestamp editing does not work on Azure. Overwrites ExpertWaitingRoom changes. Need to find a fix!
-                        //context.Meetings.Update(meeting);
-                        //context.SaveChanges();
-
-                        //If expert does not update timestamp for 30 seconds, they are assumed to be afk and are set to unavailable
-                        if (ExpertIsNotThere(meeting.ExpertTimestamp))
-                        {
-                            Expert afkExpert = context.Experts.Where(e => e.Id == expertId).FirstOrDefault();
-                            afkExpert.IsAvailable = false;
-                            expertId = 0;
-                            meeting.ExpertId = 0;
-                            context.Update(afkExpert);
-                            context.Update(meeting);
-                            context.SaveChanges();
-                        }
-
-                        if (DateTime.Compare(DateTime.UtcNow, meeting.MatchExpireTimestamp) > 0)
-                        {
-                            expertId = 0;
-                            meeting.ExpertId = 0;
-                            context.Update(meeting);
-                            context.SaveChanges();
-                        }
-                    }
-                }
-            }
-
-            meeting.Status = "No Match";
-            context.Meetings.Update(meeting);
-            context.SaveChanges();
-
-            //perform 2nd pass of algorithm since matching with a currently-available expert has failed
-
-            //Check database to see if there are preferred hours for this help request then do one of two second passes depending on if any preferred hours are found
-            bool helpRequestHasSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).Any();
-
-            //Algorithm Second Pass (Trying to find offline experts to meet with later)
-            List<(int, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs, clientMaxPoints);
-
-            List<int> expertIdList = offlineExpertIdsAndScores.Select(e => e.Item1).ToList();
-
-            List<Itmuser> itmuserList = new List<Itmuser>();
-
-            List<int> itmMatchingExpertIds = new List<int>();
-
-            List<Expert> matchingExperts = new List<Expert>();
-
-            List<ExpertService> tempExpertServices = new List<ExpertService>();
-
-            List<ExpertService> listOfExpertServices = new List<ExpertService>();
-
-            int tempId = 0;
-            foreach (int i in expertIdList)
-            {
-                tempId = context.Experts.Where(e => e.Id == i).Select(e => e.ItmuserId).FirstOrDefault();
-
-                itmMatchingExpertIds.Add(tempId);
-
-                tempExpertServices = context.ExpertServices.Where(es => es.ExpertId == i).ToList();
-
-                foreach (ExpertService es in tempExpertServices)
-                {
-                    listOfExpertServices.Add(es);
-                }
-            }
-
-            Itmuser tempItUser = new Itmuser();
-            foreach (int i in itmMatchingExpertIds)
-            {
-                tempItUser = context.Itmusers.Where(it => it.Id == i).FirstOrDefault();
-
-                itmuserList.Add(tempItUser);
-            }
-
+            Meeting meeting = context.Meetings.Where(m => m.ClientId == itUser.Id && m.Status == "Matching").FirstOrDefault();
             ExpertClientMatchingViewModel vm = new ExpertClientMatchingViewModel();
 
-            vm.OfflineExpertIdsAndScores = offlineExpertIdsAndScores;
-            vm.Itmusers = itmuserList;
-            vm.Services = context.Services.ToList();
-            vm.ExpertTags = listOfExpertServices;
+            vm.OfflineExpertIdsAndScores = new List<(int, double, double)>();
+            vm.Itmusers = new List<Itmuser>();
+            vm.Services = new List<Service>();
+            vm.ExpertTags = new List<ExpertService>();
 
+            if (meeting != null)
+            {
+                //Compile a list of the IDs of the services tagged by the client for their help request
+                List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+
+                //Find the maximum value of points associated with a client's help request to compare experts against
+                int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
+
+                meeting.Status = "No Match";
+                context.Meetings.Update(meeting);
+                context.SaveChanges();
+
+                //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
+                if (clientMaxPoints == 0)
+                {
+                    List<(int, double)> emptyList = new List<(int, double)>();
+                    return View(emptyList);
+                }
+
+                //perform 2nd pass of algorithm since matching with a currently-available expert has failed
+
+                //Check database to see if there are preferred hours for this help request then do one of two second passes depending on if any preferred hours are found
+                bool helpRequestHasSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).Any();
+
+                //Algorithm Second Pass (Trying to find offline experts to meet with later)
+                List<(int, double, double)> offlineExpertIdsAndScores = FindUnavailableMatchingExperts(meeting, helpRequestHasSchedule, helpRequestServiceIDs, clientMaxPoints);
+
+                List<int> expertIdList = offlineExpertIdsAndScores.Select(e => e.Item1).ToList();
+
+                List<Itmuser> itmuserList = new List<Itmuser>();
+
+                List<int> itmMatchingExpertIds = new List<int>();
+
+                List<Expert> matchingExperts = new List<Expert>();
+
+                List<ExpertService> tempExpertServices = new List<ExpertService>();
+
+                List<ExpertService> listOfExpertServices = new List<ExpertService>();
+
+                int tempId = 0;
+                foreach (int i in expertIdList)
+                {
+                    tempId = context.Experts.Where(e => e.Id == i).Select(e => e.ItmuserId).FirstOrDefault();
+
+                    itmMatchingExpertIds.Add(tempId);
+
+                    tempExpertServices = context.ExpertServices.Where(es => es.ExpertId == i).ToList();
+
+                    foreach (ExpertService es in tempExpertServices)
+                    {
+                        listOfExpertServices.Add(es);
+                    }
+                }
+
+                Itmuser tempItUser = new Itmuser();
+                foreach (int i in itmMatchingExpertIds)
+                {
+                    tempItUser = context.Itmusers.Where(it => it.Id == i).FirstOrDefault();
+
+                    itmuserList.Add(tempItUser);
+                }
+
+                vm.OfflineExpertIdsAndScores = offlineExpertIdsAndScores;
+                if (!vm.OfflineExpertIdsAndScores.Any())
+                {
+                    vm.OfflineExpertIdsAndScores.Add((0, 0, 0));
+                }
+                vm.Itmusers = itmuserList;
+                vm.Services = context.Services.ToList();
+                vm.ExpertTags = listOfExpertServices;
+            }
             return View(vm);
         }
 
-        public List<(int, double)> FindThresholdMeetingExperts(List<int> expertIDs, List<int> helpRequestServiceIDs, int clientMaxPoints)
+        public List<(int, double, double)> FindThresholdMeetingExperts(List<int> expertIDs, List<int> helpRequestServiceIDs, int clientMaxPoints)
         {
             //Initialize values for generating matching score
             double threshold = 0.75;
-            (int, double) IdMatchingScorePair = (0, 0);
+            (int, double, double) IdMatchingScoreTuple = (0, 0, 0);
 
             //Create list to fill with threshold meeting experts to then pass back
-            List<(int, double)> thresholdMeetingExperts = new List<(int, double)>();
+            List<(int, double, double)> thresholdMeetingExperts = new List<(int, double, double)>();
+
+            double feedbackScoreMax;
+            double feedbackScore;
 
             foreach (int id in expertIDs)
             {
@@ -406,19 +366,37 @@ namespace ITMatching.Controllers
                         expertMatchingScore = 1;
                     }
 
-                    IdMatchingScorePair = (id, expertMatchingScore);
-                    thresholdMeetingExperts.Add(IdMatchingScorePair);
+                    //Calculate FeedbackScore since Expert passes matchingScore threshold
+                    feedbackScoreMax = context.Meetings.Where(m => m.Feedback != null && m.ExpertId == id).Count();
+                    feedbackScore = context.Meetings.Where(m => m.Feedback == 1 && m.ExpertId == id).Count();
+
+                    if (feedbackScoreMax != 0)
+                    {
+                        feedbackScore = feedbackScore / feedbackScoreMax;
+                    }
+                    else
+                    {
+                        feedbackScore = 1;
+                    }
+
+                    if (feedbackScore > 1 )
+                    {
+                        feedbackScore = 1;
+                    }
+
+                    IdMatchingScoreTuple = (id, expertMatchingScore, feedbackScore);
+                    thresholdMeetingExperts.Add(IdMatchingScoreTuple);
                 }
             }
             return thresholdMeetingExperts;
         }
 
         //Returns a list of threshold-meeting experts who are unavailable to meet with right now
-        public List<(int, double)> FindUnavailableMatchingExperts(Meeting meeting, bool helpRequestHasSchedule, List<int> helpRequestServiceIDs, int clientMaxPoints)
+        public List<(int, double, double)> FindUnavailableMatchingExperts(Meeting meeting, bool helpRequestHasSchedule, List<int> helpRequestServiceIDs, int clientMaxPoints)
         {
             List<int> unavailableExpertIds = context.Experts.Select(e => e.Id).ToList();
 
-            List<(int, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(unavailableExpertIds, helpRequestServiceIDs, clientMaxPoints);
+            List<(int, double, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(unavailableExpertIds, helpRequestServiceIDs, clientMaxPoints);
 
             //Check if any experts meet the threshold 
             if (thresholdMeetingExperts.Any())
@@ -451,19 +429,21 @@ namespace ITMatching.Controllers
                         int expertMatchingHoursWithClient = expertScheduleMatchingClientHours.Count;
                         double hoursPercentage = expertMatchingHoursWithClient / clientAvailableHoursCount;
                         double newMatchingScore = thresholdMeetingExperts[i].Item2 * hoursPercentage;
-                        thresholdMeetingExperts[i] = (thresholdMeetingExperts[i].Item1, newMatchingScore);
+                        thresholdMeetingExperts[i] = (thresholdMeetingExperts[i].Item1, newMatchingScore, 0);
 
 
                     }
                 }
 
+
+
                 //Create new list for Experts who meet the threshold sorted by descending order
-                List<(int, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ToList();
+                List<(int, double, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ThenByDescending(t => t.Item3).ToList();
 
                 if (sortedExperts.Count > 10)
                 {
                     double maxScore = sortedExperts[0].Item2;
-                    List<(int, double)> tiedExperts = new List<(int, double)>();
+                    List<(int, double, double)> tiedExperts = new List<(int, double, double)>();
                     tiedExperts.Add(sortedExperts[0]);
 
                     //check if and how many ties for highest matching score exist
@@ -477,17 +457,35 @@ namespace ITMatching.Controllers
                         tiedExperts.Add(sortedExperts[i]);
                     }
 
-                    //check if more than 10 experts tie for the highest matching score
+                    //check if more than 10 experts tie for the highest feedback score
                     if (tiedExperts.Count > 10)
                     {
-                        //if more than 10 Experts tie for the highest matching score, they will be randomized to reduce alphabetical or other bias in listing them
-                        Random random = new Random();
-                        List<(int, double)> shuffledTiedExperts = tiedExperts.OrderBy(item => random.Next()).ToList();
-                        List<(int, double)> top10ShuffledTiedExperts = shuffledTiedExperts.Take(10).ToList();
-                        return top10ShuffledTiedExperts;
+                        double maxFeedbackScore = sortedExperts[0].Item3;
+                        List<(int, double, double)> tiedFeedbackExperts = new List<(int, double, double)>();
+                        tiedFeedbackExperts.Add(sortedExperts[0]);
+
+                        //check if and how many ties for highest matching score exist
+                        for (int i = 1; i < sortedExperts.Count; i++)
+                        {
+                            if (sortedExperts[i].Item2 < maxScore)
+                            {
+                                break;
+                            }
+
+                            tiedFeedbackExperts.Add(sortedExperts[i]);
+                        }
+
+                        if (tiedExperts.Count > 10)
+                        {
+                            //if more than 10 Experts tie for the highest matching and feedback scores, they will be randomized to reduce alphabetical or other bias in listing them
+                            Random random = new Random();
+                            List<(int, double, double)> shuffledTiedExperts = tiedExperts.OrderBy(item => random.Next()).ToList();
+                            List<(int, double, double)> top10ShuffledTiedExperts = shuffledTiedExperts.Take(10).ToList();
+                            return top10ShuffledTiedExperts;
+                        }
                     }
 
-                    List<(int, double)> top10sortedExperts = sortedExperts.Take(10).ToList();
+                    List<(int, double, double)> top10sortedExperts = sortedExperts.Take(10).ToList();
                     return top10sortedExperts;
                 }
                 else
@@ -496,7 +494,7 @@ namespace ITMatching.Controllers
                 }
             }
 
-            List<(int, double)> emptyList = new List<(int, double)>();
+            List<(int, double, double)> emptyList = new List<(int, double, double)>();
             return emptyList;
         }
 
@@ -585,42 +583,228 @@ namespace ITMatching.Controllers
 
         
         [Authorize]
-        public async Task<IActionResult> ClientWaitingRoom()
+        public async Task<IActionResult> HelpRequestSubmission()
         {
             string id = _userManager.GetUserId(User);
             Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
 
             if (itUser != null)
             {
+                var HelpRequestSubmissionVM = new HelpRequestSubmissionViewModel();
 
-                Meeting meeting = new Meeting();
-                meeting.Date = DateTime.UtcNow;
-                meeting.ClientTimestamp = DateTime.UtcNow;
-                meeting.ExpertTimestamp = DateTime.UtcNow;
-                meeting.MatchExpireTimestamp = DateTime.UtcNow;
-                meeting.ClientId = itUser.Id;
-                meeting.ExpertId = 0;
-                meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
-                meeting.Status = "Matching";
-                meeting.Feedback = null;
+                var currentRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
 
-                context.Meetings.Add(meeting);
+                List<Meeting> matchingMeetings = context.Meetings.Where(m => m.Status == "Matching" && m.ClientId == itUser.Id).ToList();
+                foreach (Meeting m in matchingMeetings)
+                {
+                    m.Status = "No Match";
+                    context.Meetings.Update(m);
+                }
                 context.SaveChanges();
 
-                HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
-
-                var clientWaitingRoomVM = new ClientWaitingRoomViewModel
+                if (currentRequest != null)
+                if (currentRequest != null)
                 {
-                    HelpRequest = helpRequest,
-                    Meeting = meeting
-                };
+                    Meeting meeting = new Meeting();
+                    meeting.Date = DateTime.UtcNow;
+                    meeting.ClientTimestamp = DateTime.UtcNow;
+                    meeting.ExpertTimestamp = DateTime.UtcNow;
+                    meeting.MatchExpireTimestamp = DateTime.UtcNow;
+                    meeting.ClientId = itUser.Id;
+                    meeting.ExpertId = 0;
+                    meeting.HelpRequestId = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).Select(i => i.Id).FirstOrDefault();
+                    meeting.Status = "Matching";
+                    meeting.Feedback = null;
 
-                return View(clientWaitingRoomVM);
+                    //Compile a list of IDs from all experts who are currently available for matching
+                    List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
+
+                    //Compile a list of the IDs of the services tagged by the client for their help request
+                    List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+
+                    //Find the maximum value of points associated with a client's help request to compare experts against
+                    int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
+
+                    //If the client's max points associated with their help request is 0, then they have no tags, so return an empty list because they will not be able to match with anyone.
+                    if (clientMaxPoints == 0)
+                    {
+                        List<(int, double)> emptyList = new List<(int, double)>();
+                        return Redirect("ClientExpertMatching");
+                    }
+
+                    //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
+                    List<(int, double, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints);
+
+                    meeting.numOfPotentialMatches = thresholdMeetingExperts.Count();
+
+
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+
+                    meeting = context.Meetings.Where(m => m.Status == "Matching" && m.ClientId == itUser.Id).FirstOrDefault();
+
+                    //Attempt to meet with online experts who meet the matching score threshold for this help request
+                    if (thresholdMeetingExperts.Any())
+                    {
+                        //Create new list for Experts who meet the threshold sorted by descending order
+                        List<(int, double, double)> sortedExperts = thresholdMeetingExperts.OrderByDescending(t => t.Item2).ToList();
+
+                        PotentialMatch tempPotentialMatch = new PotentialMatch();
+                        List<PotentialMatch> tempPotentialMatchList = new List<PotentialMatch>();
+
+                        //Iterate through each expert in the list, starting from highest matching score, until an expert accepts to meet, or until the list is exhausted
+                        foreach ((int, double, double) ex in sortedExperts)
+                        {
+                            tempPotentialMatch = new PotentialMatch();
+
+                            tempPotentialMatch.MeetingId = meeting.Id;
+                            tempPotentialMatch.ExpertId = ex.Item1;
+                            tempPotentialMatch.MatchingScore = ex.Item2;
+
+                            tempPotentialMatchList.Add(tempPotentialMatch);
+                        }
+                        context.PotentialMatches.AddRange(tempPotentialMatchList);
+                        context.SaveChanges();
+                    }
+
+                    HelpRequest helpRequest = context.HelpRequests.Where(hr => hr.ClientId == itUser.Id && hr.IsOpen == true).FirstOrDefault();
+
+                    HelpRequestSubmissionVM.HelpRequest = helpRequest;
+                    HelpRequestSubmissionVM.Meeting = meeting;
+                }
+                else
+                {
+                    HelpRequestSubmissionVM.HelpRequest = new HelpRequest() { Id = 0 };
+                    HelpRequestSubmissionVM.Meeting = new Meeting() { Id = 0 };
+                }
+
+                return View(HelpRequestSubmissionVM);
             }
             else
             {
                 return BadRequest();
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ClientWaitingRoom()
+        {
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+
+            var clientWaitingRoomVM = new ClientWaitingRoomViewModel();
+
+            Meeting meeting = context.Meetings.Where(m => m.ClientId == itUser.Id && ( m.Status == "Matched" || m.Status == "Matching")).FirstOrDefault();
+
+            if (itUser != null)
+            {
+                if (meeting != null)
+                {
+                    if (meeting.ExpertId == 0)
+                    {
+                        List<PotentialMatch> potentialMatches = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id).ToList();
+                        if (!potentialMatches.Any())
+                        {
+                            return RedirectToAction("ClientExpertMatching");
+                        }
+                        else
+                        {
+                            List<PotentialMatch> orderedMatches = potentialMatches.OrderByDescending(pm => pm.MatchingScore).ToList();
+                            PotentialMatch nextMatch = orderedMatches.First();
+                            meeting.ExpertId = nextMatch.ExpertId;
+                            meeting.ClientTimestamp = DateTime.UtcNow;
+                            meeting.ExpertTimestamp = DateTime.UtcNow;
+                            meeting.MatchExpireTimestamp = DateTime.UtcNow.AddMinutes(2);
+                            context.Meetings.Update(meeting);
+                            context.SaveChanges();
+                        }
+                    }
+                    else if (meeting.Status == "Matched")
+                    {
+                        return RedirectToAction("ChatRoom", new { id = meeting.Id });
+                    }
+
+                    //meeting.ClientTimestamp = DateTime.UtcNow;
+
+                    //Timestamp editing does not work on Azure. Overwrites ExpertWaitingRoom changes. Need to find a fix!
+                    //context.Meetings.Update(meeting);
+                    //context.SaveChanges();
+
+                    Expert currentExpert = context.Experts.Where(e => e.Id == meeting.ExpertId).FirstOrDefault();
+
+                    //If expert does not update timestamp for 30 seconds, they are assumed to be afk and are set to unavailable
+                    if (ExpertIsNotThere(meeting.ExpertTimestamp))
+                    {
+                        if (currentExpert != null)
+                        {
+                            currentExpert.IsAvailable = false;
+                            context.Experts.Update(currentExpert);
+                        }
+                        meeting.ExpertId = 0;
+                        context.Meetings.Update(meeting);
+                        context.SaveChanges();
+                    }
+
+                    if (DateTime.Compare(DateTime.UtcNow, meeting.MatchExpireTimestamp) > 0)
+                    {
+                        PotentialMatch afkMatch = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id && pm.ExpertId == meeting.ExpertId).FirstOrDefault();
+                        if (afkMatch != null)
+                        {
+                            context.PotentialMatches.Remove(afkMatch);
+                        }
+                        meeting.ExpertId = 0;
+                        context.Meetings.Update(meeting);
+                        context.SaveChanges();
+                    }
+
+                    if (!currentExpert.IsAvailable)
+                    {
+                        PotentialMatch unavailableMatch = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id && pm.ExpertId == meeting.ExpertId).FirstOrDefault();
+                        if (unavailableMatch != null)
+                        {
+                            context.PotentialMatches.Remove(unavailableMatch);
+                        }
+                        meeting.ExpertId = 0;
+                        context.Meetings.Update(meeting);
+                        context.SaveChanges();
+                    }
+
+                    //Compile a list of IDs from all experts who are currently available for matching
+                    List<int> onlineExperts = context.Experts.Where(e => e.IsAvailable == true).Select(e => e.Id).ToList();
+
+                    //Compile a list of the IDs of the services tagged by the client for their help request
+                    List<int> helpRequestServiceIDs = context.RequestServices.Where(rs => rs.RequestId == meeting.HelpRequestId).Select(rs => rs.ServiceId).ToList();
+
+                    //Find the maximum value of points associated with a client's help request to compare experts against
+                    int clientMaxPoints = GetServicePoints(helpRequestServiceIDs);
+
+                    //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
+                    int numOfThresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints).Count();
+                    int remainingPotentialMatches = context.PotentialMatches.Where(pm => pm.MeetingId == meeting.Id).Count();
+
+                    clientWaitingRoomVM.Meeting = context.Meetings.Where(m => m.Id == meeting.Id).FirstOrDefault();
+                    clientWaitingRoomVM.HelpRequest = context.HelpRequests.Where(hr => hr.Id == meeting.HelpRequestId).FirstOrDefault();
+                    clientWaitingRoomVM.numOfPotentialMatches = meeting.numOfPotentialMatches;
+                    clientWaitingRoomVM.numOfOnlineExperts = onlineExperts.Count();
+                    clientWaitingRoomVM.currentExpertInList = (meeting.numOfPotentialMatches - remainingPotentialMatches) + 1;
+                    if (clientWaitingRoomVM.currentExpertInList > clientWaitingRoomVM.numOfPotentialMatches)
+                    {
+                        clientWaitingRoomVM.currentExpertInList = clientWaitingRoomVM.numOfPotentialMatches;
+                    }
+
+                    return View(clientWaitingRoomVM);
+
+                }
+                else
+                {
+                    return RedirectToAction("HelpRequestSubmission");
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpPost]
@@ -635,6 +819,10 @@ namespace ITMatching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeMeetingStatus(int meetingId, string status)
         {
+            string id = _userManager.GetUserId(User);
+            Itmuser itUser = await _itmuserRepo.GetByAspNetUserIdAsync(id);
+            Expert eUser = await _expertRepo.GetByItmUserIdAsync(itUser.Id);
+
             Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
 
             //await _meetingRepo.UpdateStatusAsync(meetingId, status);
@@ -643,6 +831,10 @@ namespace ITMatching.Controllers
 
             if (!isAccepted)
             {
+                PotentialMatch pm = context.PotentialMatches.Where(pm => pm.MeetingId == meetingId && pm.ExpertId == eUser.Id).FirstOrDefault();
+                context.PotentialMatches.Remove(pm);
+                context.SaveChanges();
+
                 meeting.ExpertId = 0;
                 context.Meetings.Update(meeting);
                 context.SaveChanges();
@@ -770,6 +962,14 @@ namespace ITMatching.Controllers
         public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
         {
             await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");
+            Meeting meeting = context.Meetings.Where(m => m.Id == meetingId).FirstOrDefault();
+            List<PotentialMatch> potentialMatches = context.PotentialMatches.Where(pm => pm.MeetingId == meetingId).ToList();
+            foreach(PotentialMatch pm in potentialMatches)
+            {
+                context.PotentialMatches.Remove(pm);
+                context.SaveChanges();
+            }
+
             return isExpert ? RedirectToAction("ExpertWaitingRoom", "Matching") : RedirectToAction("ChatRoom", new { id = meetingId });
         }
 

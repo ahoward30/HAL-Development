@@ -56,7 +56,16 @@ CREATE TABLE [Meeting] (
   [ClientTimestamp]			DATETIME,
   [ExpertTimestamp]			DATETIME,
   [MatchExpireTimestamp]	DATETIME,
-  [Feedback]                INT
+  [Feedback]                INT,
+  [numOfPotentialMatches]   INT NOT NULL
+)
+GO
+
+CREATE TABLE [PotentialMatch] (
+  [ID]						INT PRIMARY KEY IDENTITY(1, 1),
+  [MeetingID]				INT NOT NULL,
+  [ExpertID]				INT NOT NULL,
+  [MatchingScore]           FLOAT NOT NULL
 )
 GO
 

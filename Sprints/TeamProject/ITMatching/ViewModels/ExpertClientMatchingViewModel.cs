@@ -12,7 +12,7 @@ namespace ITMatching.ViewModels
     {
         public List<Itmuser> Itmusers { get; set; } //Name, email
         public List<Service> Services { get; set; }
-        public List<(int, double)> OfflineExpertIdsAndScores { get; set; } // matching score
+        public List<(int, double, double)> OfflineExpertIdsAndScores { get; set; } // matching score
         public List<ExpertService> ExpertTags { get; set; }
     }
 }
