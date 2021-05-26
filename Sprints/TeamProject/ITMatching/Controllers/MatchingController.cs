@@ -99,7 +99,7 @@ namespace ITMatching.Controllers
 
                     context.SaveChanges();
 
-                    ID = context.HelpRequests.Where(hr => hr.IsOpen == true).Select(hr => hr.Id).FirstOrDefault();
+                    ID = context.HelpRequests.Where(hr => hr.IsOpen == true && hr.ClientId == itUser.Id).Select(hr => hr.Id).FirstOrDefault();
 
                 }
 
@@ -114,6 +114,7 @@ namespace ITMatching.Controllers
                     if (matchingRequestServiceCount == 0)
                     {
                         context.RequestServices.Add(entry);
+                        context.SaveChanges();
                     }
 
                 }
@@ -124,8 +125,11 @@ namespace ITMatching.Controllers
                 {
                     if (!TagIds.Contains(i))
                     {
-                        RequestService serviceToRemove = context.RequestServices.Where(rs => rs.ServiceId == i).FirstOrDefault();
-                        context.RequestServices.Remove(serviceToRemove);
+                        RequestService serviceToRemove = context.RequestServices.Where(rs => rs.RequestId == ID && rs.ServiceId == i).FirstOrDefault();
+                        if (serviceToRemove != null)
+                        {
+                            context.RequestServices.Remove(serviceToRemove);
+                        }
                     }
                 }
 
@@ -169,7 +173,7 @@ namespace ITMatching.Controllers
 
                     context.SaveChanges();
 
-                    ID = context.HelpRequests.Where(hr => hr.IsOpen == true).Select(hr => hr.Id).FirstOrDefault();
+                    ID = context.HelpRequests.Where(hr => hr.IsOpen == true && hr.ClientId == itUser.Id).Select(hr => hr.Id).FirstOrDefault();
                 }
 
                 foreach (int i in TagIds)
@@ -193,8 +197,11 @@ namespace ITMatching.Controllers
                 {
                     if (!TagIds.Contains(i))
                     {
-                        RequestService serviceToRemove = context.RequestServices.Where(rs => rs.ServiceId == i).FirstOrDefault();
-                        context.RequestServices.Remove(serviceToRemove);
+                        RequestService serviceToRemove = context.RequestServices.Where(rs => rs.RequestId == ID && rs.ServiceId == i).FirstOrDefault();
+                        if (serviceToRemove != null)
+                        {
+                            context.RequestServices.Remove(serviceToRemove);
+                        }
                     }
                 }
 

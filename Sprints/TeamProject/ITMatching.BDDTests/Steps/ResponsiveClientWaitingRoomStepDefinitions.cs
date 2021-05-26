@@ -97,7 +97,7 @@ namespace ITMatching.BDDTests.Steps
             RequestService rs = (RequestService)_ctx["RequestService"];
             string serviceId = rs.ServiceId.ToString();
             driver.FindElement(By.Id("HelpRequest.RequestTitle")).SendKeys(hr.RequestTitle);
-            driver.FindElement(By.Id("HelpRequest.RequestDescription")).SendKeys(hr.RequestTitle);
+            driver.FindElement(By.Id("HelpRequest.RequestDescription")).SendKeys(hr.RequestDescription);
             driver.FindElement(By.Id("HelpRequest.RequestTitle")).SendKeys(hr.RequestTitle);
             driver.FindElement(By.Id("checkbox")).FindElement(By.CssSelector("checkbox")).Click();
             driver.FindElement(By.Id(serviceId)).FindElement(By.CssSelector("button[type=submit]")).Click();
