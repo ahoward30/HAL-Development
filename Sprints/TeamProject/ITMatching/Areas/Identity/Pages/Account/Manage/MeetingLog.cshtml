@@ -45,13 +45,13 @@
         switch (m.Feedback)
         {
             case 1:
-                tempMeetingLogModel.Feedback = "Helpful"; 
+                tempMeetingLogModel.Feedback = "Helpful";
                 break;
             case 0:
-                tempMeetingLogModel.Feedback = "Not Helpful"; 
+                tempMeetingLogModel.Feedback = "Not Helpful";
                 break;
             default:
-                tempMeetingLogModel.Feedback = "No Opinion/No Feedback"; 
+                tempMeetingLogModel.Feedback = "No Opinion/No Feedback";
                 break;
         }
 
@@ -68,7 +68,8 @@
             tempMeetingLogModel.MatchedUserName = tempItmuser.FirstName + " " + tempItmuser.LastName;
             tempMeetingLogModel.MatchedUserEmail = tempItmuser.Email;
         }
-        tempMeetingLogModel.TimeOfMeeting = m.Date;
+
+        tempMeetingLogModel.TimeOfMeeting = m.Date.ToLocalTime(); ;
         tempRequestServices = AppContext.RequestServices.Where(rs => rs.RequestId == tempHelpRequest.Id).ToList();
 
         Service tempService = new Service();
@@ -83,13 +84,13 @@
 }
 
 
-<div class="container">
-    <div class="container-fluid justify-content-center">
+    <div class="container justify-content-center">
         <div class="row justify-content-center">
-
-            <h1 class="col-lg-10 text-center mb-5"><strong>Meeting Logs History</strong></h1>
-            <hr />
-            <br />
+            <div class="col-md-12 justify-content-center mt-5">
+                <h1 class="text-center mb-5"><strong>Meeting Logs History</strong></h1>
+            </div>
+                <hr />
+                <br />
 
             @if (meetingInfo.Any())
             {
@@ -146,7 +147,7 @@
                             <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
                                 <p class="font-weight-bold text-white">
                                     @m.RequestDescription
-                                    <br />
+                                    <br /><br />
                                     Met with: @m.MatchedUserName
                                     <br />
                                     User's Email: @m.MatchedUserEmail
@@ -175,9 +176,9 @@
                                     </div>
                                     @if (!isExpert)
                                     {
-                                        <div class="text-center">
+                                        <div class="text-center justify-content-center">
                                             <form asp-controller="Matching" asp-action="MeetingFeedback" method="post">
-                                                <button type="submit" name="id" value="@m.MeetingId" class="btn btn-success font-weight-bold py-2 px-4 m-3 mt-5">Edit Feedback</button>
+                                                <button type="submit" name="id" value="@m.MeetingId" class="btn btn-primary text-white font-weight-bold py-2 px-4 m-3 mt-5">Edit Feedback</button>
                                             </form>
                                         </div>
                                     }
@@ -192,28 +193,25 @@
             {
                 <div class="container">
                     <div class="row text-center">
-                        <div class="col-lg-10">
+                        <div class="col-md-12">
                             <h3>No Past Meetings Available</h3>
-                        </div>
+                        </div><br />
+                        <div class="col-md-12">
                         @if (!isExpert)
                         {
-                            <div class="col-lg-10">
-                                <p>Submit a help request and get matched up to create your meeting log history. </p>
-                            </div>
+                            <p>Submit a help request and get matched up to create your meeting log history. </p>
                         }
                         else
                         {
-                            <div class="col-lg-10">
-                                <p>Accept a client's help request to create your meeting log history. </p>
-                            </div>
+                            <p>Accept a client's help request to create your meeting log history. </p>
                         }
+                        </div>
                     </div>
                 </div>
             }
 
         </div>
     </div>
-</div>
 
 
 @section Scripts {

@@ -19,12 +19,14 @@
 
     HelpRequest[] helpRequests = AppContext.HelpRequests.Where(hr => hr.ClientId == itUser.Id).ToArray();
 
-    <div class="container-fluid  justify-content-center" >
+    <div class="container justify-content-center" >
         <div class="row justify-content-center">
+            <div class="col-md-12 mt-5 justify-content-center">
+                <h1 class="text-center mb-5"><strong>Help Request History</strong></h1>
                 @if (helpRequests?.Any() == true)
                 {
 
-                    <table class="table justify-content-center" style="margin-left:-600px; margin-right:-400px">
+                    <table class="table justify-content-center">
                         <tr class="thead-custom">
                             <th scope="col" class="text-center">Help Request Title</th>
                             <th scope="col" class="text-center">Help Request Description</th>
@@ -51,20 +53,21 @@
                                         <td><button type="submit" class="btn btn-primary" name="HelpRequestID" value="@hr.Id">Resubmit</button></td>
                                     </tr>
                                 </form>
-                             }
-                            </tbody>
+                            }
+                        </tbody>
                     </table>
                 }
                 @if (helpRequests?.Any() != true)
                 {
                     <div class="container">
-                        <div class="row">
-                            <div class="col-lg-10">
-                                <h3>Your account has created no IT help requests.</h3>
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 justify-content-center">
+                                <h3 class="text-center">Your account has created no IT help requests.</h3>
                             </div>
                         </div>
                     </div>
                 }
+            </div>
         </div>
     </div>
 }
