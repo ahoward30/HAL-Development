@@ -42,6 +42,19 @@
         tempMeetingLogModel.MeetingId = m.Id;
         tempMeetingLogModel.IsExpert = isExpert;
 
+        switch (m.Feedback)
+        {
+            case 1:
+                tempMeetingLogModel.Feedback = "Helpful"; 
+                break;
+            case 0:
+                tempMeetingLogModel.Feedback = "Not Helpful"; 
+                break;
+            default:
+                tempMeetingLogModel.Feedback = "No Opinion/No Feedback"; 
+                break;
+        }
+
         if (isExpert)
         {
             tempItmuser = AppContext.Itmusers.Where(it => it.Id == m.ClientId).FirstOrDefault();
@@ -74,7 +87,45 @@
     <div class="container-fluid justify-content-center">
         <div class="row justify-content-center">
 
-            <h1 class="col-lg-10 text-center"><strong>Meeting Logs History</strong></h1>
+            <h1 class="col-lg-10 text-center mb-5"><strong>Meeting Logs History</strong></h1>
+
+            @if (isExpert)
+            {
+                double feedbackScoreMax = AppContext.Meetings.Where(m => m.Feedback != null && m.ExpertId == eUser.Id).Count();
+                double feedbackScore = AppContext.Meetings.Where(m => m.Feedback == 1 && m.ExpertId == eUser.Id).Count();
+
+                if (feedbackScoreMax != 0)
+                {
+                    feedbackScore = feedbackScore / feedbackScoreMax;
+                }
+                else
+                {
+                    feedbackScore = 1;
+                }
+
+                if (feedbackScore > 1)
+                {
+                    feedbackScore = 1;
+                }
+
+                feedbackScore = feedbackScore * 100;
+                feedbackScore = Math.Round(feedbackScore, 1);
+
+                if (feedbackScore >= 75.0)
+                {
+                    <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: darkseagreen">@feedbackScore%</span></h3>
+                }
+                else if (feedbackScore < 75.0 && feedbackScore >= 50.0)
+                {
+                    <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: orange">@feedbackScore%</span></h3>
+                }
+                else
+                {
+                    <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: indianred">@feedbackScore%</span></h3>
+                }
+
+            }
+
 
             <hr />
             <br />
@@ -104,17 +155,38 @@
                                     User's Email: @m.MatchedUserEmail
                                     <br />
                                     Time of meeting: @m.TimeOfMeeting
-                                </p>
-
-                                <div class="d-flex m-n3 flex-wrap">
-                                    @foreach (Service tag in m.HelpRequestTags)
+                                    <br />
+                                    @switch (m.Feedback)
                                     {
-                                        <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag.ServiceName</span>
+                                        case "Helpful":
+                                        <p class="font-weight-bold">Client Feedback: <span style="color: darkseagreen;">@m.Feedback</span></p>
+                                        break;
+                                    case "Not Helpful":
+                                        <p class="font-weight-bold">Client Feedback: <span style="color: indianred;">@m.Feedback</span></p>
+                                        break;
+                                    default:
+                                        <p class="font-weight-bold">Client Feedback: <span style="color: white;">@m.Feedback</span></p>
+                                        break;
+                                }
+                                    </p>
+
+                                    <div class="d-flex m-n3 flex-wrap">
+                                        @foreach (Service tag in m.HelpRequestTags)
+                                        {
+                                            <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag.ServiceName</span>
+                                        }
+                                    </div>
+                                    @if (!isExpert)
+                                    {
+                                        <div class="text-center">
+                                            <form asp-controller="Matching" asp-action="MeetingFeedback" method="post">
+                                                <button type="submit" name="id" value="@m.MeetingId" class="btn btn-success font-weight-bold py-2 px-4 m-3 mt-5">Edit Feedback</button>
+                                            </form>
+                                        </div>
                                     }
                                 </div>
-                            </div>
-                            cnt++;
-                        }
+                                cnt++;
+                            }
                     </div>
                 </div>
             }
@@ -129,13 +201,13 @@
                         @if (isExpert)
                         {
                             <div class="col-lg-10">
-                                <p>Submit a help request and get matched up to view your meeting log history. </p>
+                                <p>Submit a help request and get matched up to create your meeting log history. </p>
                             </div>
                         }
                         else
                         {
                             <div class="col-lg-10">
-                                <p>Accept a client's help request to view your meeting log history. </p>
+                                <p>Accept a client's help request to create your meeting log history. </p>
                             </div>
                         }
                     </div>

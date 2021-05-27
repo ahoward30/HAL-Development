@@ -13,7 +13,7 @@
             <p>IT-Matching supports a multitude of different topics that our experts can troubleshoot. The topics are broadly split into the categories of "Hardware", "Software", and "Network". When you submit a help request as a client, you are able to write a description of your IT issue, and tag your request with any and all topics that relate to your issue.</p>
         </div>
         <div class="col-lg-6">
-            <p>After submitting your help request, you will be matched with an expert who has experience in the topics that you tagged in your help request. From this point, you and your matched expert can have a one-on-one meeting with the ability for text-chat, video calling, and screensharing. </p>
+            <p>After submitting your help request, you will be matched with an expert who has experience in the topics that you tagged in your help request. From this point, you and your matched expert can have a one-on-one text-chat meeting to come to a solution for your IT issue. </p>
         </div>
     </div>
 </div>
@@ -40,13 +40,10 @@
                     <li class="nav-item">
                         <a href="#osTab" class="nav-link" data-toggle="tab">Operating System</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#methodTab" class="nav-link" data-toggle="tab">Meeting Method</a>
-                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade pb-0 mb-0 show active" id="hardwareTab">
-                        <ul class="mb-0">
+                        <ul class="mb-0 formTags">
                             @foreach (var item in Model)
                             {
                                 if (item.ServiceCategory == "Hardware" && item.ServiceName != "Hardware")
@@ -57,7 +54,7 @@
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="softwareTab">
-                        <ul class="mb-0">
+                        <ul class="mb-0 formTags">
                             @foreach (var item in Model)
                             {
                                 if (item.ServiceCategory == "Software" && item.ServiceName != "Software")
@@ -68,7 +65,7 @@
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="networkTab">
-                        <ul class="mb-0">
+                        <ul class="mb-0 formTags">
                             @foreach (var item in Model)
                             {
                                 if (item.ServiceCategory == "Network" && item.ServiceName != "Network")
@@ -83,17 +80,6 @@
                             @foreach (var item in Model)
                             {
                                 if (item.ServiceCategory == "OS")
-                                {
-                                    <li class="text-shadow">@item.ServiceName</li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="methodTab">
-                        <ul class="mb-0">
-                            @foreach (var item in Model)
-                            {
-                                if (item.ServiceCategory == "CommunicationMethod" && item.ServiceName != "CommunicationMethod")
                                 {
                                     <li class="text-shadow">@item.ServiceName</li>
                                 }

@@ -28,5 +28,6 @@ namespace ITMatching.Models
         public List<Service> HelpRequestTags { get; set; } = new List<Service>();
         public int MeetingId { get; set; }
         public bool IsExpert { get; set; }
+        public string Feedback { get; set; }
     }
 }
