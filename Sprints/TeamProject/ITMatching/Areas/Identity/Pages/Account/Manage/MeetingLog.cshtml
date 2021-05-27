@@ -88,50 +88,47 @@
         <div class="row justify-content-center">
 
             <h1 class="col-lg-10 text-center mb-5"><strong>Meeting Logs History</strong></h1>
-
-            @if (isExpert)
-            {
-                double feedbackScoreMax = AppContext.Meetings.Where(m => m.Feedback != null && m.ExpertId == eUser.Id).Count();
-                double feedbackScore = AppContext.Meetings.Where(m => m.Feedback == 1 && m.ExpertId == eUser.Id).Count();
-
-                if (feedbackScoreMax != 0)
-                {
-                    feedbackScore = feedbackScore / feedbackScoreMax;
-                }
-                else
-                {
-                    feedbackScore = 1;
-                }
-
-                if (feedbackScore > 1)
-                {
-                    feedbackScore = 1;
-                }
-
-                feedbackScore = feedbackScore * 100;
-                feedbackScore = Math.Round(feedbackScore, 1);
-
-                if (feedbackScore >= 75.0)
-                {
-                    <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: darkseagreen">@feedbackScore%</span></h3>
-                }
-                else if (feedbackScore < 75.0 && feedbackScore >= 50.0)
-                {
-                    <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: orange">@feedbackScore%</span></h3>
-                }
-                else
-                {
-                    <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: indianred">@feedbackScore%</span></h3>
-                }
-
-            }
-
-
             <hr />
             <br />
 
             @if (meetingInfo.Any())
             {
+                @if (isExpert)
+                {
+                    double feedbackScoreMax = AppContext.Meetings.Where(m => m.Feedback != null && m.ExpertId == eUser.Id).Count();
+                    double feedbackScore = AppContext.Meetings.Where(m => m.Feedback == 1 && m.ExpertId == eUser.Id).Count();
+
+                    if (feedbackScoreMax != 0)
+                    {
+                        feedbackScore = feedbackScore / feedbackScoreMax;
+                    }
+                    else
+                    {
+                        feedbackScore = 1;
+                    }
+
+                    if (feedbackScore > 1)
+                    {
+                        feedbackScore = 1;
+                    }
+
+                    feedbackScore = feedbackScore * 100;
+                    feedbackScore = Math.Round(feedbackScore, 1);
+
+                    if (feedbackScore >= 75.0)
+                    {
+                        <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: darkseagreen">@feedbackScore%</span></h3>
+                    }
+                    else if (feedbackScore < 75.0 && feedbackScore >= 50.0)
+                    {
+                        <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: orange">@feedbackScore%</span></h3>
+                    }
+                    else
+                    {
+                        <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: indianred">@feedbackScore%</span></h3>
+                    }
+
+                }
 
                 var cnt = 0;
 
@@ -198,7 +195,7 @@
                         <div class="col-lg-10">
                             <h3>No Past Meetings Available</h3>
                         </div>
-                        @if (isExpert)
+                        @if (!isExpert)
                         {
                             <div class="col-lg-10">
                                 <p>Submit a help request and get matched up to create your meeting log history. </p>
