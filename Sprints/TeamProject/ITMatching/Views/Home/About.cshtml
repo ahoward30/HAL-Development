@@ -6,7 +6,7 @@
             BackColor = "#617E60",                                          //Course author allows students to use course material. 
             ImageURL = "https://cdn.discordapp.com/attachments/790693889325137930/843968691761971200/logo_Hal_edit_color_green_more_canvas.png",
             Title = "We are HAL Development",
-            Description = ("We are computer science students from Western Oregon University. The name 'HAL' comes from a combination of the first letters of all of our last names, those being:" + "\n" + "Alex Howard" + "\n" + "Adnan Almarzooq" + "\n" + "Jimmy Larios"),
+            Description = ("We are computer science students from Western Oregon University. The name 'HAL' comes from a combination of the first letters of all of our last names, those being:<br /><ul><li><a class=\"text-white\" href=\"https://github.com/ahoward30\">Alex Howard</a></li><li><a class=\"text-white\" href=\"https://github.com/AdnanM1995\">Adnan Almarzooq</a></li><li><a class=\"text-white\" href=\"https://github.com/jlarios18\">Jimmy Larios</a></li></ul>"),
             },
         new SlideDetail {
             BackColor = "#2A86BA",
@@ -44,7 +44,7 @@
                         <div class="container justify-content-center">
                             <div class="row justify-content-center">
                                  <div class="col-md-10">
-                                     <p class="text-white">@slides[i].Description.Replace("\n", System.Environment.NewLine)</p>
+                                     <p class="text-white">@Html.Raw(slides[i].Description)</p>
                                  </div>
                             </div>
                         </div>

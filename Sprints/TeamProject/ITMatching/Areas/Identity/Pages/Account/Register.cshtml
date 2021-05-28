@@ -1,19 +1,27 @@
 @page
 @model RegisterModel
 @{
-    ViewData["Title"] = "ClientRegister";
+    ViewData["Title"] = "Client Register";
 }
+<style>
+	table td {
+		padding: 5px;
+	}
 
+	.dark-label {
+		margin: 0px;
+	}
+</style>
 <br />
 <div class="container">
     <div class="row centered-form">
-        <div class="col-xs-12 col-sm-8 col-md-12">
-            <div class="panel panel-default" style="margin-bottom:20px;">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
                 <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <center>
                         <h3 style="font-family: Verdana;" class="dark-label">Client</h3>
                         <hr />
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div asp-validation-summary="All" class="text-danger text-left d-flex justify-content-center"></div>
                         <table>
                             <tr class="form-group">
                                 <th><label asp-for="Input.FirstName" class="dark-label"></label>:</th>
@@ -58,7 +66,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th colspan="2"><center><button type="submit" class="btn SubmitBtn">Register</button></center></th>
+                                <th colspan="2"><center><button type="submit" class="btn SubmitBtn mt-3">Register</button></center></th>
                             </tr>
                         </table>
                     </center>

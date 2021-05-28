@@ -12,9 +12,17 @@
     }
 }
 
+class Room {
+    constructor(meetingId, userId) {
+        this.meetingId = parseInt(meetingId);
+        this.userId = parseInt(userId);
+    }
+}
+
 const chatBox = document.getElementById('chat-box');
 const MESSAGE_FORM = 'postMessage-';
 const FILE_FORM = 'uploadFile-';
+var roomDetail = null;
 
 function dateTimeDisplay(date) {
     var d = moment(date);
@@ -25,6 +33,14 @@ function refreshDateTime() {
     $('[data-utcdate]').each(function () {
         let localTime = moment.utc($(this).attr('data-utcdate')).toDate();
         $(this).html(dateTimeDisplay(localTime));
+    });
+}
+
+function setImages() {
+    $('[data-img-src]').each(function () {
+        $(this).onload = function () { window.onImageLoaded(); };
+        $(this).onerror = function () { window.reloadImage(this); };
+        $(this).attr('src', $(this).attr('data-img-src'));
     });
 }
 
@@ -48,7 +64,16 @@ function reloadImage(obj) {
 }
 
 function joinRoom() {
-    joinChatRoomToHub(parseInt($('#' + MESSAGE_FORM + 'meetingId').val()));
+    roomDetail = new Room($('#' + MESSAGE_FORM + 'meetingId').val(), $('#' + MESSAGE_FORM + 'sentBy').val());
+    joinChatRoomToHub(roomDetail);
+}
+
+function setStatus(text, isOnline) {
+    $('#status-text').html(text);
+    $('#status-text').attr('class', isOnline ? 'text-success' : 'text-danger');
+
+    $('#status-badge').html(isOnline ? 'Online' : 'Offline');
+    $('#status-badge').attr('class', 'p-2 badge badge-pill ' + (isOnline ? 'badge-success' : 'badge-danger'));
 }
 
 $(document).ready(function () {
@@ -78,11 +103,13 @@ $(document).ready(function () {
     $('#sendButton').attr('disabled', true);
     setInterval(refreshDateTime, 5000);
     refreshDateTime();
+    setImages();
     scrollToBottom();
+    setStatus('Waiting for the user to join room.', false);
 });
 
 window.addEventListener("beforeunload", function (event) {
-    leaveChatRoomToHub(parseInt($('#' + MESSAGE_FORM + 'meetingId').val()));
+    leaveChatRoomToHub(roomDetail);
 });
 
 function clearInputField() {
