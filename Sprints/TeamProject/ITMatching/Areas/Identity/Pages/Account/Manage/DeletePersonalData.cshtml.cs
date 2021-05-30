@@ -6,6 +6,7 @@ using ITMatching.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ITMatching.Areas.Identity.Pages.Account.Manage
@@ -82,18 +83,28 @@ namespace ITMatching.Areas.Identity.Pages.Account.Manage
             }
             user.UserName = $"deleted@user-{user.Id}.com";
             user.Email = user.UserName;
+            user.PhoneNumber = "0000000000";
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{user.Id}'.");
             }
 
-            Itmuser itmUser = _context.Itmusers.FirstOrDefault(item => item.AspNetUserId == user.Id);
+            Itmuser itmUser =  await _context.Itmusers.FirstOrDefaultAsync(item => item.AspNetUserId == user.Id);
             itmUser.UserName = user.UserName;
-            itmUser.Email = user.UserName;
+            itmUser.Email = user.Email;
+            itmUser.PhoneNumber = user.PhoneNumber;
             itmUser.FirstName = "Deleted";
             itmUser.LastName = "User";
             _context.Update(itmUser);
+
+            Expert expert = await _context.Experts.FirstOrDefaultAsync(e => e.ItmuserId == itmUser.Id);
+            if (expert != null)
+            {
+                var services = await _context.ExpertServices.Where(s => s.ExpertId == expert.Id).ToListAsync();
+                _context.RemoveRange(services);
+            }
+
             await _context.SaveChangesAsync();
 
             await _signInManager.SignOutAsync();

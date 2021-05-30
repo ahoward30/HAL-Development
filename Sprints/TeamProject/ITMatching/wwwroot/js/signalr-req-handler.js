@@ -4,6 +4,27 @@
 
 connection.on('receiveMessage', addMessageToChatRoom);
 
+connection.on('onlineUsers', function (users) {
+    let isOnline = users.filter(u => u !== CurrentUserId).length > 0;
+    if (isOnline) {
+        setStatus('The user is available.', true);
+    }
+});
+
+connection.on('userOnline', function (userId) {
+    let isOnline = userId !== CurrentUserId;
+    if (isOnline) {
+        setStatus('The user is available.', true);
+    }
+});
+
+connection.on('userOffline', function (userId) {
+    let isOffline = userId !== CurrentUserId;
+    if (isOffline) {
+        setStatus('The user left room.', false);
+    }
+});
+
 async function start() {
     try {
         await connection.start();
@@ -20,12 +41,12 @@ connection.onclose(start);
 // Start the connection.
 start();
 
-function joinChatRoomToHub(meetingId) {
-    connection.invoke('joinChatRoom', meetingId);
+function joinChatRoomToHub(room) {
+    connection.invoke('joinChatRoom', room);
 }
 
-function leaveChatRoomToHub(meetingId) {
-    connection.invoke('leaveChatRoom', meetingId);
+function leaveChatRoomToHub(room) {
+    connection.invoke('leaveChatRoom', room);
 }
 
 function sendMessageToHub(message) {
