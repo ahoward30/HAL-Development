@@ -6,7 +6,7 @@
 }
 
 <div class="container-fluid justify-content-center">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mb-5">
         @if (Model.Meeting.HelpRequestId == Model.HelpRequest.Id && Model.HelpRequest.IsOpen == true)
         {
         <div class="col-md-2">
@@ -96,7 +96,7 @@
                 <h3 class="mt-5 mb-5 text-center">Please submit a help request using our help request form</h3>
                 <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Create Help Request"></a><br />
                 }
-            </div>
+    </div>
 </div>
 
 @section Scripts {

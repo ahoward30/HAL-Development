@@ -170,41 +170,6 @@
                                 </div>
                             </div>
                             <br />
-                            <div class="card-header requestFormCardHeader text-center">
-                                <label>
-                                    <span class="text-white font-weight-bold">Select your preferred meeting methods (all that apply):</span>
-                                </label>
-                            </div>
-                            <div class="card card-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <ul class="formTagsCommunication">
-                                                @foreach (Service s in Model.Services)
-                                                {
-                                                    if (s.ServiceCategory == "CommunicationMethod" && s.ServiceName != "CommunicationMethod")
-                                                    {
-                                                        <li>
-                                                            <label>
-                                                                @if (Model.checkedBoxes.Contains(s.Id))
-                                                                {
-                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" checked />
-                                                                }
-                                                                else
-                                                                {
-                                                                    <input type="checkbox" class="cbox" name="TagIds" value="@s.Id" />
-                                                                }
-                                                                <span class="text-dark">@s.ServiceName </span>
-                                                            </label>
-                                                        </li>
-                                                    }
-                                                }
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
                             <div class="input-group-btn">
                                 <center>
                                     <a class="btn btn-secondary" asp-area="Identity" asp-page="/Account/Manage/ExpertTags" title="Manage">Cancel</a>&nbsp;
