@@ -10,7 +10,7 @@ h1.navbar-brand {
 }
 
 a {
-    color: #EEEEEE;
+    color: #FFF;
 }
 
 .btn-primary {
@@ -19,11 +19,72 @@ a {
     border-color: #1861ac;
 }
 
+
+.nav-item {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    width: auto;
+    font-size: 48px;
+}
+
+.nav-item:hover {
+    background-color: #d8831b;
+    color: #FFF;
+}
+
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    width: auto;
+    height: 100px;
+    font-size: 18px;
+}
+
+.nav-link:hover{
+    color:white;
+}
+
+.nav-link:active{
+    color:white;
+}
+
+.service-nav {
+    height: 50px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.service-link {
+    height: 50px;
+    margin: 0px;
+    padding: 0px;
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #1861ac;
+    color: white;
     background-color: #5089b8;
     border-color: #1861ac;
 }
+
+.themeToggle {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    width: auto;
+    font-size: 48px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -140,11 +201,6 @@ body {
     color: #d8831b;
 }
 
-.nav-item:hover {
-    background-color: #d8831b;
-    color: darkgray;
-}
-
 h1 {
     font-size: 48px;
 }
@@ -224,6 +280,12 @@ p {
     list-style: none;
 }
 
+.formHardwareTags {
+    column-count: 4;
+    column-gap: 2rem;
+    list-style: none;
+}
+
 .formTagsCommunication {
     column-count: 4;
     column-gap: 2rem;
@@ -244,10 +306,10 @@ p {
     position: center;
 }
 
-    .centered-form .panel {
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
-    }
+.centered-form .panel {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+}
 
 label.label-floatlabel {
     font-weight: bold;
@@ -387,7 +449,7 @@ label.label-floatlabel {
 }
 
 .req-head-text {
-    color: whitesmoke;
+    color: white;
 }
 
 .req-body-bg {

@@ -7,10 +7,10 @@
 
 
 <ul class="nav nav-pills nav-fill justify-content-center">
-    <li class="nav-item"><a class="nav-link text-center @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Personal Info</a></li>
-    <li class="nav-item"><a class="nav-link text-center @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Change Email</a></li>
-    <li class="nav-item"><a class="nav-link text-center  @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Change Password</a></li>
-    <li class="nav-item"><a class="nav-link text-center  @ManageNavPages.MeetingLogNavClass(ViewContext)" id="meeting-log" asp-page="./MeetingLog">View Meeting Logs</a></li>
+    <li class="nav-item service-link"><a class="nav-link text-center @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Personal Info</a></li>
+    <li class="nav-item service-link"><a class="nav-link text-center @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Change Email</a></li>
+    <li class="nav-item service-link"><a class="nav-link text-center  @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Change Password</a></li>
+    <li class="nav-item service-link"><a class="nav-link text-center  @ManageNavPages.MeetingLogNavClass(ViewContext)" id="meeting-log" asp-page="./MeetingLog">View Meeting Logs</a></li>
 
     @{
         string id = UserManager.GetUserId(User);
@@ -20,15 +20,15 @@
 
     @if (eUser == null)
     {
-        <li class="nav-item"><a class="nav-link @ManageNavPages.HelpRequestHistoryNavClass(ViewContext)" id="help-request-history" asp-page="./HelpRequestHistory">View Help Request History</a></li>
+        <li class="nav-item service-link"><a class="nav-link @ManageNavPages.HelpRequestHistoryNavClass(ViewContext)" id="help-request-history" asp-page="./HelpRequestHistory">View Help Request History</a></li>
     }
     else
     {
-        <li class="nav-item"><a class="nav-link @ManageNavPages.ExpertTagsNavClass(ViewContext)" id="expert-tags" asp-page="./ExpertTags">View Subject Tags</a></li>
+        <li class="nav-item service-link"><a class="nav-link @ManageNavPages.ExpertTagsNavClass(ViewContext)" id="expert-tags" asp-page="./ExpertTags">View Subject Tags</a></li>
     }
     @if (hasExternalLogins)
     {
         <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
     }
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Delete Account</a></li>
+    <li class="nav-item service-link"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Delete Account</a></li>
 </ul>

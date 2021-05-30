@@ -89,129 +89,131 @@
             <div class="col-md-12 justify-content-center mt-5">
                 <h1 class="text-center mb-5"><strong>Meeting Logs History</strong></h1>
             </div>
-                <hr />
-                <br />
-
-            @if (meetingInfo.Any())
-            {
-                @if (isExpert)
+            <hr />
+            <br />
+                @if (meetingInfo.Any())
                 {
-                    double feedbackScoreMax = AppContext.Meetings.Where(m => m.Feedback != null && m.ExpertId == eUser.Id).Count();
-                    double feedbackScore = AppContext.Meetings.Where(m => m.Feedback == 1 && m.ExpertId == eUser.Id).Count();
+                    <div>
 
-                    if (feedbackScoreMax != 0)
-                    {
-                        feedbackScore = feedbackScore / feedbackScoreMax;
-                    }
-                    else
-                    {
-                        feedbackScore = 1;
-                    }
-
-                    if (feedbackScore > 1)
-                    {
-                        feedbackScore = 1;
-                    }
-
-                    feedbackScore = feedbackScore * 100;
-                    feedbackScore = Math.Round(feedbackScore, 1);
-
-                    if (feedbackScore >= 75.0)
-                    {
-                        <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: darkseagreen">@feedbackScore%</span></h3>
-                    }
-                    else if (feedbackScore < 75.0 && feedbackScore >= 50.0)
-                    {
-                        <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: orange">@feedbackScore%</span></h3>
-                    }
-                    else
-                    {
-                        <h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: indianred">@feedbackScore%</span></h3>
-                    }
-
-                }
-
-                var cnt = 0;
-
-                <div class="accordion" id="accordionReq">
-                    <div class="row no-gutters mb-5">
-
-                        @foreach (ITMatching.Models.MeetingLogModel m in meetingInfo)
+                        @if (isExpert)
                         {
-                            <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
-                                <div class="col-12 p-3 req-head-bg">
-                                    <h3 class="mb-0 req-head-text font-weight-bold text-left">@m.RequestTitle</h3>
-                                </div>
-                            </button>
+                            double feedbackScoreMax = AppContext.Meetings.Where(m => m.Feedback != null && m.ExpertId == eUser.Id).Count();
+                            double feedbackScore = AppContext.Meetings.Where(m => m.Feedback == 1 && m.ExpertId == eUser.Id).Count();
 
-                            <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
-                                <p class="font-weight-bold text-white">
-                                    @m.RequestDescription
-                                    <br /><br />
-                                    Met with: @m.MatchedUserName
-                                    <br />
-                                    User's Email: @m.MatchedUserEmail
-                                    <br />
-                                    Time of meeting: @m.TimeOfMeeting
-                                    <br />
-                                    @switch (m.Feedback)
-                                    {
-                                        case "Helpful":
-                                        <p class="font-weight-bold text-white">Client Feedback: <span style="color: darkseagreen;">@m.Feedback</span></p>
-                                        break;
-                                    case "Not Helpful":
-                                        <p class="font-weight-bold text-white">Client Feedback: <span style="color: indianred;">@m.Feedback</span></p>
-                                        break;
-                                    default:
-                                        <p class="font-weight-bold text-white">Client Feedback: <span style="color: white;">@m.Feedback</span></p>
-                                        break;
-                                }
-                                    </p>
-
-                                    <div class="d-flex m-n3 flex-wrap">
-                                        @foreach (Service tag in m.HelpRequestTags)
-                                        {
-                                            <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag.ServiceName</span>
-                                        }
-                                    </div>
-                                    @if (!isExpert)
-                                    {
-                                        <div class="text-center justify-content-center">
-                                            <form asp-controller="Matching" asp-action="MeetingFeedback" method="post">
-                                                <button type="submit" name="id" value="@m.MeetingId" class="btn btn-primary text-white font-weight-bold py-2 px-4 m-3 mt-5">Edit Feedback</button>
-                                            </form>
-                                        </div>
-                                    }
-                                </div>
-                                cnt++;
+                            if (feedbackScoreMax != 0)
+                            {
+                                feedbackScore = feedbackScore / feedbackScoreMax;
                             }
-                    </div>
-                </div>
-            }
+                            else
+                            {
+                                feedbackScore = 1;
+                            }
 
-            else
-            {
-                <div class="container">
-                    <div class="row text-center">
-                        <div class="col-md-12">
-                            <h3>No Past Meetings Available</h3>
-                        </div><br />
-                        <div class="col-md-12">
-                        @if (!isExpert)
-                        {
-                            <p>Submit a help request and get matched up to create your meeting log history. </p>
+                            if (feedbackScore > 1)
+                            {
+                                feedbackScore = 1;
+                            }
+
+                            feedbackScore = feedbackScore * 100;
+                            feedbackScore = Math.Round(feedbackScore, 1);
+
+                            if (feedbackScore >= 75.0)
+                            {
+                                <div><h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: darkseagreen">@feedbackScore%</span></h3><br /></div>
+                            }
+                            else if (feedbackScore < 75.0 && feedbackScore >= 50.0)
+                            {
+                                <div><h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: orange">@feedbackScore%</span></h3><br /></div>
+                            }
+                            else
+                            {
+                                <div><h3 class="font-weight-bold">Overall Client Satisfaction: <span style="color: indianred">@feedbackScore%</span></h3><br /></div>
+                            }
+
                         }
-                        else
-                        {
-                            <p>Accept a client's help request to create your meeting log history. </p>
-                        }
+                    </div>
+                    var cnt = 0;   
+                    <div class="col-md-12">
+                        <div class="accordion" id="accordionReq">
+                            <div class="row no-gutters mb-5">
+
+                                @foreach (ITMatching.Models.MeetingLogModel m in meetingInfo)
+                                {
+                                    <button class="border-0 btn-block mt-3 p-0@(cnt == 0 ? "" : " collapsed")" type="button" data-toggle="collapse" data-target="#collapse-@cnt" aria-expanded="@(cnt == 0 ? "true" : "false")" aria-controls="collapse-@cnt">
+                                        <div class="p-3 req-head-bg">
+                                            <h3 class="mb-0 req-head-text font-weight-bold text-left">@m.RequestTitle</h3>
+                                        </div>
+                                    </button>
+
+                                    <div id="collapse-@cnt" data-parent="#accordionReq" class="col-12 p-3 req-body-bg collapse@(cnt == 0 ? " show" : "")">
+                                        <p class="font-weight-bold text-white">
+                                            @m.RequestDescription
+                                            <br /><br />
+                                            Met with: @m.MatchedUserName
+                                            <br />
+                                            User's Email: @m.MatchedUserEmail
+                                            <br />
+                                            Time of meeting: @m.TimeOfMeeting
+                                            <br />
+                                            @switch (m.Feedback)
+                                            {
+                                                case "Helpful":
+                                                <p class="font-weight-bold text-white">Client Feedback: <span style="color: darkseagreen;">@m.Feedback</span></p>
+                                                break;
+                                            case "Not Helpful":
+                                                <p class="font-weight-bold text-white">Client Feedback: <span style="color: indianred;">@m.Feedback</span></p>
+                                                break;
+                                            default:
+                                                <p class="font-weight-bold text-white">Client Feedback: <span style="color: white;">@m.Feedback</span></p>
+                                                break;
+                                        }
+                                            </p>
+
+                                            <div class="d-flex m-n3 flex-wrap">
+                                                @foreach (Service tag in m.HelpRequestTags)
+                                                {
+                                                    <span class="badge badge-warning m-3 py-3 px-4 text-white">@tag.ServiceName</span>
+                                                }
+                                            </div>
+                                            @if (!isExpert)
+                                            {
+                                                <div class="text-center justify-content-center">
+                                                    <form asp-controller="Matching" asp-action="MeetingFeedback" method="post">
+                                                        <button type="submit" name="id" value="@m.MeetingId" class="btn btn-primary text-white font-weight-bold py-2 px-4 m-3 mt-5">Edit Feedback</button>
+                                                    </form>
+                                                </div>
+                                            }
+                                        </div>
+                                        cnt++;
+                                    }
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
+                else
+                {
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <h3>No Past Meetings Available</h3>
+                            </div><br />
+                            <div class="col-md-12">
+                            @if (!isExpert)
+                            {
+                                <p>Submit a help request and get matched up to create your meeting log history. </p>
+                            }
+                            else
+                            {
+                                <p>Accept a client's help request to create your meeting log history. </p>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
         </div>
-    </div>
 
 
 @section Scripts {
