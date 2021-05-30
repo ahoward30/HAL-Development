@@ -29,7 +29,7 @@ namespace ITMatching.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("itmatching@outlook.com", Options.SGUser),
+                From = new EmailAddress("itmatching@outlook.com", Options.SGName),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
