@@ -7,7 +7,7 @@ namespace ITMatching.Services
 {
     public class AuthMessageSenderOptions
     {
-        public string SendGridUser { get; set; }
-        public string SendGridKey { get; set; }
+        public string SGName { get; set; }
+        public string SGKey { get; set; }
     }
 }
