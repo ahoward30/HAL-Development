@@ -29,20 +29,20 @@
         <div class="row">
             <br /><br />
             <div class="col-lg-6">
-                <h1 class="text-white text-center text-shadow">@(isExpert ? "Want to help?" : "Have an IT Issue?")</h1>
+                <h1 class="text-white text-center text-shadow">@(isExpert ? "Want to help?" : "Have an IT issue?")</h1>
             </div>
             <div class="col-lg-6">
                 @if (!isUserLoggedIn) //User is not logged in
                 {
-                    <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See What We Can Help You With"></a><br />
+                    <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See what we can help you with"></a><br />
                 }
                 else if (isExpert) //User logged in and is Expert
                 {
-                    <a href='@Url.Action("ExpertWaitingRoom", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Enter the Expert's Waiting Room"></a><br />
+                    <a href='@Url.Action("ExpertWaitingRoom", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Enter the expert's waiting room"></a><br />
                 }
                 else //User logged in and is Client
                 {
-                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get Help Now"></a><br />
+                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get help Now"></a><br />
                 }
             </div>
         </div>
@@ -86,6 +86,7 @@
                                         <li><p class=" text-white">Request form for clients to describe and tag their IT issue</p><br /></li>
                                         <li><p class=" text-white">Automated system that connects users based on a "Matching Score"</p><br /></li>
                                         <li><p class=" text-white">Live one-on-one text chat between clients and experts</p><br /></li>
+                                        <li><p class=" text-white">Scheduling system to accommodate users based on times that work for them</p><br /></li>
                                     </ul>
                                 </div>
                             </div>
@@ -95,9 +96,9 @@
                                 <div class="card-header"><h2 id="OrangeText">Get Help with...</h2></div>
                                 <div class="card-body">
                                     <ul class="text-left">
-                                        <li><p class=" text-white">Hardware,</p></li>
-                                        <li><p class=" text-white">Software,</p></li>
-                                        <li><p class=" text-white">and Networking,</p></li>
+                                        <li><p class=" text-white">Hardware</p></li>
+                                        <li><p class=" text-white">Software</p></li>
+                                        <li><p class=" text-white">Networking</p></li>
                                     </ul>
                                     <h3 id="OrangeText">From an expert picked just for you!</h3>
                                 </div>

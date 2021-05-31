@@ -179,11 +179,22 @@ body {
     border: 0px;
 }
 
+.OrangeButton {
+    background-color: #d8831b;
+    border: 0px;
+}
+
     #OrangeButton:hover {
         background-color: #c57000;
         color: #fff;
         border: 0px;
     }
+
+.OrangeButton:hover {
+    background-color: #c57000;
+    color: #fff;
+    border: 0px;
+}
 
 #HomeCard {
     background-color: #5089b8;

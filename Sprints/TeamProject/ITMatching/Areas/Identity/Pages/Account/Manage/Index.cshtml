@@ -26,28 +26,28 @@
         Dictionary<string, List<int>> hours = ITMatching.Controllers.SchedulerUtilController.GetSchedule(workHr);
         ViewData["SchedulerData"] = hours;
 
-        <div class="row justify-content-center mt-3 mb-3">
+        <div class="row justify-content-center mt-4 mb-3">
             <div class="col-md-9 justify-content-center">
                 <form id="profile-form" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="@itUser.FirstName"></label>
+                        <label asp-for="@itUser.FirstName">First name</label>
                         <input asp-for="@itUser.FirstName" class="form-control" disabled />
                         @*<input type="text" readonly class="form-control-plaintext" id="staticText" value="@itUser.FirstName">*@
                         <span asp-validation-for="@itUser.FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.LastName"></label>
+                        <label asp-for="@itUser.LastName">Last name</label>
                         <input asp-for="@itUser.LastName" class="form-control" disabled />
                         <span asp-validation-for="@itUser.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.Email"></label>
+                        <label asp-for="@itUser.Email">Email</label>
                         <input asp-for="@itUser.Email" class="form-control" disabled />
                         <span asp-validation-for="@itUser.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.PhoneNumber"></label>
+                        <label asp-for="@itUser.PhoneNumber">Phone number</label>
                         <input asp-for="@itUser.PhoneNumber" class="form-control" disabled />
                         <span asp-validation-for="@itUser.PhoneNumber" class="text-danger"></span>
                     </div>
@@ -56,7 +56,7 @@
                     {
                      <div class="form-group d-flex justify-content-center">
                          <div class="mb-3" style="height: 75px;">
-                         <a class="Tempbtn" asp-controller="SchedulerUtil" asp-action="Schedular">Set Up My Schedule</a>
+                         <a class="btn btn-primary" id="OrangeButton" asp-controller="SchedulerUtil" asp-action="Schedular">Set Up My Schedule</a>
                          <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
                          </div>
                      </div>
@@ -64,7 +64,7 @@
                     {
                 <div class="form-group d-flex justify-content-center">
                     <div class="mb-3" style="height: 75px;">
-                    <a class="Tempbtn" asp-controller="SchedulerUtil" asp-action="Schedular"> View/Edit My Schedule</a>
+                    <a class="btn btn-primary" id="OrangeButton" asp-controller="SchedulerUtil" asp-action="Schedular">View/Edit My Schedule</a>
                     <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
                     </div>
                 </div>
@@ -75,27 +75,27 @@
     }
     else
     {
-        <div class="row justify-content-center mt-3 mb-3">
+        <div class="row justify-content-center mt-4 mb-3">
             <div class="col-md-9 justify-content-center">
                 <form id="profile-form" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="@itUser.FirstName"></label>
+                        <label asp-for="@itUser.FirstName">First name</label>
                         <input asp-for="@itUser.FirstName" class="form-control" disabled />
                         <span asp-validation-for="@itUser.FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.LastName"></label>
+                        <label asp-for="@itUser.LastName">Last name</label>
                         <input asp-for="@itUser.LastName" class="form-control" disabled />
                         <span asp-validation-for="@itUser.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.Email"></label>
+                        <label asp-for="@itUser.Email">Email</label>
                         <input asp-for="@itUser.Email" class="form-control" disabled />
                         <span asp-validation-for="@itUser.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.PhoneNumber"></label>
+                        <label asp-for="@itUser.PhoneNumber">Phone nucol-md-12mber</label>
                         <input asp-for="@itUser.PhoneNumber" class="form-control" disabled />
                         <span asp-validation-for="@itUser.PhoneNumber" class="text-danger"></span>
                     </div>
