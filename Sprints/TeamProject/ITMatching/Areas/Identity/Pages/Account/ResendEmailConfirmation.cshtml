@@ -9,10 +9,10 @@
     <div class="row centered-form">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
-                <h1 class="dark-label">Still in need for confirmation email?</h1>
+                <h1 class="dark-label">Didn't receive a confirmation email?</h1>
 
                 <form id="account" method="post">
-                    <h4 class="dark-label">Please enter your email.</h4>
+                    <h4 class="dark-label">Please enter your email, and a new confirmation email will be sent.</h4>
                     <hr />
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
@@ -21,7 +21,7 @@
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Send Confirmation</button>
+                        <button type="submit" class="btn btn-orange">Send Confirmation</button>
                     </div>
                 </form>
             </div>
