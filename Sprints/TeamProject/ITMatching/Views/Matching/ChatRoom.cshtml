@@ -96,7 +96,7 @@
                         <div class="d-flex m-n2 flex-wrap">
                             @foreach (var tag in tags)
                             {
-                                <span class="badge badge-primary m-2 p-2">@tag</span>
+                                <span class="badge badge-orange m-2 p-2">@tag</span>
                             }
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                             <form asp-controller="Matching" asp-action="CloseMeeting">
                                 <input type="hidden" name="meetingId" value="@Model.Meeting.Id">
                                 <input type="hidden" name="isExpert" value="@Model.IsExpert.ToString()">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Close Meeting</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Close Meeting</button>
                             </form>
                         </div>
                     </div>
@@ -214,14 +214,14 @@ else
                     if (cUser.ItmuserId == meeting.ClientId)
                     {
                         <input name="meetingId" type="hidden" value="@Model.ChatRoomID" />
-                        <button type="submit" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Leave Feedback</button>
+                        <button type="submit" class="btn btn-orange btn-xlarge font-weight-bold py-2 px-4 mx-5">Leave Feedback</button>
                     }
                 }
                 else
                 {
-                    <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Enter expert waiting room</button>
+                    <button type="submit" asp-controller="Matching" asp-action="ExpertWaitingRoom" class="btn btn-orange btn-xlarge font-weight-bold py-2 px-4 mx-5">Enter expert waiting room</button>
                 }
-                <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-primary btn-xlarge font-weight-bold py-2 px-4 mx-5" id="OrangeButton">Return to home page</button>
+                <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-orange btn-xlarge font-weight-bold py-2 px-4 mx-5">Return to home page</button>
             </div>
         </form>
     }
