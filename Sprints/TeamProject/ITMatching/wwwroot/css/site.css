@@ -174,26 +174,72 @@ body {
     background-position: center center;
 }
 
-#OrangeButton {
+#btn btn-orange {
     background-color: #d8831b;
     border: 0px;
 }
 
-.OrangeButton {
+.btn-orange {
     background-color: #d8831b;
     border: 0px;
+    color: white;
 }
 
-    #OrangeButton:hover {
+    #btn-orange:hover {
         background-color: #c57000;
         color: #fff;
         border: 0px;
     }
 
-.OrangeButton:hover {
+.btn-orange:hover {
     background-color: #c57000;
     color: #fff;
     border: 0px;
+}
+
+.btn-orange:focus, .btn-orange:active {
+    border-color: white !important;
+}
+
+.badge-orange {
+    background-color: #d8831b;
+    border: 0px;
+    color: white;
+}
+
+.badge-blue {
+    background-color: #187AF9;
+    color: white;
+}
+
+.text-gray {
+    color: lightslategrey;
+}
+
+.text-blue {
+    color: #187AF9;
+}
+
+.text-link {
+    color: #AFDDAF;
+    font-weight: bold;
+}
+
+.text-link:hover {
+    color: #5511DD;
+}
+
+.logo {
+    margin-left: 10px;
+    height: 30px;
+    width: 30px;
+    transition: all .1s ease-in-out;
+
+}
+
+.logo:hover {
+    filter: saturate(9000%);
+    transform: scale(1.1);
 }
 
 #HomeCard {
@@ -387,7 +433,7 @@ label.label-floatlabel {
         color: white;
     }
 
-.SchedularTable {
+.SchedulerTable {
     text-align: center;
     margin-bottom: 50px;
     margin-top: 50px;

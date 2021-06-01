@@ -56,7 +56,7 @@
                     {
                      <div class="form-group d-flex justify-content-center">
                          <div class="mb-3" style="height: 75px;">
-                         <a class="btn btn-primary" id="OrangeButton" asp-controller="SchedulerUtil" asp-action="Schedular">Set Up My Schedule</a>
+                         <a class="btn btn-orange" id="btn-orange" asp-controller="SchedulerUtil" asp-action="Scheduler">Set Up My Schedule</a>
                          <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
                          </div>
                      </div>
@@ -64,7 +64,7 @@
                     {
                 <div class="form-group d-flex justify-content-center">
                     <div class="mb-3" style="height: 75px;">
-                    <a class="btn btn-primary" id="OrangeButton" asp-controller="SchedulerUtil" asp-action="Schedular">View/Edit My Schedule</a>
+                    <a class="btn btn-orange" asp-controller="SchedulerUtil" asp-action="Scheduler">View/Edit My Schedule</a>
                     <span asp-validation-for="@eUser.WorkSchedule" class="text-danger"></span>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                         <span asp-validation-for="@itUser.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="@itUser.PhoneNumber">Phone nucol-md-12mber</label>
+                        <label asp-for="@itUser.PhoneNumber">Phone number</label>
                         <input asp-for="@itUser.PhoneNumber" class="form-control" disabled />
                         <span asp-validation-for="@itUser.PhoneNumber" class="text-danger"></span>
                     </div>

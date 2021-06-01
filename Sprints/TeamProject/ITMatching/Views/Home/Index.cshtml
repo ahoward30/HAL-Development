@@ -7,6 +7,7 @@
     ViewData["Title"] = "Home Page";
     bool isUserLoggedIn = SignInManager.IsSignedIn(User);
     bool isExpert = false;
+    bool hasTags = false;
     if (isUserLoggedIn)
     {
         string id = UserManager.GetUserId(User);
@@ -14,11 +15,19 @@
         Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
         isExpert = eUser != null;
 
+
         if (isExpert)
         {
             eUser.IsAvailable = false;
+            List<ExpertService> expertServices = AppContext.ExpertServices.Where(es => es.ExpertId == eUser.Id).ToList();
+            if (expertServices.Any())
+            {
+                hasTags = true;
+            }
             AppContext.Experts.Update(eUser);
             AppContext.SaveChanges();
+
+
         }
     }
 }
@@ -34,15 +43,25 @@
             <div class="col-lg-6">
                 @if (!isUserLoggedIn) //User is not logged in
                 {
-                    <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="See what we can help you with"></a><br />
+                    <a href='@Url.Action("ServicesList", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="See what we can help you with"></a><br />
                 }
                 else if (isExpert) //User logged in and is Expert
                 {
-                    <a href='@Url.Action("ExpertWaitingRoom", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Enter the expert's waiting room"></a><br />
+
+                    //Expert has subject tags attached to their account 
+                    if (hasTags)
+                    {
+                        <a href='@Url.Action("ExpertWaitingRoom", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Enter the expert's waiting room"></a><br />
+                    }
+                    //Expert does not have subject tags attached to their account
+                    else
+                    {
+                        <a href='@Url.Action("EditTagsForm", "Account")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Tell us about your experience"></a><br />
+                    }
                 }
                 else //User logged in and is Client
                 {
-                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Get help Now"></a><br />
+                    <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Get help now"></a><br />
                 }
             </div>
         </div>
@@ -51,9 +70,37 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h4 class="text-white text-center">
-                    If you have an IT-related issue, then submit a help request and get matched with an expert who can help you!
-                </h4>
+                @if (!isUserLoggedIn) //User is not logged in
+                {
+                    <h4 class="text-white text-center">
+                        Log in or register for an account to start matching with other users!
+                    </h4>
+                }
+                else if (isExpert) //User logged in and is Expert
+                {
+
+                    //Expert has subject tags attached to their account
+                    if (hasTags)
+                    {
+                        <h4 class="text-white text-center">
+                            Enter into the waiting room to get matched with clients with issues that you have experience in!
+                        </h4>
+                    }
+                    //Expert does not have subject tags attached to their account
+                    else
+                    {
+                        <h4 class="text-white text-center">
+                            Tell us about the subjects that you have experience in, so that we can match you to clients in need!
+                        </h4>
+                    }
+                }
+                else //User logged in and is Client
+                {
+                    <h4 class="text-white text-center">
+                        If you have an IT-related issue, then submit a help request and get matched with an expert who can help you!
+                    </h4>
+                }
+
             </div>
         </div>
     </div>

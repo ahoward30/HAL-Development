@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ITMatching.Areas.Identity.Pages.Account
 {
-    public class SchedularModel : PageModel
+    public class SchedulerModel : PageModel
     {
         public void OnGet()
         {
