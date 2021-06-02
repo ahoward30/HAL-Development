@@ -1,20 +1,21 @@
 @model IEnumerable<ITMatching.Models.FAQ>
 
 @{
-    ViewData["Title"] = "IT Matching FAQ";
+    ViewData["Title"] = "FAQ Page";
 }
 
 <br />
 
-<div class="text-center">
-    <h1 class="display-4 mb-4 mt-4"><strong>Frequently Asked Questions</strong></h1>
-</div>
+<div class="container justify-content-center">
+    <div class="row justify-content-center">
+        <div class="col-md-12 justify-content-center mt-5 mb-5 text-center">
+            <h1 class="display-4 mb-4"><strong>Frequently Asked Questions</strong></h1>
+            <p>To better help customers learn about ITMatching, we've compiled the following Frequently Asked Questions (FAQs).</p>
+        </div>
 
-<br />
+        <br />
 
-<div class="row justify-content-center mb-5">
-    <div class="col-lg-10">
-        <div class="accordion" id="accordionQuestion">
+        <div class="accordion col-md-10 justify-content-center mb-5" id="accordionQuestion">
             @{ var i = 1;}
             @foreach (var item in Model)
             {

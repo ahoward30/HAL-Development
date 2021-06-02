@@ -526,6 +526,12 @@ label.label-floatlabel {
         color: #222222;
     }
 
+    .req-body-bg a.btn {
+        font-size: 1.25rem;
+        border-radius: 1.75rem;
+        color: #222222;
+    }
+
 .p-3px {
     padding: 3px;
 }

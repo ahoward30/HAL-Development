@@ -89,9 +89,9 @@ namespace ITMatching.Controllers
         [HttpPost]
         public IActionResult ViewSchedule(int ExpertId)
         {
-            Expert exp = appContext.Experts.Find(ExpertId);
+            Expert exp = appContext.Experts.Find(id);
             Itmuser itm = appContext.Itmusers.Find(exp.ItmuserId);
-            List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == ExpertId).ToList();
+            List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == id).ToList();
             Dictionary<string, List<int>> hours = GetSchedule(workHr);
             ViewBag.ViewScheduleName = itm.FirstName;
             ViewBag.ViewSchedulerData = hours;
