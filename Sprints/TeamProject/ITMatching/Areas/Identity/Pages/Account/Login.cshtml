@@ -1,92 +1,70 @@
 @page
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @model LoginModel
 
 @{
-	ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Log in";
 }
 
 
 <br />
 <div class="container">
- <div class="row centered-form">
-  <div class="col-md-12">
-   <div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
-	<h1 class="dark-label">@ViewData["Title"]</h1>
+    <div class="row centered-form">
+        <div class="col-md-12">
+            <div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
+                <h1 class="dark-label">@ViewData["Title"]</h1>
 
-	<form id="account" method="post">
-	 <h4 class="dark-label">Use a local account to log in.</h4>
-	 <hr />
-	 <div asp-validation-summary="All" class="text-danger"></div>
-	 <div class="form-group">
-	  <label asp-for="Input.Email" class="dark-label"></label>
-	  <input asp-for="Input.Email" class="form-control" />
-	  <span asp-validation-for="Input.Email" class="text-danger"></span>
-	 </div>
-	 <div class="form-group">
-	  <label asp-for="Input.Password" class="dark-label"></label>
-	  <input asp-for="Input.Password" class="form-control" />
-	  <span asp-validation-for="Input.Password" class="text-danger"></span>
-	 </div>
-	 <div class="form-group">
-	  <div class="checkbox">
-	   <label asp-for="Input.RememberMe" class="dark-label">
-		<input asp-for="Input.RememberMe" />
-								@Html.DisplayNameFor(m => m.Input.RememberMe)
-	   </label>
-	  </div>
-	 </div>
-	 <div class="form-group">
-	  <button type="submit" class="btn btn-orange">Log in</button>
-	 </div>
-	 <div class="form-group">
-	  <p>
-	   <a class="dark-label" id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-	  </p>
-	  <p>
-	   <a class="dark-label" asp-page="./TempRegister" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-	  </p>
-	  <p>
-	   <a class="dark-label" id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-	  </p>
-	 </div>
-	</form>
-
-				@*<div class="col-md-6 col-md-offset-2">
-					<section>
-					<h4>Use another service to log in.</h4>
-					<hr />
-					@{
-					if ((Model.ExternalLogins?.Count ?? 0) == 0)
-					{
-					<div>
-					<p>
-					There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-					for details on setting up this ASP.NET application to support logging in via external services.
-					</p>
-					</div>
-					}
-					else
-					{
-					<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-					<div>
-					<p>
-					@foreach (var provider in Model.ExternalLogins)
-					{
-					<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-					}
-					</p>
-					</div>
-					</form>
-					}
-					}
-					</section>
-					</div>*@
-
-   </div>
-  </div>
- </div>
+                <form id="account" method="post">
+                    <h4 class="dark-label">Use a local account to log in.</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email" class="dark-label"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password" class="dark-label"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe" class="dark-label">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Input.captchaInput" type="hidden" name="Input.captchaInput" id="captchaInput" value="" />
+                        <button type="submit" class="btn btn-orange">Log in</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a class="dark-label" id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a class="dark-label" asp-page="./TempRegister" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                        <p>
+                            <a class="dark-label" id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lcgx_8aAAAAANRdqiojwV_ZUFMb_ygAb1GIEhZE"></script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('@Configuration["RecaptchaSettings:SiteKey"]', { action: 'contact' }).then(function (token) {
+            $("#captchaInput").val(token);
+        });
+    });
+    </script>
 }

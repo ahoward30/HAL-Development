@@ -1,4 +1,5 @@
 ﻿using ITMatching.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace ITMatching.Controllers
         {
             appContext = context;
         }
+
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -73,6 +76,7 @@ namespace ITMatching.Controllers
 
         }
 
+        [Authorize]
         public IActionResult Scheduler()
         {
             ViewBag.SchedulerData = scheduleHours;
@@ -81,6 +85,7 @@ namespace ITMatching.Controllers
 
         //Had to comment out the routing while trying to fix the view for the ExpertClientMatching. REMEMBER TO FIX
         //[Route("/ViewSchedule/{ExpertId}")]
+        [Authorize]
         [HttpPost]
         public IActionResult ViewSchedule(int ExpertId)
         {

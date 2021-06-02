@@ -1,16 +1,18 @@
 @page
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @model RegisterModel
+
 @{
     ViewData["Title"] = "Client Register";
 }
 <style>
-	table td {
-		padding: 5px;
-	}
+    table td {
+        padding: 5px;
+    }
 
-	.dark-label {
-		margin: 0px;
-	}
+    .dark-label {
+        margin: 0px;
+    }
 </style>
 <br />
 <div class="container">
@@ -66,7 +68,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th colspan="2"><center><button type="submit" class="btn btn-orange mt-3">Register</button></center></th>
+                                <th colspan="2">
+                                    <center>
+                                        <input asp-for="Input.captchaInput" type="hidden" name="Input.captchaInput" id="captchaInput" value="" />
+                                        <button type="submit" class="btn btn-orange mt-3">Register</button>
+                                    </center>
+                                </th>
                             </tr>
                         </table>
                     </center>
@@ -77,4 +84,12 @@
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lcgx_8aAAAAANRdqiojwV_ZUFMb_ygAb1GIEhZE"></script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('@Configuration["RecaptchaSettings:SiteKey"]', { action: 'contact' }).then(function (token) {
+            $("#captchaInput").val(token);
+        });
+    });
+    </script>
 }

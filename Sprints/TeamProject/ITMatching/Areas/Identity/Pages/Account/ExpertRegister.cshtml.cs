@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using GoogleReCaptcha.V3.Interface;
+using Microsoft.Extensions.Configuration;
 
 namespace ITMatching.Areas.Identity.Pages.Account
 {
@@ -25,18 +27,24 @@ namespace ITMatching.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ITMatchingAppContext _context;
+        private readonly ICaptchaValidator _captchaValidator;
+        private readonly IConfiguration _configuration;
 
         public ExpertRegisterModel(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ITMatchingAppContext context)
+            ITMatchingAppContext context,
+            ICaptchaValidator captchaValidator,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _captchaValidator = captchaValidator;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -82,6 +90,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            public string captchaInput { get; set; }
         }
 
 
@@ -95,6 +104,12 @@ namespace ITMatching.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            _captchaValidator.UpdateSecretKey(_configuration["RecaptchaSettings:SecretKey"]);
+            if (!await _captchaValidator.IsCaptchaPassedAsync(Input.captchaInput))
+            {
+                ModelState.AddModelError("captcha", "Captcha validation failed");
+            }
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };

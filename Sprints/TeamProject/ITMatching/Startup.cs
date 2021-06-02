@@ -20,6 +20,8 @@ using ITMatching.Models.Concrete;
 using ITMatching.Hubs;
 using ITMatching.Services.Abstract;
 using ITMatching.Services.Concrete;
+using GoogleReCaptcha.V3.Interface;
+using GoogleReCaptcha.V3;
 
 namespace ITMatching
 {
@@ -61,6 +63,7 @@ namespace ITMatching
             services.AddControllersWithViews();
             // Added to enable runtime compilation
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
             services.AddSignalR(options =>
             {

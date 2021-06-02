@@ -145,6 +145,7 @@ namespace ITMatching.Controllers
 
             return RedirectToAction("RequestForm", "Matching");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult HelpRequestWithSchedule(HelpRequest helpRequest, int?[] TagIds)
@@ -218,6 +219,7 @@ namespace ITMatching.Controllers
             return RedirectToAction("RequestForm", "Matching");
         }
 
+        [Authorize]
         public IActionResult ResubmitHelpRequest(int helpRequestID)
         {
             //Grabs list of open help requests and sets them to false
@@ -243,13 +245,14 @@ namespace ITMatching.Controllers
             return View(viewModel);
         }
 
-
+        [Authorize]
         public IActionResult RequestScheduler()
         {
 
             return View();
         }
 
+        [Authorize]
         //Attempt to meet with an online expert, and either navigate to a meeting room to talk to them, or to a page listing expert information if no matching experts are available.
         public IActionResult ClientExpertMatching()
         {
@@ -549,7 +552,6 @@ namespace ITMatching.Controllers
         }
 
         //Returns True if expert has not updated their timestamp on a pending meeting object for over 30 seconds, likely indicating they are no longer in their waiting room
-
         public Boolean ExpertIsNotThere(DateTime dbTime)
         {
             DateTime current = DateTime.UtcNow;

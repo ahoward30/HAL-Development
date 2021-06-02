@@ -1,42 +1,44 @@
 ﻿@page
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @model ITMatching.Areas.Identity.Pages.Account.ExpertRegisterModel
+
 @{
     ViewData["Title"] = "Expert Register";
 }
 <style>
-	table td {
-		padding: 5px;
-	}
+    table td {
+        padding: 5px;
+    }
 
-	.dark-label {
-		margin: 0px;
-	}
+    .dark-label {
+        margin: 0px;
+    }
 </style>
 <br />
 <div class="container">
-	<div class="row centered-form">
+    <div class="row centered-form">
         <div class="col-xs-12 col-sm-12 col-md-12">
-			<div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
-				<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-					<center>
-						<h3 style="font-family: Verdana;" class="dark-label">Expert</h3>
-						<hr />
-						<div asp-validation-summary="All" class="text-danger text-left d-flex justify-content-center"></div>
-						<table>
-							<tr class="form-group">
-								<th><label asp-for="Input.FirstName" class="dark-label"></label>:</th>
-								<td class="col-md-10">
-									<input asp-for="Input.FirstName" class="form-control" />
-									<span asp-validation-for="Input.FirstName" class="text-danger"></span>
-								</td>
-							</tr>
-							<tr>
-								<th><label asp-for="Input.LastName" class="dark-label"></label>:</th>
-								<td class="col-md-10">
-									<input asp-for="Input.LastName" class="form-control" />
-									<span asp-validation-for="Input.LastName" class="text-danger"></span>
-								</td>
-							</tr>
+            <div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <center>
+                        <h3 style="font-family: Verdana;" class="dark-label">Expert</h3>
+                        <hr />
+                        <div asp-validation-summary="All" class="text-danger text-left d-flex justify-content-center"></div>
+                        <table>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.FirstName" class="dark-label"></label>:</th>
+                                <td class="col-md-10">
+                                    <input asp-for="Input.FirstName" class="form-control" />
+                                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label asp-for="Input.LastName" class="dark-label"></label>:</th>
+                                <td class="col-md-10">
+                                    <input asp-for="Input.LastName" class="form-control" />
+                                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                </td>
+                            </tr>
                             <tr class="form-group">
                                 <th><label asp-for="Input.PhoneNumber" class="dark-label"></label>:</th>
                                 <td class="col-md-10">
@@ -65,16 +67,29 @@
                                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                                 </td>
                             </tr>
-							<tr>
-								<th colspan="2"><center><button type="submit" class="btn btn-orange mt-3">Register</button></center></th>
-							</tr>
-						</table>
-					</center>
-				</form>
-			</div>
-		</div>
-	</div>
+                            <tr>
+                                <th colspan="2">
+                                    <center>
+                                        <input asp-for="Input.captchaInput" type="hidden" name="Input.captchaInput" id="captchaInput" value="" />
+                                        <button type="submit" class="btn btn-orange mt-3">Register</button>
+                                    </center>
+                                </th>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lcgx_8aAAAAANRdqiojwV_ZUFMb_ygAb1GIEhZE"></script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('@Configuration["RecaptchaSettings:SiteKey"]', { action: 'contact' }).then(function (token) {
+            $("#captchaInput").val(token);
+        });
+    });
+    </script>
 }

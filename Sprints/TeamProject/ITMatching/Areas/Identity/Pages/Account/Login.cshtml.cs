@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using GoogleReCaptcha.V3.Interface;
+using Microsoft.Extensions.Configuration;
 
 namespace ITMatching.Areas.Identity.Pages.Account
 {
@@ -20,14 +22,20 @@ namespace ITMatching.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ICaptchaValidator _captchaValidator;
+        private readonly IConfiguration _configuration;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ICaptchaValidator captchaValidator,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _captchaValidator = captchaValidator;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -52,6 +60,7 @@ namespace ITMatching.Areas.Identity.Pages.Account
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+            public string captchaInput { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -76,7 +85,12 @@ namespace ITMatching.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        
+
+            _captchaValidator.UpdateSecretKey(_configuration["RecaptchaSettings:SecretKey"]);
+            if (!await _captchaValidator.IsCaptchaPassedAsync(Input.captchaInput))
+            {
+                ModelState.AddModelError("captcha", "Captcha validation failed");
+            }
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout

@@ -29,12 +29,14 @@ namespace ITMatching.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult helpRequestHistory()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult ExpertTags(int?[] TagIds)
         {
             if (ModelState.IsValid)
@@ -99,6 +101,7 @@ namespace ITMatching.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult MeetingLog()
         {
             //if (ModelState.IsValid)
