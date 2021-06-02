@@ -9,7 +9,8 @@
 <div class="container justify-content-center">
     <div class="row justify-content-center">
         <div class="col-md-12 justify-content-center mt-5 mb-5 text-center">
-            <h1 class="display-4"><strong>Frequently Asked Questions</strong></h1>
+            <h1 class="display-4 mb-4"><strong>Frequently Asked Questions</strong></h1>
+            <p>To better help customers learn about ITMatching, we've compiled the following Frequently Asked Questions (FAQs).</p>
         </div>
 
         <br />
@@ -18,7 +19,7 @@
             @{ var i = 1;}
             @foreach (var item in Model)
             {
-                <div class="card">
+                <div class="card mb-0">
                     <div class="card-header faq-header" id="@($"question{i}")">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-white text-left collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse{i}")" aria-expanded="false" aria-controls="@($"collapse{i}")">
