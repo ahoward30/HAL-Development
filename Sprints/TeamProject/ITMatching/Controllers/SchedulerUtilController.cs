@@ -79,14 +79,11 @@ namespace ITMatching.Controllers
             return View();
         }
 
-        //Had to comment out the routing while trying to fix the view for the ExpertClientMatching. REMEMBER TO FIX
-        //[Route("/ViewSchedule/{ExpertId}")]
-        [HttpPost]
-        public IActionResult ViewSchedule(int ExpertId)
+        public IActionResult ViewSchedule(int id)
         {
-            Expert exp = appContext.Experts.Find(ExpertId);
+            Expert exp = appContext.Experts.Find(id);
             Itmuser itm = appContext.Itmusers.Find(exp.ItmuserId);
-            List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == ExpertId).ToList();
+            List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == id).ToList();
             Dictionary<string, List<int>> hours = GetSchedule(workHr);
             ViewBag.ViewScheduleName = itm.FirstName;
             ViewBag.ViewSchedularData = hours;
