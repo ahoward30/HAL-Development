@@ -7,21 +7,21 @@ connection.on('receiveMessage', addMessageToChatRoom);
 connection.on('onlineUsers', function (users) {
     let isOnline = users.filter(u => u !== CurrentUserId).length > 0;
     if (isOnline) {
-        setStatus('The user is available.', true);
+        setStatus('The user has entered the chatroom.', true);
     }
 });
 
 connection.on('userOnline', function (userId) {
     let isOnline = userId !== CurrentUserId;
     if (isOnline) {
-        setStatus('The user is available.', true);
+        setStatus('The user has entered the chatroom.', true);
     }
 });
 
 connection.on('userOffline', function (userId) {
     let isOffline = userId !== CurrentUserId;
     if (isOffline) {
-        setStatus('The user left room.', false);
+        setStatus('The user has left the chatroom.', false);
     }
 });
 

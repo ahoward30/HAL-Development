@@ -1,7 +1,10 @@
-﻿@model Dictionary<string, List<int>>
+@page
+@model Dictionary<string, List<int>>
 @{ 
     ViewData["Title"] = "Scheduler";
 }
+
+
 @using ITMatching.Models
 @using Microsoft.AspNetCore.Identity
 
@@ -122,8 +125,7 @@
                     </table>
 
                 </div>
-
-                <button class="btn-success" style="border-radius:10px;" onclick="save()">Save</button>
+                <button class="btn btn-orange" style="border-radius:10px;" onclick="save()">Save</button>
             </center>
         </div>
     </div>

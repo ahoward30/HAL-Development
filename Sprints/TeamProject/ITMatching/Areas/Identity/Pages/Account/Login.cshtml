@@ -9,7 +9,7 @@
 <br />
 <div class="container">
  <div class="row centered-form">
-  <div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="col-md-12">
    <div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
 	<h1 class="dark-label">@ViewData["Title"]</h1>
 
@@ -36,14 +36,14 @@
 	  </div>
 	 </div>
 	 <div class="form-group">
-	  <button type="submit" class="btn btn-primary">Log in</button>
+	  <button type="submit" class="btn btn-orange">Log in</button>
 	 </div>
 	 <div class="form-group">
 	  <p>
 	   <a class="dark-label" id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
 	  </p>
 	  <p>
-	   <a class="dark-label" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+	   <a class="dark-label" asp-page="./TempRegister" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
 	  </p>
 	  <p>
 	   <a class="dark-label" id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>

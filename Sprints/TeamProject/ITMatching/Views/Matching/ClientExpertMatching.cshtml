@@ -19,7 +19,7 @@
             <h3 class="mt-4 mb-5 text-center">Here are some offline matching experts who may be able to help you later.</h3>
 
 
-            <div class="accordion" id="accordionReq">
+            <div class="accordion mb-5" id="accordionReq">
                 <div class="row no-gutters">
 
 
@@ -93,23 +93,24 @@
 
         else
         {
-            <h1 class="mt-5 mb-5 text-center"><strong>Sorry, no registered experts have the ability to help you.</strong></h1><br />
-            <h3 class="mt-5 mb-2 text-center">Did you make sure to properly tag your help request? You can edit and resubmit your help request from your account page.</h3>
+            <h2 class="mt-5 mb-5 text-center"><strong>Sorry, no registered experts have the ability to help you.</strong></h2><br />
+            <h4 class="mt-3 mb-2 text-center">Did you make sure to properly tag your help request with applicable subjects?</h4>
+            <p class="text-center mt-3">You can edit and resubmit your help request from your profile's help request history.</p>
 
             <div class="row justify-content-center">
-                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn btn-xlarge btn-secondary m-5" id="OrangeButton" value="Return to Home Page"></a>
+                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn btn-xlarge btn-orange m-5" id="btn-orange" value="Return to Home Page"></a>
             </div>
         }
     }
     else
     {
-        <h1 class="mt-5 mb-5 text-center"><strong>No Help Request or Tags Detected</strong></h1><br />
-        <h3 class="mt-5 mb-2 text-center">To get matched with an expert, create a new help request and tag it, or resubmit a previous one.</h3><br /><br />
+        <h1 class="mt-5 mb-5 text-center"><strong>No Help Request or Subjects Detected</strong></h1><br />
+        <h3 class="mt-5 mb-2 text-center">To get matched with an expert, create a new help request and tag it with applicable subjects, or resubmit a previous one from your profile's help request history.</h3><br /><br />
 
         <div class="row justify-content-center">
-            <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn btn-xlarge btn-secondary m-3" id="OrangeButton" value="Create New Help Request"></a>
+            <a href='@Url.Action("RequestForm", "Matching")' class="text-decoration-none"><input type="button" class="btn btn-xlarge btn-orange m-3" id="btn-orange" value="Create New Help Request"></a>
 
-            <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn btn-xlarge btn-secondary m-3" id="OrangeButton" value="Return to Home Page"></a>
+            <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn btn-xlarge btn-orange m-3" id="btn-orange" value="Return to Home Page"></a>
         </div>
     }
 

@@ -95,37 +95,41 @@
 <div class="text-center container-fluid">
     <br /><br />
     <div class="container-fluid">
-        <div class="card border-dark text-black bg-info mb-3" id="HomeCard">
-            <div class="card-body" id="HomeCard">
-                <div class="card text-white bg-dark mb-3">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <div class="card-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Return to Home Page"></a>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-dark text-black bg-info mb-3" id="HomeCard">
+                    <div class="card-body" id="HomeCard">
+                        <div class="card text-white bg-dark mb-3">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="col-lg-4">
+                                                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" id="btn-orange" value="Return to Home Page"></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="card-header"><h1 id="OrangeText">Register for an account today, and allow us to solve your IT issues!</h1></div>
-                        <div class="card-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <a asp-area="Identity" asp-page="/Account/TempRegister" class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Register Now"></a>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-secondary btn-block" id="OrangeButton" value="Return to Home Page"></a>
+                            }
+                            else
+                            {
+                                <div class="card-header"><h1 id="OrangeText">Register for an account, and allow us to help you!</h1></div>
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="row justify-content-center">
+                                            <div class="col-lg-4">
+                                                <a asp-area="Identity" asp-page="/Account/TempRegister" class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Register Now"></a>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Return to Home Page"></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         </div>

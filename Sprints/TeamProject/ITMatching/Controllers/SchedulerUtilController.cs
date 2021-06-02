@@ -73,9 +73,9 @@ namespace ITMatching.Controllers
 
         }
 
-        public IActionResult Schedular()
+        public IActionResult Scheduler()
         {
-            ViewBag.SchedularData = scheduleHours;
+            ViewBag.SchedulerData = scheduleHours;
             return View();
         }
 
@@ -86,7 +86,7 @@ namespace ITMatching.Controllers
             List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == id).ToList();
             Dictionary<string, List<int>> hours = GetSchedule(workHr);
             ViewBag.ViewScheduleName = itm.FirstName;
-            ViewBag.ViewSchedularData = hours;
+            ViewBag.ViewSchedulerData = hours;
             return View(hours);
         }
     }
