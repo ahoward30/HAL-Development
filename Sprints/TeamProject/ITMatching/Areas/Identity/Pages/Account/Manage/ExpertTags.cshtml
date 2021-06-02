@@ -21,16 +21,26 @@
 
     <div class="container justify-content-center">
         <div class="row justify-content-center">
-            <div class="col-md-12 justify-content-center">
+            <div class="col-md-12 mt-3">
+                <center>
+                    <h1 class="mb-5">Expert Subjects</h1>
+                </center>
+            </div>
+            <div class="col-md-12 justify-content-center mb-3">
                 @if (expertServices.Count > 0)
                 {
+                    <center class="mb-5">
+                        <h4 class="mb-3">You can make changes to which subjects you consider yourself an expert of by clicking here. </h4>
+                        <p class="mb-5">These tags will be used to match you to a client when entering the waiting room from the home page.</p>
+                        @Html.ActionLink("Add/Edit Subject Tags", "EditTagsForm", "Account", null, new { @class = "btn btn-orange btn-lg" })
+                    </center>
                     <table class="table justify-content-center mt-5">
                         <tr class="thead-account">
-                            <th colspan="2" class="text-center">My Subject Tags</th>
+                            <th colspan="2" class="text-center">My Subjects of Expertise</th>
                         </tr>
                         <tr class="thead-account">
-                            <th class="text-center">Tag Category</th>
-                            <th class="text-center">Tag Name</th>
+                            <th class="text-center">Subject Category</th>
+                            <th class="text-center">Subject of Expertise</th>
                         </tr>
                         <tbody>
                             @if (expertServices != null)
@@ -55,21 +65,19 @@
                 }
                 else
                 {
+                    <center class="mb-5">
+                        <h3 class="text-center"><strong>You currently don't have any subjects of expertise that we can use to match you</strong></h3><br />
+                        <p class="mb-5">Let us know what IT subjects you have experience in troubleshooting so that we can better match you to clients who need your help.</p>
+                        @Html.ActionLink("Add Subjects", "EditTagsForm", "Account", null, new { @class = "btn btn-orange btn-lg" })
+                    </center>
                     <div class="container justify-content-center">
                         <div class="row justify-content-center">
                             <div class="col-md-12 justify-content-center">
-                                <h3 class="text-center mt-5"><strong>You currently do not have any expert subject tags selected.</strong></h3><br />
-                                <p class="text-center">Click the button below and tell us what IT-help you have experience in.</p>
                             </div>
                         </div>
                     </div>
                 }
             </div>
-        </div>
-        <div class="col-md-12 mt-3 mb-3">
-            <center>
-                @Html.ActionLink("Add/Edit Subject Tags", "EditTagsForm", "Account", null, new { @class = "btn btn-primary btn-xlarge", @id = "OrangeButton"})
-            </center>
         </div>
     </div>
 }

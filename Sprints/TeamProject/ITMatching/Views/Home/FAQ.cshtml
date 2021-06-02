@@ -15,11 +15,11 @@
 
         <br />
 
-        <div class="accordion col-md-10 justify-content-center mb-5" id="accordionQuestion">
+        <div class="accordion" id="accordionQuestion">
             @{ var i = 1;}
             @foreach (var item in Model)
             {
-                <div class="card mb-0">
+                <div class="card">
                     <div class="card-header faq-header" id="@($"question{i}")">
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-white text-left collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse{i}")" aria-expanded="false" aria-controls="@($"collapse{i}")">

@@ -6,7 +6,7 @@
 }
 
 <script src="~/js/request-form.js" asp-append-version="true"></script>
-<h1 class="text-center">@ViewData["Title"]</h1>
+<h1 class="text-center mt-5">@ViewData["Title"]</h1>
 
 <div class="container">
     <div class="row">
@@ -26,10 +26,10 @@
                             <span asp-validation-for="HelpRequest.RequestDescription" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="tags">Select any tags that apply:</label><br />
+                            <label for="tags">Select any subjects that apply (We use these to match you with an expert):</label><br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS" value="Operating Systems" id="OrangeButton">
+                                    <input class="btn btn-orange" type="button" data-toggle="collapse" data-target="#collapseOS" aria-expanded="true" aria-controls="collapseOS" value="Operating Systems" id="btn-orange">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseOS">
@@ -60,7 +60,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware" value="Hardware" id="OrangeButton">
+                                    <input class="btn btn-orange" type="button" data-toggle="collapse" data-target="#collapseHardware" aria-expanded="false" aria-controls="collapseHardware" value="Hardware" id="btn-orange">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseHardware">
@@ -91,7 +91,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware" value="Software" id="OrangeButton">
+                                    <input class="btn btn-orange" type="button" data-toggle="collapse" data-target="#collapseSoftware" aria-expanded="false" aria-controls="collapseSoftware" value="Software" id="btn-orange">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseSoftware">
@@ -122,7 +122,7 @@
                             <br />
                             <div class="card-header requestFormCardHeader">
                                 <label>
-                                    <input class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork" value="Network" id="OrangeButton">
+                                    <input class="btn btn-orange" type="button" data-toggle="collapse" data-target="#collapseNetwork" aria-expanded="false" aria-controls="collapseNetwork" value="Network" id="btn-orange">
                                 </label>
                             </div>
                             <div class="collapse" id="collapseNetwork">
@@ -151,12 +151,12 @@
                                 </div>
                             </div>
                             <br />
-                            <div class="row input-group-btn">
-                                <button type="submit" class="btn btn-primary" id="submit" style="margin-left:20px">Submit IT-request</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button type="submit" class="btn btn-primary" style="margin-left:510px" asp-controller="Matching" asp-action="HelpRequestWithSchedule">Submit IT-request and choose your availability schedule </button>
+                            <div class="row input-group-btn justify-content-between">
+                                <button type="submit" class="btn btn-orange btn-lg ml-3" id="submit">Submit IT-request</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-orange btn-lg mr-3" asp-controller="Matching" asp-action="HelpRequestWithSchedule">Submit IT-request and tell us when you're available</button>
                             </div>
                             <div>
-                                <h4 class="text-center" style=" color:red; margin-top:20px;">*Please note: Submitting an availability schedule helps to give you a better match!*</h4>
+                                <h4 class="text-center mt-5 mb-5">*Please note: Telling us when you're available helps to give you a better match!*</h4>
                             </div>
                         </div>
                     </form>

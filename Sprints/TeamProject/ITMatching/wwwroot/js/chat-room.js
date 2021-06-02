@@ -70,10 +70,10 @@ function joinRoom() {
 
 function setStatus(text, isOnline) {
     $('#status-text').html(text);
-    $('#status-text').attr('class', isOnline ? 'text-success' : 'text-danger');
+    $('#status-text').attr('class', isOnline ? 'text-blue' : 'text-danger');
 
     $('#status-badge').html(isOnline ? 'Online' : 'Offline');
-    $('#status-badge').attr('class', 'p-2 badge badge-pill ' + (isOnline ? 'badge-success' : 'badge-danger'));
+    $('#status-badge').attr('class', 'p-2 badge badge-pill ' + (isOnline ? 'badge-blue' : 'badge-danger'));
 }
 
 $(document).ready(function () {

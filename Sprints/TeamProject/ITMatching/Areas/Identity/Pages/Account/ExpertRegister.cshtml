@@ -15,7 +15,7 @@
 <br />
 <div class="container">
 	<div class="row centered-form">
-		<div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-xs-12 col-sm-12 col-md-12">
 			<div class="panel panel-default px-5 py-3" style="margin-bottom:20px;">
 				<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
 					<center>
@@ -25,48 +25,48 @@
 						<table>
 							<tr class="form-group">
 								<th><label asp-for="Input.FirstName" class="dark-label"></label>:</th>
-								<td>
+								<td class="col-md-10">
 									<input asp-for="Input.FirstName" class="form-control" />
 									<span asp-validation-for="Input.FirstName" class="text-danger"></span>
 								</td>
 							</tr>
 							<tr>
 								<th><label asp-for="Input.LastName" class="dark-label"></label>:</th>
-								<td>
+								<td class="col-md-10">
 									<input asp-for="Input.LastName" class="form-control" />
 									<span asp-validation-for="Input.LastName" class="text-danger"></span>
 								</td>
 							</tr>
-							<tr class="form-group">
-								<th><label asp-for="Input.PhoneNumber" class="dark-label"></label>:</th>
-								<td>
-									<input asp-for="Input.PhoneNumber" class="form-control" />
-									<span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-								</td>
-							</tr>
-							<tr class="form-group">
-								<th><label asp-for="Input.Email" class="dark-label"></label>:</th>
-								<td>
-									<input asp-for="Input.Email" class="form-control" />
-									<span asp-validation-for="Input.Email" class="text-danger"></span>
-								</td>
-							</tr>
-							<tr class="form-group">
-								<th><label asp-for="Input.Password" class="dark-label"></label>:</th>
-								<td>
-									<input asp-for="Input.Password" class="form-control" />
-									<span asp-validation-for="Input.Password" class="text-danger"></span>
-								</td>
-							</tr>
-							<tr class="form-group">
-								<th><label asp-for="Input.ConfirmPassword" class="dark-label"></label>:</th>
-								<td>
-									<input asp-for="Input.ConfirmPassword" class="form-control" />
-									<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-								</td>
-							</tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.PhoneNumber" class="dark-label"></label>:</th>
+                                <td class="col-md-10">
+                                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.Email" class="dark-label"></label>:</th>
+                                <td class="col-md-10">
+                                    <input asp-for="Input.Email" class="form-control" />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.Password" class="dark-label"></label>:</th>
+                                <td class="col-md-10">
+                                    <input asp-for="Input.Password" class="form-control" />
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th><label asp-for="Input.ConfirmPassword" class="dark-label"></label>:</th>
+                                <td class="col-md-10">
+                                    <input asp-for="Input.ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                </td>
+                            </tr>
 							<tr>
-								<th colspan="2"><center><button type="submit" class="btn SubmitBtn mt-3">Register</button></center></th>
+								<th colspan="2"><center><button type="submit" class="btn btn-orange mt-3">Register</button></center></th>
 							</tr>
 						</table>
 					</center>
