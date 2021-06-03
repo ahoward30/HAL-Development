@@ -948,7 +948,7 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
-                //message = await _messageRepo.AddOrUpdateAsync(message);
+                message = await _messageRepo.AddOrUpdateAsync(message);
                 return Ok(message);
             }
             return BadRequest("Invalid request.");
@@ -964,7 +964,7 @@ namespace ITMatching.Controllers
                 if (result.Error != null) return BadRequest(result.Error.Message);
 
                 message.FileUrl = result.SecureUrl.AbsoluteUri;
-                //message = await _messageRepo.AddOrUpdateAsync(message);
+                message = await _messageRepo.AddOrUpdateAsync(message);
                 return Ok(message);
             }
             return BadRequest("Invalid request.");

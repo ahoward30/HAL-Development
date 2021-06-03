@@ -1,10 +1,10 @@
 ﻿class Message {
-    constructor(meetingId, sentBy, sentTime, text, fileURL) {
+    constructor(meetingId, sentBy, sentTime, text, fileUrl) {
         this.meetingId = parseInt(meetingId);
         this.sentBy = parseInt(sentBy);
         this.sentTime = new Date(sentTime);
         this.text = text;
-        this.fileURL = fileURL;
+        this.fileUrl = fileUrl;
     }
 
     get sentTimeDB() {
@@ -139,7 +139,7 @@ function addMessageToChatRoom(message) {
     let content = document.createElement('div');
     content.className = 'rounded py-2 px-3 mb-2 ' + (isCurrentUserMessage ? 'bg-primary' : 'bg-light');
 
-    if (!message.fileURL) {
+    if (!message.fileUrl) {
         let text = document.createElement('p');
         text.className = 'text-small mb-0 ' + (isCurrentUserMessage ? 'text-white' : 'text-muted');
         text.innerHTML = message.text;
@@ -156,7 +156,7 @@ function addMessageToChatRoom(message) {
         img.alt = `${message.text} - ${message.sentTimeDB}`;
         img.onload = function () { window.onImageLoaded(); };
         img.onerror = function () { window.reloadImage(this); };
-        img.src = message.fileURL;
+        img.src = message.fileUrl;
         imgDiv.appendChild(img);
         content.appendChild(imgDiv);
     }
