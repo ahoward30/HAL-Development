@@ -239,8 +239,13 @@ namespace ITMatching.Controllers
 
             ResubmitFormViewModel viewModel = new ResubmitFormViewModel();
             viewModel.Services = context.Services.ToList();
-            viewModel.HelpRequest = context.HelpRequests.Where(hr => hr.Id == helpRequestID).FirstOrDefault();
+            viewModel.HelpRequest = context.HelpRequests.Where(hr => hr.Id == helpRequestID && hr.ClientId == itUser.Id).FirstOrDefault();
             viewModel.checkedBoxes = checkedServiceBoxes;
+
+            if (viewModel.HelpRequest == null)
+            {
+                viewModel.HelpRequest = new HelpRequest { Id = 0 };
+            }
 
             return View(viewModel);
         }
