@@ -63,10 +63,17 @@
                                 }
                             </tr>
                             <tr>
-                                <th style="background-color: #343a40;">Wednesnday</th>
+                                <th style="background-color: #343a40;">Wednesday</th>
                                 @for (int i = 0; i < 24; i++)
                                 {
-                                    <td width="25px" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                    if (ViewBag.ViewSchedulerData != null && ViewBag.ViewSchedulerData["Wednesday"].Contains(i))
+                                    {
+                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                    }
+                                    else
+                                    {
+                                        <td width="25px" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                    }
                                 }
 
                             </tr>

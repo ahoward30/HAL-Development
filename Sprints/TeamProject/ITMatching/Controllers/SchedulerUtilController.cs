@@ -83,6 +83,7 @@ namespace ITMatching.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult ViewSchedule(int id)
         {
             Expert exp = appContext.Experts.Find(id);
