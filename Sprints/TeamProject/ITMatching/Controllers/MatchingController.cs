@@ -896,6 +896,7 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public IActionResult Feedback(int meetingId)
         {
@@ -916,6 +917,7 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize]
         public IActionResult SubmitFeedback(string feedback, int meetingID)
         {
@@ -942,6 +944,7 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostMessage(Message message)
         {
             if (ModelState.IsValid)
@@ -953,6 +956,7 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadFile(Message message, IFormFile file)
         {
             if (ModelState.IsValid)
@@ -968,6 +972,7 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CloseMeeting(int meetingId, bool isExpert)
         {
             await _meetingRepo.UpdateStatusAsync(meetingId, "Closed");

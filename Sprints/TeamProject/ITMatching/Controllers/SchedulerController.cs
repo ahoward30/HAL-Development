@@ -30,6 +30,7 @@ namespace ITMatching.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Post(Schedule sch)
         {
             string[] Mon = sch.Monday;
