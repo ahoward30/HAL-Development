@@ -644,7 +644,7 @@ namespace ITMatching.Controllers
                     //Create a list to store IDs and matching scores of experts who meet the matching score threshold "List<(ExpertID, matchingScore)>"
                     List<(int, double, double)> thresholdMeetingExperts = FindThresholdMeetingExperts(onlineExperts, helpRequestServiceIDs, clientMaxPoints);
 
-                    meeting.numOfPotentialMatches = thresholdMeetingExperts.Count();
+                    meeting.NumOfPotentialMatches = thresholdMeetingExperts.Count();
 
 
                     context.Meetings.Add(meeting);
@@ -793,9 +793,9 @@ namespace ITMatching.Controllers
 
                     clientWaitingRoomVM.Meeting = context.Meetings.Where(m => m.Id == meeting.Id).FirstOrDefault();
                     clientWaitingRoomVM.HelpRequest = context.HelpRequests.Where(hr => hr.Id == meeting.HelpRequestId).FirstOrDefault();
-                    clientWaitingRoomVM.numOfPotentialMatches = meeting.numOfPotentialMatches;
+                    clientWaitingRoomVM.numOfPotentialMatches = meeting.NumOfPotentialMatches;
                     clientWaitingRoomVM.numOfOnlineExperts = onlineExperts.Count();
-                    clientWaitingRoomVM.currentExpertInList = (meeting.numOfPotentialMatches - remainingPotentialMatches) + 1;
+                    clientWaitingRoomVM.currentExpertInList = (meeting.NumOfPotentialMatches - remainingPotentialMatches) + 1;
                     if (clientWaitingRoomVM.currentExpertInList > clientWaitingRoomVM.numOfPotentialMatches)
                     {
                         clientWaitingRoomVM.currentExpertInList = clientWaitingRoomVM.numOfPotentialMatches;
@@ -964,7 +964,7 @@ namespace ITMatching.Controllers
                 var result = await _photoService.AddPhotoAsync(file);
                 if (result.Error != null) return BadRequest(result.Error.Message);
 
-                message.FileURL = result.SecureUrl.AbsoluteUri;
+                message.FileUrl = result.SecureUrl.AbsoluteUri;
                 message = await _messageRepo.AddOrUpdateAsync(message);
                 return Ok(message);
             }

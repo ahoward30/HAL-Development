@@ -1,26 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+#nullable disable
 
 namespace ITMatching.Models
 {
-    public class Message
+    [Table("Message")]
+    public partial class Message
     {
+        [Key]
+        [Column("ID")]
         public int Id { get; set; }
-        [Required]
+        [Column("MeetingID")]
         public int MeetingId { get; set; }
-        [Required]
-        public int SentBy { get; set; } // Itmuser.Id of sender
-        [Required]
+        public int SentBy { get; set; }
+        [Column(TypeName = "datetime")]
         public DateTime? SentTime { get; set; }
-        [Required]
+        [StringLength(2000)]
         public string Text { get; set; }
-        public string FileURL { get; set; }
+        [Column("FileUrl")]
+        [StringLength(500)]
+        public string FileUrl { get; set; }
         public bool IsAttachment
         {
-            get => !string.IsNullOrWhiteSpace(FileURL);
+            get => !string.IsNullOrWhiteSpace(FileUrl);
         }
+
+        [ForeignKey(nameof(MeetingId))]
+        [InverseProperty("Messages")]
+        public virtual Meeting Meeting { get; set; }
     }
 }

@@ -20,23 +20,22 @@ namespace ITMatching.Models
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Expert> Experts { get; set; }
         public virtual DbSet<ExpertFeedback> ExpertFeedbacks { get; set; }
-        public virtual DbSet<FAQ> FAQs { get; set; }
+        public virtual DbSet<ExpertService> ExpertServices { get; set; }
+        public virtual DbSet<Faq> Faqs { get; set; }
         public virtual DbSet<HelpRequest> HelpRequests { get; set; }
         public virtual DbSet<Itmuser> Itmusers { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
-        public virtual DbSet<PotentialMatch> PotentialMatches { get; set; }
-        public virtual DbSet<Service> Services { get; set; }
-        public virtual DbSet<ExpertService> ExpertServices { get; set; }
-        public virtual DbSet<RequestService> RequestServices { get; set; }
-        public virtual DbSet<WorkSchedule> WorkSchedules { get; set; }
-        public virtual DbSet<RequestSchedule> RequestSchedules { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<PotentialMatch> PotentialMatches { get; set; }
+        public virtual DbSet<RequestSchedule> RequestSchedules { get; set; }
+        public virtual DbSet<RequestService> RequestServices { get; set; }
+        public virtual DbSet<Service> Services { get; set; }
+        public virtual DbSet<WorkSchedule> WorkSchedules { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Name=ITMatchingConnection");
             }
         }
@@ -47,208 +46,125 @@ namespace ITMatching.Models
 
             modelBuilder.Entity<Client>(entity =>
             {
-                entity.ToTable("Client");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.ItmuserId).HasColumnName("ITMUserID");
+                entity.HasOne(d => d.Itmuser)
+                    .WithMany(p => p.Clients)
+                    .HasForeignKey(d => d.ItmuserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Client_ITMUserID");
             });
 
             modelBuilder.Entity<Expert>(entity =>
             {
-                entity.ToTable("Expert");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.ItmuserId).HasColumnName("ITMUserID");
-
-                entity.Property(e => e.WorkSchedule).HasMaxLength(60);
-
-                entity.Property(e => e.IsAvailable).HasColumnName("IsAvailable");
+                entity.HasOne(d => d.Itmuser)
+                    .WithMany(p => p.Experts)
+                    .HasForeignKey(d => d.ItmuserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Expert_ITMUserID");
             });
 
             modelBuilder.Entity<ExpertFeedback>(entity =>
             {
-                entity.ToTable("ExpertFeedback");
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.ExpertFeedbacks)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpertFeedback_ClientID");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.ClientId).HasColumnName("ClientID");
-
-                entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
-
-                entity.Property(e => e.MeetingID).HasColumnName("MeetingID");
-
-                entity.Property(e => e.Rating).HasColumnName("Rating");
-            });
-
-            modelBuilder.Entity<FAQ>(entity =>
-            {
-                entity.ToTable("FAQ");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Answer)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.Question)
-                    .IsRequired()
-                    .HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<HelpRequest>(entity =>
-            {
-                entity.ToTable("HelpRequest");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.ClientId).HasColumnName("ClientID");
-
-                entity.Property(e => e.RequestDescription).HasMaxLength(2000);
-
-                entity.Property(e => e.RequestTitle).HasMaxLength(40);
-
-                entity.Property(e => e.IsOpen).HasColumnName("IsOpen");
-
-            });
-
-            modelBuilder.Entity<Itmuser>(entity =>
-            {
-                entity.ToTable("ITMUser");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.AspNetUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.PhoneNumber).HasMaxLength(13);
-
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Meeting>(entity =>
-            {
-                entity.ToTable("Meeting");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Date).HasColumnName("Date");
-
-                entity.Property(e => e.ClientId).HasColumnName("ClientID");
-
-                entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
-
-                entity.Property(e => e.HelpRequestId).HasColumnName("HelpRequestID");
-
-                entity.Property(e => e.Status).HasColumnName("Status");
-
-                entity.Property(e => e.ClientTimestamp).HasColumnName("ClientTimestamp");
-
-                entity.Property(e => e.ExpertTimestamp).HasColumnName("ExpertTimestamp");
-
-                entity.Property(e => e.MatchExpireTimestamp).HasColumnName("MatchExpireTimestamp");
-
-                entity.Property(e => e.Feedback).HasColumnName("Feedback");
-
-                entity.Property(e => e.numOfPotentialMatches).HasColumnName("numOfPotentialMatches");
-
-            });
-
-            modelBuilder.Entity<PotentialMatch>(entity =>
-            {
-                entity.ToTable("PotentialMatch");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
-
-                entity.Property(e => e.ExpertId).HasColumnName("ExpertID");
-
-                entity.Property(e => e.MatchingScore).HasColumnName("MatchingScore");
-            });
-
-            modelBuilder.Entity<Service>(entity =>
-            {
-                entity.ToTable("Service");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.ServiceCategory)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ServiceName)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.HasOne(d => d.Expert)
+                    .WithMany(p => p.ExpertFeedbacks)
+                    .HasForeignKey(d => d.ExpertId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpertFeedback_ExpertID");
             });
 
             modelBuilder.Entity<ExpertService>(entity =>
             {
-                entity.ToTable("ExpertService");
+                entity.HasOne(d => d.Expert)
+                    .WithMany(p => p.ExpertServices)
+                    .HasForeignKey(d => d.ExpertId)
+                    .HasConstraintName("FK_ExpertService_ExpertId");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.ExpertServices)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExpertService_ServiceId");
             });
 
-            modelBuilder.Entity<RequestService>(entity =>
+            modelBuilder.Entity<Itmuser>(entity =>
             {
-                entity.ToTable("RequestService");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.UserName).IsUnicode(false);
             });
 
-            modelBuilder.Entity<WorkSchedule>(entity =>
+            modelBuilder.Entity<Meeting>(entity =>
             {
-                entity.ToTable("WorkSchedule");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Day).HasMaxLength(20);
-            });
-            modelBuilder.Entity<RequestSchedule>(entity =>
-            {
-                entity.ToTable("RequestSchedule");
-
-                entity.Property(e => e.ID).HasColumnName("ID");
-            });
-
-            modelBuilder.Entity<RequestSchedule>(entity =>
-            {
-                entity.ToTable("RequestSchedule");
-
-                entity.Property(e => e.ID).HasColumnName("ID");
+                entity.HasOne(d => d.HelpRequest)
+                    .WithMany(p => p.Meetings)
+                    .HasForeignKey(d => d.HelpRequestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Meeting_HelpRequestID");
             });
 
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.ToTable("Message");
+                entity.HasOne(d => d.Meeting)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.MeetingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Message_MeetingID");
+            });
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+            modelBuilder.Entity<PotentialMatch>(entity =>
+            {
+                entity.HasOne(d => d.Expert)
+                    .WithMany(p => p.PotentialMatches)
+                    .HasForeignKey(d => d.ExpertId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PotentialMatch_ExpertID");
 
-                entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
+                entity.HasOne(d => d.Meeting)
+                    .WithMany(p => p.PotentialMatches)
+                    .HasForeignKey(d => d.MeetingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PotentialMatch_MeetingID");
+            });
 
-                entity.Property(e => e.SentBy).HasColumnName("SentBy");
+            modelBuilder.Entity<RequestSchedule>(entity =>
+            {
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.RequestSchedules)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RequestSchedule_ClientId");
 
-                entity.Property(e => e.SentTime).HasColumnName("SentTime");
+                entity.HasOne(d => d.Request)
+                    .WithMany(p => p.RequestSchedules)
+                    .HasForeignKey(d => d.RequestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RequestSchedule_RequestId");
+            });
 
-                entity.Property(e => e.Text).HasColumnName("Text");
+            modelBuilder.Entity<RequestService>(entity =>
+            {
+                entity.HasOne(d => d.Request)
+                    .WithMany(p => p.RequestServices)
+                    .HasForeignKey(d => d.RequestId)
+                    .HasConstraintName("FK_RequestService_ServiceId");
 
-                entity.Property(e => e.FileURL).HasColumnName("FileURL");
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.RequestServices)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_RequestService_RequestId");
+            });
+
+            modelBuilder.Entity<WorkSchedule>(entity =>
+            {
+                entity.HasOne(d => d.Expert)
+                    .WithMany(p => p.WorkSchedules)
+                    .HasForeignKey(d => d.ExpertId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WorkSchedule_ExpertId");
             });
 
             OnModelCreatingPartial(modelBuilder);

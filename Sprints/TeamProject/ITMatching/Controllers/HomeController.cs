@@ -87,7 +87,7 @@ namespace ITMatching.Controllers
                 }
             }
 
-            List<FAQ> qAndAList = context.FAQs.ToList();
+            List<Faq> qAndAList = context.Faqs.ToList();
 
             return View(qAndAList);
         }
