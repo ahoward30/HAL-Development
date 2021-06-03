@@ -592,7 +592,7 @@ namespace ITMatching.Controllers
                 return View(ewrVM);
             }
             else
-            { return BadRequest(); }
+            { return RedirectToAction("Error", "Home"); }
         }
 
         
@@ -926,8 +926,13 @@ namespace ITMatching.Controllers
         [Authorize]
         public IActionResult SubmitFeedback(string feedback, int meetingID)
         {
+            if (meetingID == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
             Meeting meeting = context.Meetings.Where(m => m.Id == meetingID).FirstOrDefault();
-             
+
             switch (feedback)
             {
                 case "Helpful":

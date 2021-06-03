@@ -90,6 +90,11 @@ namespace ITMatching.Controllers
                 Itmuser itUser = context.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
                 Expert eUser = context.Experts.Where(e => e.ItmuserId == itUser.Id).FirstOrDefault();
 
+                if (eUser == null)
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+
                 List<int> checkedServiceBoxes = context.ExpertServices.Where(es => es.ExpertId == eUser.Id).Select(id => id.ServiceId).ToList();
 
                 EditTagsFormViewModel viewModel = new EditTagsFormViewModel();
