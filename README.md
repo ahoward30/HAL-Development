@@ -4,9 +4,9 @@
 
 ## IT Matching
 
-![ITMatching-Logo](https://cdn.discordapp.com/attachments/798252040295415879/850320720911400960/unknown.png)
-
 This repository serves as the hub for all of HAL-Development's work on IT Matching as part of the senior project sequence for Western Oregon University's Computer Science Department. IT Matching is an Azure-hosted web application giving the opportunity for those seeking IT help to be matched with those with the expertise needed in order to solve their IT-related problems. IT Matching will prompt clients who need help to describe the nature of their IT or computing related issue and automatically connect them with experts whose provided expertise matches the client’s issue. Once matched together in the system, IT Matching allows for the client and the expert to text-chat one-on-one to come to a solution to the client’s IT-related issue. 
+
+![ITMatching-Logo](https://cdn.discordapp.com/attachments/798252040295415879/850320720911400960/unknown.png)
 
 ## Key Features
 
