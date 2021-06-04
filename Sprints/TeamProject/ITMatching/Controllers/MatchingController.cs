@@ -954,19 +954,23 @@ namespace ITMatching.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostMessage(Message message)
         {
             if (ModelState.IsValid)
             {
-                //message = await _messageRepo.AddOrUpdateAsync(message);
+                message = await _messageRepo.AddOrUpdateAsync(message);
 
                 message.Text = message.Text.Replace("<", "");
                 message.Text = message.Text.Replace(">", "");
                 message.Text = message.Text.Replace("/", "");
                 message.Text = message.Text.Replace("\'", "");
                 message.Text = message.Text.Replace("\"", "");
-                message.Text = message.Text.Replace("%", "");
-                
+                message.Text = message.Text.Replace("‘", "");
+                message.Text = message.Text.Replace("”", "");
+                message.Text = message.Text.Replace("’", "");
+                message.Text = message.Text.Replace("“", "");
+
                 return Ok(message);
             }
             return BadRequest("Invalid request.");
@@ -983,7 +987,10 @@ namespace ITMatching.Controllers
                 message.Text = message.Text.Replace("/", "");
                 message.Text = message.Text.Replace("\'", "");
                 message.Text = message.Text.Replace("\"", "");
-                message.Text = message.Text.Replace("%", "");
+                message.Text = message.Text.Replace("‘", "");
+                message.Text = message.Text.Replace("”", "");
+                message.Text = message.Text.Replace("’", "");
+                message.Text = message.Text.Replace("“", "");
 
                 var result = await _photoService.AddPhotoAsync(file);
                 if (result.Error != null) return BadRequest(result.Error.Message);

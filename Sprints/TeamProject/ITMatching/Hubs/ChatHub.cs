@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ITMatching.Hubs
 {
@@ -28,8 +29,11 @@ namespace ITMatching.Hubs
             { await Clients.Group(Convert.ToString(room.MeetingId)).SendAsync("userOffline", room.UserId); }
         }
 
-        public async Task SendMessage(Message message) =>
+        public async Task SendMessage(Message message)
+        {
+            message.Text = HttpUtility.HtmlEncode(message.Text);
             await Clients.Group(Convert.ToString(message.MeetingId)).SendAsync("receiveMessage", message);
+        }
 
         private bool OnJoinChatRoom(int meetingId, int userId, string connectionId)
         {

@@ -148,30 +148,37 @@
     </div>
 
         <script>
-            function selectTd(_id) {
+            function selectTd(_id)
+            {
                 var element = document.getElementById(_id);
-                if (element.style.background == "") {
+                if (element.style.background == "")
+                {
                     element.style.background = "#1684E7";
-                } else {
+                } else
+                {
                     element.style.background = "";
                 }
             }
 
-            function save() {
+            function save()
+            {
                 var list1 = [];
 
 
                 var days = ["Mon_", "Tue_", "Wed_", "Thu_", "Fri_", "Sat_", "Sun_"];
                 var i;
-                for (i = 0; i <= 6; i++) {
+                for (i = 0; i <= 6; i++)
+                {
                     var day = days[i];
                     var list = [];
                     var count = 0;
-                    for (var j = 0; j < 24; j++) {
+                    for (var j = 0; j < 24; j++)
+                    {
                         var _id = day + j;
                         var element = document.getElementById(_id);
                         console.log(element.style.background);
-                        if (element.style.background == "rgb(22, 132, 231)") {
+                        if (element.style.background == "rgb(22, 132, 231)")
+                        {
                             console.log(_id)
                             list[count++] = _id;
                         }
@@ -179,7 +186,8 @@
                     list1[i] = list;
                 }
 
-                var obj = {
+                var obj =
+                {
                     "UserId": @ClientID,
                     "Monday": list1[0],
                     "Tuesday": list1[1],
@@ -191,6 +199,7 @@
                 }
                 SaveData(obj);
             }
+
 
         function SaveData(_obj) {
             var token = $('input[name="__RequestVerificationToken"]').val();
@@ -209,5 +218,10 @@
             })
         }
     </script>
-}
+    }
+    else
+    {
+       <h1 class="text-center mt-5 mb-5"><strong>Sorry, you cannot send help requests</strong></h1>
+       <h3 class="text-center mb-5">As an expert, you do not have permission to access this page.</h3>
+    }
 }
