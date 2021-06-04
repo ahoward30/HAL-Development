@@ -18,7 +18,9 @@ This repository serves as the hub for all of HAL-Development's work on IT Matchi
 
 ## Starting and Getting Matched
 
-To get started, navigate to the register page in the top right of the website. Register or log-in as either a client if you need IT assistance, or an expert to offer IT assistance to others. Finally, if you are a client, select "Get help now" on the homepage to create and submit your IT help request. If you are an expert, first tell us what subjects you have experience in troubleshooting by navigating to the Expert Tags form either on the home page, or through the account management pages. Once you have told us what subjects to match you with, click on the "Enter the expert's waiting room" button on the homepage to enter the waiting room, press the button labled "Go Online", and await your clients. 
+To get started, navigate to the register page in the top right of the website. Register or log-in as either a client if you need IT assistance, or an expert to offer IT assistance to others. If you are a client, select "Get help now" on the homepage to create and submit your IT help request. In the case that there are no appropriate experts for your issue online, then you will be presented with a list of potential experts to meet with later, alongside their general information and work schedules.  
+![ClientHelpRequest](https://media.discordapp.net/attachments/798252040295415879/850317474536095754/unknown.png?width=888&height=627)
+If you are an expert, first tell us what subjects you have experience in troubleshooting by navigating to the Expert Tags form either on the home page, or through the account management pages. Once you have told us what subjects to match you with, click on the "Enter the expert's waiting room" button on the homepage to enter the waiting room, press the button labled "Go Online", and await your clients. 
 
 ## Meeting with another User
 
