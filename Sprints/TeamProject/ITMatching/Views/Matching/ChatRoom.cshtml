@@ -127,21 +127,22 @@
 
                         @foreach (var message in Model.Messages)
                         {
+                            message.Text = Html.Encode(message.Text);
                             var isSender = message.SentBy != Model.CurrentUserId;
                             <div class="media w-50 mb-3@(isSender ? "" : " ml-auto")">
                                 <div class="media-body">
                                     <div class="rounded py-2 px-3 mb-2 @(isSender ? "bg-light" : "bg-primary")">
                                         @if (message.IsAttachment)
                                         {
-                                            <small class="font-italic mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</small>
+                                        <small class="font-italic mb-0 @(isSender ? "text-muted" : "text-white")">@Html.Encode(message.Text)</small>
                                             <div class="img-thumbnail img-wrapper mb-2">
                                                 <img data-img-src="@message.FileUrl" 
-                                                     alt="@($"{message.Text} - {message.SentTime.Value.ToString("yyyyMMddHHmmss")}")" />
+                                                     alt="@($"{@Html.Encode(message.Text)} - {message.SentTime.Value.ToString("yyyyMMddHHmmss")}")" />
                                             </div>
                                         }
                                         else
                                         {
-                                            <p class="text-small mb-0 @(isSender ? "text-muted" : "text-white")">@message.Text</p>
+                                            <p class="text-small mb-0 @(isSender ? "text-muted" : "text-white")">@Html.Encode(message.Text)</p>
                                         }
                                     </div>
                                     <p class="small text-muted" data-utcdate="@(System.Text.Json.JsonSerializer.Serialize(message.SentTime.Value).Replace("\"", ""))"></p>

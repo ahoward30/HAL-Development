@@ -87,6 +87,12 @@ namespace ITMatching.Controllers
         public IActionResult ViewSchedule(int id)
         {
             Expert exp = appContext.Experts.Find(id);
+
+            if (exp == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
             Itmuser itm = appContext.Itmusers.Find(exp.ItmuserId);
             List<WorkSchedule> workHr = appContext.WorkSchedules.Where(work => work.ExpertId == id).ToList();
             Dictionary<string, List<int>> hours = GetSchedule(workHr);

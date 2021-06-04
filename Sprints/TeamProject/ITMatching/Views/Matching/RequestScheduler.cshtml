@@ -12,128 +12,132 @@
 {
     string id = UserManager.GetUserId(User);
     Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
-    Client eUser = AppContext.Clients.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
-    var ClientID = eUser.Id;
+    Expert expert = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    bool isExpert = expert != null;
+    if (!isExpert)
+    {
+        Client eUser = AppContext.Clients.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+        var ClientID = eUser.Id;
 
-    <div class="container">
-        <div class="row centered-form">
-            <div class="col-xs-12 col-sm-8 col-md-12">
-                <center>
-                    <div class="panel panel-default">
-                        <table class="SchedulerTable" border="1">
-                            <tr>
-                                <th style="background-color:#c57000">Time</th>
-                                <th colspan="12" style="background-color: #343a40;">AM</th>
-                                <th colspan="12" style="background-color: #343a40;">PM</th>
-                            </tr>
-                            <tr>
-                                <th style="background-color:#c57000">Day</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    <td width="25px" style="background-color:#c57000"> @i  </td>
-                                }
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Monday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Monday"].Contains(i))
+        <div class="container">
+            <div class="row centered-form">
+                <div class="col-xs-12 col-sm-8 col-md-12">
+                    <center>
+                        <div class="panel panel-default">
+                            <table class="SchedulerTable" border="1">
+                                <tr>
+                                    <th style="background-color:#c57000">Time</th>
+                                    <th colspan="12" style="background-color: #343a40;">AM</th>
+                                    <th colspan="12" style="background-color: #343a40;">PM</th>
+                                </tr>
+                                <tr>
+                                    <th style="background-color:#c57000">Day</th>
+                                    @for (int i = 0; i < 24; i++)
                                     {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Mon_@i" onclick="selectTd('Mon_@i')">  </td>
+                                        <td width="25px" style="background-color:#c57000"> @i  </td>
                                     }
-                                    else
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Monday</th>
+                                    @for (int i = 0; i < 24; i++)
                                     {
-                                        <td width="25px" id="Mon_@i" onclick="selectTd('Mon_@i')">  </td>
+                                        if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Monday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Mon_@i" onclick="selectTd('Mon_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Mon_@i" onclick="selectTd('Mon_@i')">  </td>
+                                        }
+
+                                    }
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Tuesday</th>
+                                    @for (int i = 0; i < 24; i++)
+                                    {
+                                        if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Tuesday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Tue_@i" onclick="selectTd('Tue_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Tue_@i" onclick="selectTd('Tue_@i')">  </td>
+                                        }
+                                    }
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Wednesday</th>
+                                    @for (int i = 0; i < 24; i++)
+                                    {
+                                        if (ViewBag.ViewSchedulerData != null && ViewBag.ViewSchedulerData["Wednesday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                        }
                                     }
 
-                                }
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Tuesday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Tuesday"].Contains(i))
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Thursday</th>
+                                    @for (int i = 0; i < 24; i++)
                                     {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Tue_@i" onclick="selectTd('Tue_@i')">  </td>
+                                        if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Thursday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Thu_@i" onclick="selectTd('Thu_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Thu_@i" onclick="selectTd('Thu_@i')">  </td>
+                                        }
                                     }
-                                    else
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Friday</th>
+                                    @for (int i = 0; i < 24; i++)
                                     {
-                                        <td width="25px" id="Tue_@i" onclick="selectTd('Tue_@i')">  </td>
+                                        if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Friday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Fri_@i" onclick="selectTd('Fri_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Fri_@i" onclick="selectTd('Fri_@i')">  </td>
+                                        }
                                     }
-                                }
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Wednesday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.ViewSchedulerData != null && ViewBag.ViewSchedulerData["Wednesday"].Contains(i))
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Saturday</th>
+                                    @for (int i = 0; i < 24; i++)
                                     {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                        if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Saturday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Sat_@i" onclick="selectTd('Sat_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Sat_@i" onclick="selectTd('Sat_@i')">  </td>
+                                        }
                                     }
-                                    else
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #343a40;">Sunday</th>
+                                    @for (int i = 0; i < 24; i++)
                                     {
-                                        <td width="25px" id="Wed_@i" onclick="selectTd('Wed_@i')">  </td>
+                                        if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Sunday"].Contains(i))
+                                        {
+                                            <td width="25px" style="background:rgb(22, 132, 231)" id="Sun_@i" onclick="selectTd('Sun_@i')">  </td>
+                                        }
+                                        else
+                                        {
+                                            <td width="25px" id="Sun_@i" onclick="selectTd('Sun_@i')">  </td>
+                                        }
                                     }
-                                }
-
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Thursday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Thursday"].Contains(i))
-                                    {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Thu_@i" onclick="selectTd('Thu_@i')">  </td>
-                                    }
-                                    else
-                                    {
-                                        <td width="25px" id="Thu_@i" onclick="selectTd('Thu_@i')">  </td>
-                                    }
-                                }
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Friday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Friday"].Contains(i))
-                                    {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Fri_@i" onclick="selectTd('Fri_@i')">  </td>
-                                    }
-                                    else
-                                    {
-                                        <td width="25px" id="Fri_@i" onclick="selectTd('Fri_@i')">  </td>
-                                    }
-                                }
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Saturday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Saturday"].Contains(i))
-                                    {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Sat_@i" onclick="selectTd('Sat_@i')">  </td>
-                                    }
-                                    else
-                                    {
-                                        <td width="25px" id="Sat_@i" onclick="selectTd('Sat_@i')">  </td>
-                                    }
-                                }
-                            </tr>
-                            <tr>
-                                <th style="background-color: #343a40;">Sunday</th>
-                                @for (int i = 0; i < 24; i++)
-                                {
-                                    if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Sunday"].Contains(i))
-                                    {
-                                        <td width="25px" style="background:rgb(22, 132, 231)" id="Sun_@i" onclick="selectTd('Sun_@i')">  </td>
-                                    }
-                                    else
-                                    {
-                                        <td width="25px" id="Sun_@i" onclick="selectTd('Sun_@i')">  </td>
-                                    }
-                                }
-                            </tr>
-                        </table>
+                                </tr>
+                            </table>
 
                     </div>
                     @Html.AntiForgeryToken()
@@ -143,50 +147,50 @@
         </div>
     </div>
 
-    <script>
-        function selectTd(_id) {
-            var element = document.getElementById(_id);
-            if (element.style.background == "") {
-                element.style.background = "#1684E7";
-            } else {
-                element.style.background = "";
-            }
-        }
-
-        function save() {
-            var list1 = [];
-
-
-            var days = ["Mon_", "Tue_", "Wed_", "Thu_", "Fri_", "Sat_", "Sun_"];
-            var i;
-            for (i = 0; i <= 6; i++) {
-                var day = days[i];
-                var list = [];
-                var count = 0;
-                for (var j = 0; j < 24; j++) {
-                    var _id = day + j;
-                    var element = document.getElementById(_id);
-                    console.log(element.style.background);
-                    if (element.style.background == "rgb(22, 132, 231)") {
-                        console.log(_id)
-                        list[count++] = _id;
-                    }
+        <script>
+            function selectTd(_id) {
+                var element = document.getElementById(_id);
+                if (element.style.background == "") {
+                    element.style.background = "#1684E7";
+                } else {
+                    element.style.background = "";
                 }
-                list1[i] = list;
             }
 
-            var obj = {
-                "UserId": @ClientID,
-                "Monday": list1[0],
-                "Tuesday": list1[1],
-                "Wednesday": list1[2],
-                "Thursday": list1[3],
-                "Friday": list1[4],
-                "Saturday": list1[5],
-                "Sunday": list1[6]
+            function save() {
+                var list1 = [];
+
+
+                var days = ["Mon_", "Tue_", "Wed_", "Thu_", "Fri_", "Sat_", "Sun_"];
+                var i;
+                for (i = 0; i <= 6; i++) {
+                    var day = days[i];
+                    var list = [];
+                    var count = 0;
+                    for (var j = 0; j < 24; j++) {
+                        var _id = day + j;
+                        var element = document.getElementById(_id);
+                        console.log(element.style.background);
+                        if (element.style.background == "rgb(22, 132, 231)") {
+                            console.log(_id)
+                            list[count++] = _id;
+                        }
+                    }
+                    list1[i] = list;
+                }
+
+                var obj = {
+                    "UserId": @ClientID,
+                    "Monday": list1[0],
+                    "Tuesday": list1[1],
+                    "Wednesday": list1[2],
+                    "Thursday": list1[3],
+                    "Friday": list1[4],
+                    "Saturday": list1[5],
+                    "Sunday": list1[6]
+                }
+                SaveData(obj);
             }
-            SaveData(obj);
-        }
 
         function SaveData(_obj) {
             var token = $('input[name="__RequestVerificationToken"]').val();

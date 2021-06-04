@@ -6,30 +6,39 @@
 @inject ITMatchingAppContext AppContext
 
 <ul class="navbar-nav">
+    <li class="sliderIcon ml-3">
+        <img id="darkModeIcon" class="h-100 w-100 mt-3" src="~/Images/dark-mode.png" />
+    </li>
+
+    <li class="ml-3 mr-3 mt-1 themeToggle">
+        <label class="switch">
+            <input type="checkbox" id="toggleButton">
+            <span class="slider round"></span>
+        </label>
+    </li>
+
+    <li class="sliderIcon mr-3">
+        <img id="lightModeIcon" class="h-100 w-100 mt-3" src="~/Images/light-mode.png" />
+    </li>
+
     @if (SignInManager.IsSignedIn(User))
     {
         string id = UserManager.GetUserId(User);
         Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
         Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
 
-        <li class="themeToggle">
-            <button type="button" class="btn btn-dark" id="toggleButton">Toggle Light Mode</button>
-        </li>
         <li class="nav-item">
-            <a class="nav-link text-white" style="padding: 20px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@itUser.FirstName's Profile</a>
+            <a class="nav-link text-center text-white" style="padding: 20px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@itUser.FirstName's Profile</a>
         </li>
 
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-white" id="logout">Logout</button>
+                <button type="submit" class="nav-link text-center btn btn-link text-white" id="logout">Logout</button>
             </form>
         </li>
     }
     else
     {
-        <li class="themeToggle">
-            <button type="button" class="btn btn-orange" id="toggleButton">Toggle Light Mode</button>
-        </li>
         <li class="nav-item">
             <a class="nav-link text-white" style="padding: 20px;" asp-area="Identity" asp-page="/Account/TempRegister">Register</a>
         </li>
