@@ -420,7 +420,7 @@ namespace ITMatching.Controllers
                 {
                     //Get schedule values that have a matching helpRequestId to our meeting's helpRequestId
                     List<RequestSchedule> requestSchedule = context.RequestSchedules.Where(rs => rs.RequestId == meeting.HelpRequestId).ToList();
-                    int clientAvailableHoursCount = requestSchedule.Count;
+                    double clientAvailableHoursCount = requestSchedule.Count;
 
                     for (int i = 0; i < thresholdMeetingExperts.Count; i++)
                     {
@@ -441,12 +441,24 @@ namespace ITMatching.Controllers
 
                         }
 
-                        int expertMatchingHoursWithClient = expertScheduleMatchingClientHours.Count;
-                        double hoursPercentage = expertMatchingHoursWithClient / clientAvailableHoursCount;
+                        double expertMatchingHoursWithClient = expertScheduleMatchingClientHours.Count;
+                        double hoursPercentage = (expertMatchingHoursWithClient * 4) / clientAvailableHoursCount;
+                        if (hoursPercentage > 1)
+                        {
+                            hoursPercentage = 1;
+                        }
                         double newMatchingScore = thresholdMeetingExperts[i].Item2 * hoursPercentage;
-                        thresholdMeetingExperts[i] = (thresholdMeetingExperts[i].Item1, newMatchingScore, 0);
+                        thresholdMeetingExperts[i] = (thresholdMeetingExperts[i].Item1, newMatchingScore, thresholdMeetingExperts[i].Item3);
+                        List<(int, double, double)> newThresholdMeetingExperts = new List<(int, double, double)>();
 
-
+                        foreach ((int, double, double) ex in thresholdMeetingExperts)
+                        {
+                            if (ex.Item2 >= 0.75)
+                            {
+                                newThresholdMeetingExperts.Add(ex);
+                            }
+                        }
+                        thresholdMeetingExperts = newThresholdMeetingExperts;
                     }
                 }
 
