@@ -16,60 +16,76 @@
     string id = UserManager.GetUserId(User);
     Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
     Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
+    bool isExpert = (eUser != null);
 
     HelpRequest[] helpRequests = AppContext.HelpRequests.Where(hr => hr.ClientId == itUser.Id).ToArray();
 
-    <div class="container justify-content-center" >
-        <div class="row justify-content-center">
-            <div class="col-md-12 mt-5 justify-content-center">
-                <h1 class="text-center mb-5"><strong>Help Request History</strong></h1>
-                @if (helpRequests?.Any() == true)
-                {
+    if (!isExpert)
+    {
+        <div class="container justify-content-center">
+            <div class="row justify-content-center">
+                <div class="col-md-12 mt-5 justify-content-center">
+                    <h1 class="text-center mb-5"><strong>Help Request History</strong></h1>
+                    @if (helpRequests?.Any() == true)
+                    {
 
-                    <table class="table justify-content-center">
-                        <tr class="thead-custom">
-                            <th scope="col" class="text-center">Help Request Title</th>
-                            <th scope="col" class="text-center">Help Request Description</th>
-                            <th scope="col" class="text-center">IT Subject Tags</th>
-                            <th></th>
-                        </tr>
-                        <tbody>
-                            @foreach (HelpRequest hr in helpRequests)
-                            {
-                                int[] serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId).ToArray();
-                                List<String> tags = new List<String>();
-                                String tag;
-                                @foreach (int si in serviceIds)
+                        <table class="table justify-content-center">
+                            <tr class="thead-custom">
+                                <th scope="col" class="text-center">Help Request Title</th>
+                                <th scope="col" class="text-center">Help Request Description</th>
+                                <th scope="col" class="text-center">IT Subject Tags</th>
+                                <th></th>
+                            </tr>
+                            <tbody>
+                                @foreach (HelpRequest hr in helpRequests)
                                 {
-                                    tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
-                                    tags.Add(tag);
+                                    int[] serviceIds = AppContext.RequestServices.Where(rs => rs.RequestId == hr.Id).Select(rs => rs.ServiceId).ToArray();
+                                    List<String> tags = new List<String>();
+                                    String tag;
+                                    @foreach (int si in serviceIds)
+                                    {
+                                        tag = AppContext.Services.Where(s => s.Id == si).Select(s => s.ServiceName).FirstOrDefault().ToString();
+                                        tags.Add(tag);
+                                    }
+                                    String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
+                                    <form asp-controller="Matching" asp-action="ResubmitHelpRequest" method="get" id="requestForm">
+                                        <tr class="requestFormCardHeader">
+                                            <td class="text-nowrap text-center text-white">@hr.RequestTitle</td>
+                                            <td class="text text-left text-white">@hr.RequestDescription</td>
+                                            <td class="text text-left text-white">@tagsString</td>
+                                            <td><button type="submit" class="btn btn-orange" name="HelpRequestID" value="@hr.Id">Resubmit</button></td>
+                                        </tr>
+                                    </form>
                                 }
-                                String tagsString = tags.Aggregate("", (str, obj) => str + obj.ToString() + ", ").TrimEnd(' ').TrimEnd(',');
-                                <form asp-controller="Matching" asp-action="ResubmitHelpRequest" method="get" id="requestForm">
-                                    <tr class="requestFormCardHeader">
-                                        <td class="text-nowrap text-center text-white">@hr.RequestTitle</td>
-                                        <td class="text text-left text-white">@hr.RequestDescription</td>
-                                        <td class="text text-left text-white">@tagsString</td>
-                                        <td><button type="submit" class="btn btn-orange" name="HelpRequestID" value="@hr.Id">Resubmit</button></td>
-                                    </tr>
-                                </form>
-                            }
-                        </tbody>
-                    </table>
-                }
-                @if (helpRequests?.Any() != true)
-                {
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12 justify-content-center">
-                                <h3 class="text-center">Your account has created no IT help requests.</h3>
+                            </tbody>
+                        </table>
+                    }
+                    @if (helpRequests?.Any() != true)
+                    {
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-md-12 justify-content-center">
+                                    <h3 class="text-center">Your account has created no IT help requests.</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="container justify-content-center">
+            <div class="row justify-content-center">
+                <div class="col-md-12 mt-5 justify-content-center">
+                    <h1 class="text-center mb-5"><strong>Help Request History</strong></h1>
+                    <h3 class="text-center mb-5">As an expert, you do not have permission to view help request history.</h3>
+                </div>
+            </div>
+        </div>
+
+    }
 }
 
 @section Scripts {

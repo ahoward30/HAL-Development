@@ -16,68 +16,76 @@
     string id = UserManager.GetUserId(User);
     Itmuser itUser = AppContext.Itmusers.Where(u => u.AspNetUserId == id).FirstOrDefault();
     Expert eUser = AppContext.Experts.Where(eu => eu.ItmuserId == itUser.Id).FirstOrDefault();
-
-    List<ExpertService> expertServices = AppContext.ExpertServices.Where(es => es.ExpertId == eUser.Id).ToList();
+    bool isExpert = (eUser != null);
 
     <div class="container justify-content-center">
         <div class="row justify-content-center">
-            <div class="col-md-12 mt-3">
-                <center>
-                    <h1 class="mb-5">Expert Subjects</h1>
-                </center>
-            </div>
-            <div class="col-md-12 justify-content-center mb-3">
-                @if (expertServices.Count > 0)
-                {
-                    <center class="mb-5">
-                        <h4 class="mb-3">You can make changes to which subjects you consider yourself an expert of by clicking here. </h4>
-                        <p class="mb-5">These tags will be used to match you to a client when entering the waiting room from the home page.</p>
-                        @Html.ActionLink("Add/Edit Subject Tags", "EditTagsForm", "Account", null, new { @class = "btn btn-orange btn-lg" })
+            @if (isExpert)
+            {
+                List<ExpertService> expertServices = AppContext.ExpertServices.Where(es => es.ExpertId == eUser.Id).ToList();
+                <div class="col-md-12 mt-3">
+                    <center>
+                        <h1 class="mb-5">Expert Subjects</h1>
                     </center>
-                    <table class="table justify-content-center mt-5">
-                        <tr class="thead-account">
-                            <th colspan="2" class="text-center">My Subjects of Expertise</th>
-                        </tr>
-                        <tr class="thead-account">
-                            <th class="text-center">Subject Category</th>
-                            <th class="text-center">Subject of Expertise</th>
-                        </tr>
-                        <tbody>
-                            @if (expertServices != null)
-                            {
-                                int[] serviceIds = AppContext.ExpertServices.Where(eI => eI.ExpertId == eUser.Id).Select(sI => sI.ServiceId).ToArray();
-                                List<Service> tags = new List<Service>();
-                                Service tag;
-
-                                @foreach (int si in serviceIds)
+                </div>
+                <div class="col-md-12 justify-content-center mb-3">
+                    @if (expertServices.Count > 0)
+                    {
+                        <center class="mb-5">
+                            <h4 class="mb-5">You can make changes to which subjects you consider yourself an expert of by clicking here. </h4>
+                            <p class=" text-left mb-5">These tags will be used to match you to a client when entering the waiting room from the home page.  To further improve your matching prospects, consider setting up an estimated schedule of your available times by clicking on the button on the bottom of the <strong>"Personal Info"</strong> tab.</p>
+                            @Html.ActionLink("Add/Edit Subject Tags", "EditTagsForm", "Account", null, new { @class = "btn btn-orange btn-lg" })
+                        </center>
+                        <table class="table justify-content-center mt-5">
+                            <tr class="thead-account">
+                                <th colspan="2" class="text-center">My Subjects of Expertise</th>
+                            </tr>
+                            <tr class="thead-account">
+                                <th class="text-center">Subject Category</th>
+                                <th class="text-center">Subject of Expertise</th>
+                            </tr>
+                            <tbody>
+                                @if (expertServices != null)
                                 {
-                                    tag = AppContext.Services.Where(s => s.Id == si).FirstOrDefault();
-                                    tags.Add(tag);
+                                    int[] serviceIds = AppContext.ExpertServices.Where(eI => eI.ExpertId == eUser.Id).Select(sI => sI.ServiceId).ToArray();
+                                    List<Service> tags = new List<Service>();
+                                    Service tag;
 
-                                    <tr class="editFormCardHeader">
-                                        <td class="text-center">@tag.ServiceCategory</td>
-                                        <td class="text-center">@tag.ServiceName</td>
-                                    </tr>
+                                    @foreach (int si in serviceIds)
+                                    {
+                                        tag = AppContext.Services.Where(s => s.Id == si).FirstOrDefault();
+                                        tags.Add(tag);
+
+                                        <tr class="editFormCardHeader">
+                                            <td class="text-center">@tag.ServiceCategory</td>
+                                            <td class="text-center">@tag.ServiceName</td>
+                                        </tr>
+                                    }
                                 }
-                            }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <center class="mb-5">
-                        <h3 class="text-center"><strong>You currently don't have any subjects of expertise that we can use to match you</strong></h3><br />
-                        <p class="mb-5">Let us know what IT subjects you have experience in troubleshooting so that we can better match you to clients who need your help.</p>
-                        @Html.ActionLink("Add Subjects", "EditTagsForm", "Account", null, new { @class = "btn btn-orange btn-lg" })
-                    </center>
-                    <div class="container justify-content-center">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12 justify-content-center">
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <center class="mb-5">
+                            <h3 class="text-center"><strong>You currently don't have any subjects of expertise that we can use to match you</strong></h3><br />
+                            <p class="mb-5">Let us know what IT subjects you have experience in troubleshooting so that we can better match you to clients who need your help.</p>
+                            @Html.ActionLink("Add Subjects", "EditTagsForm", "Account", null, new { @class = "btn btn-orange btn-lg" })
+                        </center>
+                        <div class="container justify-content-center">
+                            <div class="row justify-content-center">
+                                <div class="col-md-12 justify-content-center">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <h1 class="text-center mt-5 mb-5"><strong>Sorry, you cannot set expert tags.</strong></h1>
+                <h3 class="text-center mb-5">As a client, you do not have permission to access the expert tags page.</h3>
+            }
         </div>
     </div>
 }

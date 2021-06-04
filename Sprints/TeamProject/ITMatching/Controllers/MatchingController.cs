@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -239,8 +239,13 @@ namespace ITMatching.Controllers
 
             ResubmitFormViewModel viewModel = new ResubmitFormViewModel();
             viewModel.Services = context.Services.ToList();
-            viewModel.HelpRequest = context.HelpRequests.Where(hr => hr.Id == helpRequestID).FirstOrDefault();
+            viewModel.HelpRequest = context.HelpRequests.Where(hr => hr.Id == helpRequestID && hr.ClientId == itUser.Id).FirstOrDefault();
             viewModel.checkedBoxes = checkedServiceBoxes;
+
+            if (viewModel.HelpRequest == null)
+            {
+                viewModel.HelpRequest = new HelpRequest { Id = 0 };
+            }
 
             return View(viewModel);
         }
@@ -587,7 +592,7 @@ namespace ITMatching.Controllers
                 return View(ewrVM);
             }
             else
-            { return BadRequest(); }
+            { return RedirectToAction("Error", "Home"); }
         }
 
         
@@ -921,8 +926,13 @@ namespace ITMatching.Controllers
         [Authorize]
         public IActionResult SubmitFeedback(string feedback, int meetingID)
         {
+            if (meetingID == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
             Meeting meeting = context.Meetings.Where(m => m.Id == meetingID).FirstOrDefault();
-             
+
             switch (feedback)
             {
                 case "Helpful":
@@ -948,7 +958,15 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
-                message = await _messageRepo.AddOrUpdateAsync(message);
+                //message = await _messageRepo.AddOrUpdateAsync(message);
+
+                message.Text = message.Text.Replace("<", "");
+                message.Text = message.Text.Replace(">", "");
+                message.Text = message.Text.Replace("/", "");
+                message.Text = message.Text.Replace("\'", "");
+                message.Text = message.Text.Replace("\"", "");
+                message.Text = message.Text.Replace("%", "");
+                
                 return Ok(message);
             }
             return BadRequest("Invalid request.");
@@ -960,6 +978,13 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
+                message.Text = message.Text.Replace("<", "");
+                message.Text = message.Text.Replace(">", "");
+                message.Text = message.Text.Replace("/", "");
+                message.Text = message.Text.Replace("\'", "");
+                message.Text = message.Text.Replace("\"", "");
+                message.Text = message.Text.Replace("%", "");
+
                 var result = await _photoService.AddPhotoAsync(file);
                 if (result.Error != null) return BadRequest(result.Error.Message);
 
