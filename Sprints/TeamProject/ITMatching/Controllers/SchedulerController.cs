@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace ITMatching.Controllers
 {
@@ -31,8 +32,9 @@ namespace ITMatching.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Post(Schedule sch)
+        public IActionResult Post([FromForm] string schObj)
         {
+            Schedule sch = JsonSerializer.Deserialize<Schedule>(schObj);
             string[] Mon = sch.Monday;
             string[] Tue = sch.Tuesday;
             string[] Wed = sch.Wednesday;

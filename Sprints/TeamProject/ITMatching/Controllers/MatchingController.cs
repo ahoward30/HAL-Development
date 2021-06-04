@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -966,8 +966,7 @@ namespace ITMatching.Controllers
                 message.Text = message.Text.Replace("\'", "");
                 message.Text = message.Text.Replace("\"", "");
                 message.Text = message.Text.Replace("%", "");
-
-
+                
                 return Ok(message);
             }
             return BadRequest("Invalid request.");
@@ -990,7 +989,7 @@ namespace ITMatching.Controllers
                 if (result.Error != null) return BadRequest(result.Error.Message);
 
                 message.FileUrl = result.SecureUrl.AbsoluteUri;
-                //message = await _messageRepo.AddOrUpdateAsync(message);
+                message = await _messageRepo.AddOrUpdateAsync(message);
                 return Ok(message);
             }
             return BadRequest("Invalid request.");
