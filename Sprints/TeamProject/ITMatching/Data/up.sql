@@ -115,8 +115,7 @@ CREATE TABLE [Message](
     [SentBy]            INT NOT NULL,
     [SentTime]          DATETIME,
     [Text]              NVARCHAR(2000),
-    [FileUrl]           NVARCHAR(500),
-    [IsAttachment]      BIT NOT NULL
+    [FileUrl]           NVARCHAR(500)
 )
 GO
 
