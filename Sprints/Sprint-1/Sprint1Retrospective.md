@@ -1,4 +1,4 @@
-Class Project Retrospective
+Sprint 1 Retrospective
 ==================================================
 
 # Retrospective Activity

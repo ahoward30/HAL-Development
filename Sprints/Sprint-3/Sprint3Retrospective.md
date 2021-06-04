@@ -1,4 +1,4 @@
-Class Project Retrospective
+Sprint 3 Retrospective
 ==================================================
 
 # What the team learned
