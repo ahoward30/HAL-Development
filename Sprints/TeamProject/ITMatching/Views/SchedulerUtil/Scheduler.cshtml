@@ -62,7 +62,7 @@
                             }
                         </tr>
                         <tr>
-                            <th style="background-color: #343a40;">Wednesnday</th>
+                            <th style="background-color: #343a40;">Wednesday</th>
                             @for (int i = 0; i < 24; i++)
                             {
                                 if (ViewBag.SchedulerData != null && ViewBag.SchedulerData["Wednesday"].Contains(i))
@@ -131,7 +131,7 @@
     </div>
 </div>
 
-                <script>
+    <script>
         function selectTd(_id) {
             var element = document.getElementById(_id);
             if (element.style.background == "") {
@@ -192,4 +192,5 @@
                 }
             })
         }
-                </script>}
+    </script>
+}
