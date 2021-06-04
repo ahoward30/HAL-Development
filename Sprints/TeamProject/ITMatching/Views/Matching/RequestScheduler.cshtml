@@ -136,7 +136,7 @@
                         </table>
 
                     </div>
-
+                    @Html.AntiForgeryToken()
                     <button class="btn btn-orange" style="border-radius:10px;" onclick="save()">Save</button>
                 </center>
             </div>
@@ -189,11 +189,11 @@
         }
 
         function SaveData(_obj) {
+            var token = $('input[name="__RequestVerificationToken"]').val();
             $.ajax({
                 url: "/api/Scheduler",
                 type: "POST",
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify(_obj),
+                data: { __RequestVerificationToken: token, schObj: JSON.stringify(_obj) },
                 success: function (data) {
                     console.log(data);
                     alert("Schedule Noted");
