@@ -3,16 +3,25 @@
     const themeToggle = document.getElementById('toggleButton')
     const storedTheme = localStorage.getItem('theme');
     const storedText = localStorage.getItem('toggleButton');
-    if (storedTheme && storedText) {
+    var checkedStatus = localStorage.getItem('checkedStatus');
+
+    if (storedTheme && checkedStatus) {
         themeStylesheet.href = storedTheme;
-        themeToggle.innerText = storedText;
+        if (checkedStatus == "true")
+        {
+            themeToggle.checked = true;
+        }
+        else {
+            themeToggle.checked = false;
+        }
     }
     themeToggle.addEventListener('click', () => {
         if (themeStylesheet.href.includes('dark')) {
             // toggle light mode from dark
             //$(body).fadeOut( function() {
             themeStylesheet.href = '/css/light-theme.css';
-            themeToggle.innerText = 'Toggle Dark Mode';
+            themeToggle.checked = true;
+            checkedStatus = "true";
             //$(this).fadeIn();
             //});
         }
@@ -20,11 +29,12 @@
         else{
            // $(body).fadeOut( function() {
                 themeStylesheet.href = '/css/dark-theme.css';
-                themeToggle.innerText = 'Toggle Light Mode';
+                themeToggle.checked = false;
+                checkedStatus = "false";
                 //$(this).fadeIn();
             //});
         }
         localStorage.setItem('theme', themeStylesheet.href);
-        localStorage.setItem('toggleButton', themeToggle.innerText);
+        localStorage.setItem('checkedStatus', checkedStatus);
     })
 })
