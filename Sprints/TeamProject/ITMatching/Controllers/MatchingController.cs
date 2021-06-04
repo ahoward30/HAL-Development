@@ -959,6 +959,15 @@ namespace ITMatching.Controllers
             if (ModelState.IsValid)
             {
                 //message = await _messageRepo.AddOrUpdateAsync(message);
+
+                message.Text = message.Text.Replace("<", "");
+                message.Text = message.Text.Replace(">", "");
+                message.Text = message.Text.Replace("/", "");
+                message.Text = message.Text.Replace("\'", "");
+                message.Text = message.Text.Replace("\"", "");
+                message.Text = message.Text.Replace("%", "");
+
+
                 return Ok(message);
             }
             return BadRequest("Invalid request.");
@@ -970,6 +979,13 @@ namespace ITMatching.Controllers
         {
             if (ModelState.IsValid)
             {
+                message.Text = message.Text.Replace("<", "");
+                message.Text = message.Text.Replace(">", "");
+                message.Text = message.Text.Replace("/", "");
+                message.Text = message.Text.Replace("\'", "");
+                message.Text = message.Text.Replace("\"", "");
+                message.Text = message.Text.Replace("%", "");
+
                 var result = await _photoService.AddPhotoAsync(file);
                 if (result.Error != null) return BadRequest(result.Error.Message);
 

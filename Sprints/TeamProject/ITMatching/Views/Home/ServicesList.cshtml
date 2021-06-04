@@ -76,7 +76,7 @@
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="osTab">
-                        <ul class="mb-0">
+                        <ul class="mb-0 formOSTags">
                             @foreach (var item in Model)
                             {
                                 if (item.ServiceCategory == "OS")
@@ -105,8 +105,8 @@
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="row justify-content-center">
-                                            <div class="col-lg-4">
-                                                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" id="btn-orange" value="Return to Home Page"></a>
+                                            <div class="col-lg-5">
+                                                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" id="btn-orange" value="Home Page"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -121,8 +121,8 @@
                                             <div class="col-lg-4">
                                                 <a asp-area="Identity" asp-page="/Account/TempRegister" class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Register Now"></a>
                                             </div>
-                                            <div class="col-lg-4">
-                                                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Return to Home Page"></a>
+                                            <div class="col-lg-5">
+                                                <a href='@Url.Action("Index", "Home")' class="text-decoration-none"><input type="button" class="btn-xlarge btn-orange btn-block" value="Home Page"></a>
                                             </div>
                                         </div>
                                     </div>

@@ -343,6 +343,12 @@ p {
     list-style: none;
 }
 
+.formOSTags {
+    column-count: 1;
+    column-gap: 2rem;
+    list-style: none;
+}
+
 .formTagsCommunication {
     column-count: 4;
     column-gap: 2rem;
@@ -579,7 +585,7 @@ label.label-floatlabel {
 
 .clientWaitingRoomCardCol {
     vertical-align: middle;
-    top: 30%;
+    top: 10%;
 }
 
 .infoColWrapper {
