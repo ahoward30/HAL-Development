@@ -980,6 +980,10 @@ namespace ITMatching.Controllers
                 message.Text = message.Text.Replace("”", "");
                 message.Text = message.Text.Replace("’", "");
                 message.Text = message.Text.Replace("“", "");
+                message.Text = message.Text.Replace("[", "");
+                message.Text = message.Text.Replace("]", "");
+                message.Text = message.Text.Replace("*", "");
+                message.Text = message.Text.Replace(";", "");
 
                 message = await _messageRepo.AddOrUpdateAsync(message);
 
@@ -1003,6 +1007,10 @@ namespace ITMatching.Controllers
                 message.Text = message.Text.Replace("”", "");
                 message.Text = message.Text.Replace("’", "");
                 message.Text = message.Text.Replace("“", "");
+                message.Text = message.Text.Replace("[", "");
+                message.Text = message.Text.Replace("]", "");
+                message.Text = message.Text.Replace("*", "");
+                message.Text = message.Text.Replace(";", "");
 
                 var result = await _photoService.AddPhotoAsync(file);
                 if (result.Error != null) return BadRequest(result.Error.Message);
