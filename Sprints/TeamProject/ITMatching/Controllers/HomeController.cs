@@ -45,7 +45,7 @@ namespace ITMatching.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Credits()
         {
 
             bool isUserLoggedIn = _signInManager.IsSignedIn(User);
