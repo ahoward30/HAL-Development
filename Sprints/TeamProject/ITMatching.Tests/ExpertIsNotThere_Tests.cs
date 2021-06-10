@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace ITMatching.Tests
 {
-    public class ClientIsNotThere_Tests
+    public class ExpertIsNotThere_Tests
     {
         private static MatchingController GetMatchingController()
         {
@@ -15,27 +15,27 @@ namespace ITMatching.Tests
         }
 
         [Test]
-        public void MatchingController_ClientIsNotThere_MoreThan30Seconds_True()
+        public void MatchingController_ExpertIsNotThere_MoreThan90Seconds_True()
         {
             MatchingController controller = GetMatchingController();
 
-            TimeSpan seconds = new TimeSpan(0, 0, 0, 31, 0);
+            TimeSpan seconds = new TimeSpan(0, 0, 0, 91, 0);
             DateTime time = DateTime.UtcNow.Subtract(seconds);
 
-            bool isNotThere = controller.ClientIsNotThere(time);
+            bool isNotThere = controller.ExpertIsNotThere(time);
 
             Assert.That(isNotThere);
         }
 
         [Test]
-        public void MatchingController_ClientIsNotThere_MoreThan30Seconds_False()
+        public void MatchingController_ExpertIsNotThere_MoreThan90Seconds_False()
         {
             MatchingController controller = GetMatchingController();
 
             TimeSpan seconds = new TimeSpan(0, 0, 0, 1, 0);
             DateTime time = DateTime.UtcNow.Subtract(seconds);
 
-            bool isNotThere = controller.ClientIsNotThere(time);
+            bool isNotThere = controller.ExpertIsNotThere(time);
 
             Assert.That(!isNotThere);
         }
